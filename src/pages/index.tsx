@@ -1,11 +1,16 @@
 import styled from 'styled-components'
-import SvgHeart from '../svg/heart.svg';
+import Header from '../components/home/header';
+import LeftSideBar from "../components/home/leftSideBar"
 
 export default function Home() {
   return (
     <Container>
-      <h1>My Next WebApp</h1>
-      <SvgHeart width="24" height="24" fill="white" />
+      <Header />
+      <LeftSideBar />
+      {/* <div style={{ display: "flex", height: "100%" }}>
+        <LeftSideBar />
+        <div>12345</div>
+      </div> */}
     </Container>
   )
 }
@@ -13,4 +18,6 @@ export default function Home() {
 const Container = styled.div`
   width:100vw;
   min-height:100vh;
+  display: flex;
+  flex-direction: column;
 `

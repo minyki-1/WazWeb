@@ -54,29 +54,26 @@ a {
 
 *{
 	outline: none;
-	color: white;
+	color: #363636;
 	background-color: initial;
 }
 
 body {
-  background-color: #121212;
+  background-color: #FFFFFF;
 }
 
-img {
-  width: 300px;
-  height: 300px;
-}
-
-
-/* h1{
-	
+h1{
+	font-size: 20px;
 }
 h2{
-
+	font-size: 16px;
 }
 h3{
-
+	font-size: 14px;
 }
 h4{
-
-} */
+	font-size: 12px;
+}
+h5{
+	font-size: 10px;
+}
