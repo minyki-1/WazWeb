@@ -6,18 +6,20 @@ export default function Home() {
   return (
     <Container>
       <Header />
-      <LeftSideBar />
-      {/* <div style={{ display: "flex", height: "100%" }}>
+      <Main>
         <LeftSideBar />
-        <div>12345</div>
-      </div> */}
+      </Main>
     </Container>
   )
 }
 
-const Container = styled.div`
+const Container = styled.main`
   width:100vw;
   min-height:100vh;
   display: flex;
   flex-direction: column;
+`
+const Main = styled.div`
+  width:100vw;
+  height: calc(100vh - 52px);
 `

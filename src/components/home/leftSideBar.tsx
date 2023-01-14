@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import SVG_project from "../../svg/project.svg"
 import SVG_community from "../../svg/community.svg"
+import SVG_plus from "../../svg/plus.svg"
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import Link from 'next/link'
@@ -24,13 +25,23 @@ export default function LeftSideBar() {
           <h2>Community</h2>
         </NavBtn>
       </Link>
+      <Team>
+        <TeamTitle>
+          <h2>Teams</h2>
+          <TeamAddBtn>
+            <SVG_plus width={10} height={10} fill={"#363636"} />
+            <h5>New Team</h5>
+          </TeamAddBtn>
+        </TeamTitle>
+        
+      </Team>
     </Container>
   )
 }
 
 const Container = styled.section`
   width:220px;
-  height:calc(100vh - 52px);
+  height:100%;
   display:flex;
   flex-direction: column;
   border-right: 2px solid rgba(54,54,54,0.2);
@@ -50,5 +61,27 @@ const NavBtn = styled.button < { pathname: string } > `
   }
   &:hover{
     background-color:${(props: { pathname: string }) => props.pathname === "true" ? "#4c7ef33d" : "#f2f2f2"};
+  }
+`
+const Team = styled.article`
+  margin-top: 90px;
+  padding-top: 12px;
+  border-top: 2px solid rgba(54,54,54,0.2);
+`
+const TeamTitle = styled.div`
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+`
+const TeamAddBtn = styled.button`
+  padding: 8px;
+  display:flex;
+  align-items: center;
+  border: 1px solid rgba(54,54,54,0.5);
+  border-radius: 2px;
+  cursor: pointer;
+  h5{
+    margin-left: 6px;
   }
 `
