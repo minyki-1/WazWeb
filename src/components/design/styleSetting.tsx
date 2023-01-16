@@ -3,40 +3,19 @@ import SVG_project from "../../svg/project.svg"
 import SVG_community from "../../svg/community.svg"
 import SVG_plus from "../../svg/plus.svg"
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import Link from 'next/link'
 
-export default function LeftSideBar() {
-  const { pathname } = useRouter()
+export default function StyleSetting() {
   return (
     <Container>
-      <Link href={"/"}>
-        <NavBtn pathname={String(pathname === "/")}>
-          <SVG_project width={18} height={18} fill="#363636" />
-          <h2>My Porject</h2>
-        </NavBtn>
-      </Link>
-      <Link href={"/community"}>
-        <NavBtn pathname={String(pathname === "/community")}>
-          <SVG_community />
-          <h2>Community</h2>
-        </NavBtn>
-      </Link>
-      <Team>
-        <TeamTitle>
-          <h2>Teams</h2>
-          <TeamAddBtn>
-            <SVG_plus width={10} height={10} fill={"#363636"} />
-            <h5>New Team</h5>
-          </TeamAddBtn>
-        </TeamTitle>
 
-      </Team>
     </Container>
   )
 }
 
 const Container = styled.section`
-  width:220px;
+  width:300px;
   height:100%;
   display:flex;
   flex-direction: column;
