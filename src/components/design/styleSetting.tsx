@@ -1,10 +1,4 @@
 import styled from 'styled-components'
-import SVG_project from "../../svg/project.svg"
-import SVG_community from "../../svg/community.svg"
-import SVG_plus from "../../svg/plus.svg"
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import Link from 'next/link'
 
 export default function StyleSetting() {
   return (
