@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export default function StyleSetting() {
   return (
     <Container>
-      <div></div>
+      <div>1</div>
     </Container>
   )
 }
