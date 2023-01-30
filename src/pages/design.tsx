@@ -7,6 +7,8 @@ export default function Design() {
     <Container>
       <Header />
       <Main>
+        <div></div>
+        <div></div>
         <RightSideBar />
       </Main>
     </Container>
@@ -22,4 +24,6 @@ const Container = styled.main`
 const Main = styled.div`
   width:100vw;
   height: calc(100vh - 48px);
+  display: flex;
+  justify-content: space-between;
 `
