@@ -1,15 +1,15 @@
 import styled from 'styled-components'
 
-export default function StyleSetting() {
+export default function RightSideBar() {
   return (
     <Container>
-      <div>12</div>
+      
     </Container>
   )
 }
 
 const Container = styled.section`
-  width:300px;
+  width:220px;
   height:100%;
   display:flex;
   flex-direction: column;

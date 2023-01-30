@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Header from '../components/home/header';
-import LeftSideBar from "../components/home/leftSideBar"
+import Header from '../components/home/Header';
+import LeftSideBar from "../components/home/LeftSideBar"
 
 export default function Home() {
   return (
@@ -21,5 +21,5 @@ const Container = styled.main`
 `
 const Main = styled.div`
   width:100vw;
-  height: calc(100vh - 52px);
+  height: calc(100vh - 48px);
 `
