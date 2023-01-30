@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Header from '../components/design/Header'
-import RightSideBar from '../components/design/RightSideBar'
+import Header from '../components/design/header'
+import RightSideBar from '../components/design/rightSideBar'
 
 export default function Design() {
   return (

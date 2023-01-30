@@ -1,6 +1,6 @@
 import styled from 'styled-components'
-import Header from '../components/home/Header';
-import LeftSideBar from "../components/home/LeftSideBar"
+import Header from '../components/home/header';
+import LeftSideBar from "../components/home/leftSideBar"
 
 export default function Home() {
   return (
