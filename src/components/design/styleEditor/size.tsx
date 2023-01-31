@@ -76,7 +76,7 @@ const Topic = styled.h2`
 const SizeGroup1 = styled.div`
   display:flex;
   justify-content: space-between;
-  margin: 13px 0px;
+  margin: 12px 0px;
   div{
     display: flex;
     align-items: center;
@@ -97,7 +97,7 @@ const SizeGroup2 = styled.div < { state: string } > `
   display:flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 13px 0px;
+  margin: 12px 0px;
   div{
     display:flex;
     align-items: center;

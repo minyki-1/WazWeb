@@ -1,10 +1,12 @@
 import styled from 'styled-components'
+import Arrange from './styleEditor/arrange'
 import Size from './styleEditor/size'
 
 export default function RightSideBar() {
   return (
     <Container>
       <Size />
+      <Arrange />
     </Container>
   )
 }
