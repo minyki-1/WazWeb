@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import styled from 'styled-components'
 import SVG_expand from "../../../svg/expand.svg"
 
@@ -19,39 +19,45 @@ export default function Size() {
           <input type="text" value={"300px"} />
         </div>
       </SizeGroup1>
-      <SizeGroup2 state={String(marginExpand)}>
-        <div>
-          <h4>Margin</h4>
-          {
-            marginExpand ? (
-              <>
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-              </>
-            ) : <input type="text" value={"0px"} />
-          }
-        </div>
-        <SVG_expand onClick={() => setMarginExpand(!marginExpand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer" }} />
-      </SizeGroup2>
-      <SizeGroup2 state={String(paddingExpand)}>
-        <div>
-          <h4>Padding</h4>
-          {
-            paddingExpand ? (
-              <>
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-                <input type="text" value={"0px"} />
-              </>
-            ) : <input type="text" value={"0px"} />
-          }
-        </div>
-        <SVG_expand onClick={() => setPaddingExpand(!paddingExpand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer" }} />
-      </SizeGroup2>
+      <ExpandSize text={"Margin"} expand={marginExpand} setExpand={setMarginExpand} />
+      <ExpandSize text={"Padding"} expand={paddingExpand} setExpand={setPaddingExpand} />
     </Container>
+  )
+}
+
+function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean, setExpand: Dispatch<SetStateAction<boolean>> }) {
+  return (
+    <SizeGroup2 state={String(expand)}>
+      <div>
+        <div>
+          <h4>{text}</h4>
+          <input disabled={expand} type="text" value={"0px"} />
+        </div>
+        <SVG_expand onClick={() => setExpand(!expand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer" }} />
+      </div>
+      {
+        expand ?
+          <span>
+            <div>
+              <h4>L</h4>
+              <input type="text" value={"0px"} />
+            </div>
+            <div>
+              <h4>R</h4>
+              <input type="text" value={"0px"} />
+            </div>
+            <div>
+              <h4>T</h4>
+              <input type="text" value={"0px"} />
+            </div>
+            <div>
+              <h4>B</h4>
+              <input type="text" value={"0px"} />
+            </div>
+          </span>
+          : null
+      }
+    </SizeGroup2>
   )
 }
 
@@ -64,7 +70,8 @@ const Container = styled.section`
   padding-bottom: 28px;
 `
 const Topic = styled.h2`
-  margin: 28px 0px;
+  margin-top: 28px;
+  margin-bottom: 20px;
 `
 const SizeGroup1 = styled.div`
   display:flex;
@@ -76,8 +83,8 @@ const SizeGroup1 = styled.div`
     width:calc(50% - 10px);
     margin-right: 10px;
     h4{
-      margin-right: 12px;
-      color:#363636;
+      margin-right: 8px;
+      padding: 4px;
       opacity: 0.7;
     }
     input{
@@ -88,22 +95,45 @@ const SizeGroup1 = styled.div`
 `
 const SizeGroup2 = styled.div < { state: string } > `
   display:flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
   margin: 13px 0px;
   div{
-    width:${({ state }: { state: string }) => state === "true" ? "calc(100% - 16px)" : "auto"};
     display:flex;
     align-items: center;
-    h4{
-      width:66px;
-      color:#363636;
-      opacity: 0.7;
-      margin-right: 8px;
+    justify-content: space-between;
+    div{
+      justify-content: flex-start;
+      h4{
+        width:70px;
+        opacity: 0.7;
+        margin-right: 4px;
+        padding: 4px;
+      }
+      input{
+        width:50%;
+        border: none;
+        ${({ state }: { state: string }) => state === "true" ? "opacity:0.5" : ""}
+      }
     }
-    input{
-      width:${({ state }: { state: string }) => state === "true" ? "calc(((100% - 66px - 16px) / 4) - 8px)" : "calc(((100% - 66px) / 4) - 8px)"};
-      border: none;
+  }
+  span {
+    display:flex;
+    align-items: center;
+    margin-top: 8px;
+    div{
+      width:calc(100% / 4);
+      display:flex;
+      align-items: center;
+      h4{
+        padding:4px;
+        margin-right: 8px;
+        opacity: 0.7;
+      }
+      input{
+        width:100%;
+        border: none;
+      }
     }
   }
 `
