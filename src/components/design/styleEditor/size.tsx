@@ -111,7 +111,7 @@ const SizeGroup2 = styled.div < { state: string } > `
       }
       input{
         width:50%;
-        ${({ state }: { state: string }) => state === "true" ? "opacity:0.5" : ""}
+        opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
       }
     }
   }

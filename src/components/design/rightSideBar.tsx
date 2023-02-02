@@ -5,10 +5,10 @@ import Basic from './styleEditor/basic'
 
 export default function RightSideBar() {
   return (
-    <Container>
+    <Container id="rightSideBar">
       <Size />
-      <Arrange />
       <Basic />
+      <Arrange />
     </Container>
   )
 }

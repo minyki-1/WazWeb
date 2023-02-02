@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 export default function Arrange() {
   const [display, setDisplay] = useState("flex")
-  const [justifyContent, setJustifyContent] = useState("left")
-  const [alignItems, setAlignItems] = useState("flex")
-  const [flexDirection, setFlexDirection] = useState("flex")
+  const [justifyContent, setJustifyContent] = useState("flex-start")
+  const [alignItems, setAlignItems] = useState("flex-start")
+  const [flexDirection, setFlexDirection] = useState("row")
   const [position, setPosition] = useState("static")
 
   return (
