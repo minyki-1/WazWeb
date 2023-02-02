@@ -78,8 +78,10 @@ h5{
 	font-size: 11px;
 }
 input{
-	font-size:15px;
+	border: none;
+	font-size:14px;
 }
 select{
-	font-size:15px;
+	border: none;
+	font-size:14px;
 }

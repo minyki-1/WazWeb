@@ -11,11 +11,11 @@ export default function Size() {
       <Topic>Size</Topic>
       <SizeGroup1>
         <div>
-          <h4>W</h4>
+          <h4 title="width">W</h4>
           <input type="text" />
         </div>
         <div>
-          <h4>H</h4>
+          <h4 title="height">H</h4>
           <input type="text" value={"300px"} />
         </div>
       </SizeGroup1>
@@ -39,19 +39,19 @@ function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean
         expand ?
           <span>
             <div>
-              <h4>L</h4>
+              <h4 title="margin-left">L</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4>R</h4>
+              <h4 title="margin-right">R</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4>T</h4>
+              <h4 title="margin-top">T</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4>B</h4>
+              <h4 title="margin-bottom">B</h4>
               <input type="text" value={"0px"} />
             </div>
           </span>
@@ -89,7 +89,6 @@ const SizeGroup1 = styled.div`
     }
     input{
       width:100%;
-      border: none;
     }
   }
 `
@@ -105,14 +104,13 @@ const SizeGroup2 = styled.div < { state: string } > `
     div{
       justify-content: flex-start;
       h4{
-        width:70px;
+        width:60px;
         opacity: 0.7;
         margin-right: 4px;
         padding: 4px;
       }
       input{
         width:50%;
-        border: none;
         ${({ state }: { state: string }) => state === "true" ? "opacity:0.5" : ""}
       }
     }
@@ -132,7 +130,6 @@ const SizeGroup2 = styled.div < { state: string } > `
       }
       input{
         width:100%;
-        border: none;
       }
     }
   }

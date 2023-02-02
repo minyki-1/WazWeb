@@ -19,6 +19,7 @@
     "babel-plugin-styled-components": "latest",
     "next": "latest",
     "react": "latest",
+    "react-color": "^2.19.3",
     "react-dom": "latest",
     "react-is": "^18.2.0",
     "styled-components": "latest"
