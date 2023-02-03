@@ -1,11 +1,13 @@
-import { useState, MouseEvent } from 'react'
+import { useState, MouseEvent, useEffect } from 'react'
 import styled from "styled-components"
 import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
 
 export default function Basic() {
   const [bgColor, setBgColor] = useState<IColor>({ r: "0", g: "0", b: "0", a: "1", none: false })
-
+  useEffect(() => {
+    console.log(typeof bgColor.r)
+  }, [bgColor])
   return (
     <Container>
       <Topic>Basic</Topic>

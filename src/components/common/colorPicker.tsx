@@ -11,11 +11,11 @@ interface IProps {
 }
 
 export default function ColorPicker({ color, setColor }: IProps) {
-  const [colorDisable, setColorDisable] = useState(false)
+  const [colorDisable, setColorDisable] = useState(color.none)
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
   const [opacity, setOpacity] = useState(String(Number(color.a) * 100))
-  const eyeBtnProps = { onClick: () => setColorDisable(!colorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
+  const eyeBtnProps = { onClick: () => { setColor({ ...color, none: !colorDisable }); setColorDisable(!colorDisable); }, fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
 
   function colorToHex(color: number) {
     var hexadecimal = color.toString(16);
@@ -40,6 +40,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
   }
 
   function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
+    // ! rgb값을 변경할때 타입에 안맞춰 문자에서 숫자로 변경되고 none이 사라짐
     setColor(rgb);
     setOpacity(String(Math.floor(Number(rgb.a) * 100)));
   }
