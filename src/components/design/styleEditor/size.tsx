@@ -27,34 +27,34 @@ export default function Size() {
 
 function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean, setExpand: Dispatch<SetStateAction<boolean>> }) {
   return (
-    <SizeGroup2 state={String(expand)}>
-      <div>
+    <SizeGroup2>
+      <SizeGroup3 state={String(expand)}>
         <div>
           <h4>{text}</h4>
           <input disabled={expand} type="text" value={"0px"} />
         </div>
         <SVG_expand onClick={() => setExpand(!expand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer" }} />
-      </div>
+      </SizeGroup3>
       {
         expand ?
-          <span>
+          <ExpandInput>
             <div>
-              <h4 title="margin-left">L</h4>
+              <h4 title={`${text.toLowerCase()}-top`}>T</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4 title="margin-right">R</h4>
+              <h4 title={`${text.toLowerCase()}-right`}>R</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4 title="margin-top">T</h4>
+              <h4 title={`${text.toLowerCase()}-bottom`}>B</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4 title="margin-bottom">B</h4>
+              <h4 title={`${text.toLowerCase()}-left`}>L</h4>
               <input type="text" value={"0px"} />
             </div>
-          </span>
+          </ExpandInput>
           : null
       }
     </SizeGroup2>
@@ -78,10 +78,14 @@ const SizeGroup1 = styled.div`
   justify-content: space-between;
   margin: 12px 0px;
   div{
+    margin: -6px -8px;
+    padding: 6px 8px;
+    &:hover{
+      box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+    }
     display: flex;
     align-items: center;
-    width:calc(50% - 10px);
-    margin-right: 10px;
+    width:calc(50% - 8px);
     h4{
       margin-right: 8px;
       padding: 4px;
@@ -92,45 +96,49 @@ const SizeGroup1 = styled.div`
     }
   }
 `
-const SizeGroup2 = styled.div < { state: string } > `
+const SizeGroup2 = styled.div`
   display:flex;
   flex-direction: column;
   justify-content: space-between;
-  margin: 12px 0px;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
+`
+const SizeGroup3 = styled.div < { state: string } > `
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
   div{
     display:flex;
-    align-items: center;
-    justify-content: space-between;
-    div{
-      justify-content: flex-start;
-      h4{
-        width:60px;
-        opacity: 0.7;
-        margin-right: 4px;
-        padding: 4px;
-      }
-      input{
-        width:50%;
-        opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
-      }
+    h4{
+      width:60px;
+      opacity: 0.7;
+      margin-right: 4px;
+      padding: 4px;
+    }
+    input{
+      width:50%;
+      opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
     }
   }
-  span {
+`
+const ExpandInput = styled.div`
+  display:flex;
+  align-items: center;
+  margin-top: 8px;
+  div{
+    width:calc(100% / 4);
     display:flex;
     align-items: center;
-    margin-top: 8px;
-    div{
-      width:calc(100% / 4);
-      display:flex;
-      align-items: center;
-      h4{
-        padding:4px;
-        margin-right: 8px;
-        opacity: 0.7;
-      }
-      input{
-        width:100%;
-      }
+    h4{
+      padding:4px;
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+    input{
+      width:100%;
     }
   }
 `

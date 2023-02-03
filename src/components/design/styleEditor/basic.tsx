@@ -3,16 +3,11 @@ import styled from "styled-components"
 import { ChromePicker } from 'react-color'
 import SVG_eye from "../../../svg/eye.svg"
 import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
-
-interface IColor {
-  a: string;
-  b: string;
-  g: string;
-  r: string;
-}
+import { TColor } from "../../../types/design"
+import ColorPicker from '../../common/colorPicker'
 
 export default function Basic() {
-  const [bgColor, setBgColor] = useState<IColor>({ r: "0", g: "0", b: "0", a: "1" })
+  const [bgColor, setBgColor] = useState<TColor>({ r: "0", g: "0", b: "0", a: "1" })
   const [bgColorDisable, setBgColorDisable] = useState(false)
   const [showClrSlctr, setShowClrSlctr] = useState(false)
   const [colorSelectorTop, setColorSelectorTop] = useState<number>()
@@ -24,7 +19,7 @@ export default function Basic() {
     return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
   }
 
-  function convertRGBtoHex({ r, g, b }: IColor) {
+  function convertRGBtoHex({ r, g, b }: TColor) {
     return "#" + colorToHex(Number(r)) + colorToHex(Number(g)) + colorToHex(Number(b));
   }
 
@@ -41,37 +36,15 @@ export default function Basic() {
     setShowClrSlctr(!showClrSlctr);
   }
 
-  function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
+  function colorPickerOnChangeHandle({ rgb }: { rgb: TColor }) {
     setBgColor(rgb);
     setOpacityInputValue(String(Math.floor(Number(rgb.a) * 100)));
   }
 
-  
-
   return (
     <Container>
       <Topic>Basic</Topic>
-      {showClrSlctr &&
-        <>
-          <ColorPickerWrapper id="colorPicker" top={String(colorSelectorTop)}>
-            <ChromePicker color={bgColor} onChange={colorPickerOnChangeHandle} />
-          </ColorPickerWrapper>
-          <ColorPickerBg onClick={() => setShowClrSlctr(false)} />
-        </>
-      }
-      <SizeGroup1 disable={String(bgColorDisable)}>
-        <h4 title="background-color">Bg Color</h4>
-        <button disabled={bgColorDisable} title="background-color" onClick={colorOnClickHandle} style={{
-          width: 18, height: 18, backgroundColor: convertRGBtoHex(bgColor), opacity: bgColorDisable ? 0.5 : ((Number(bgColor.a) * 100) + "%"), border: "none"
-        }} />
-        <input disabled={bgColorDisable} type="text" value={convertRGBtoHex(bgColor)} />
-        <input onChange={(e) => setOpacityInputValue(e.target.value)} disabled={bgColorDisable} type="text" value={opacityInputValue + "%"} />
-        {
-          bgColorDisable ?
-            <SVG_eye_crossed {...eyeBtnProps} />
-            : <SVG_eye {...eyeBtnProps} />
-        }
-      </SizeGroup1>
+      <ColorPicker color={bgColor} setColor={setBgColor}></ColorPicker>
     </Container>
   )
 }
@@ -91,7 +64,12 @@ const Topic = styled.h2`
 const SizeGroup1 = styled.div<{ disable: string }>`
   display: flex;
   align-items: center;
-  margin: 12px 0px;
+  height:22px;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
   h4{
     width:60px;
     margin-right: 8px;
@@ -101,6 +79,7 @@ const SizeGroup1 = styled.div<{ disable: string }>`
   input{
     opacity: ${({ disable }: { disable: string }) => disable === "true" ? 0.5 : 1};
     margin-left: 4px;
+    height:100%;
     width:calc((100% - 60px - 8px - 8px - 20px - 8px) / 2 - 10px);
   }
 `

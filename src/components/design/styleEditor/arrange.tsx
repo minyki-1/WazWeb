@@ -19,34 +19,39 @@ export default function Arrange() {
           <option title="none" value="none">None</option>
         </select>
       </SizeGroup1>
-      <SizeGroup1>
-        <h4 title='justify-content'>Row</h4>
-        <select value={justifyContent} onChange={e => setJustifyContent(e.target.value)}>
-          <option title="flex-start" value="flex-start">Left</option>
-          <option title="flex-end" value="flex-end">Right</option>
-          <option title="center" value="center">Center</option>
-          <option title="space-between" value="space-between">0:1:0</option>
-          <option title="space-around" value="space-around">1:2:1</option>
-          <option title="space-evenly" value="space-evenly">1:1:1</option>
-        </select>
-      </SizeGroup1>
-      <SizeGroup1>
-        <h4 title='align-items'>Colum</h4>
-        <select value={alignItems} onChange={e => setAlignItems(e.target.value)}>
-          <option title="flex-start" value="flex-start">Top</option>
-          <option title="flex-end" value="flex-end">Bottom</option>
-          <option title="center" value="center">Center</option>
-        </select>
-      </SizeGroup1>
-      <SizeGroup1>
-        <h4 title="flex-direction">Direction</h4>
-        <select value={flexDirection} onChange={e => setFlexDirection(e.target.value)}>
-          <option title="row" value="row">Row</option>
-          <option title="colum" value="colum">Colum</option>
-          <option title="row-reverse" value="row-reverse">Row Reverse</option>
-          <option title="colum-reverse" value="colum-reverse">Colum Reverse</option>
-        </select>
-      </SizeGroup1>
+      {
+        display === "flex" ?
+          <>
+            <SizeGroup1>
+              <h4 title='justify-content'>Row</h4>
+              <select value={justifyContent} onChange={e => setJustifyContent(e.target.value)}>
+                <option title="flex-start" value="flex-start">Left</option>
+                <option title="flex-end" value="flex-end">Right</option>
+                <option title="center" value="center">Center</option>
+                <option title="space-between" value="space-between">0:1:0</option>
+                <option title="space-around" value="space-around">1:2:1</option>
+                <option title="space-evenly" value="space-evenly">1:1:1</option>
+              </select>
+            </SizeGroup1>
+            <SizeGroup1>
+              <h4 title='align-items'>Colum</h4>
+              <select value={alignItems} onChange={e => setAlignItems(e.target.value)}>
+                <option title="flex-start" value="flex-start">Top</option>
+                <option title="flex-end" value="flex-end">Bottom</option>
+                <option title="center" value="center">Center</option>
+              </select>
+            </SizeGroup1>
+            <SizeGroup1>
+              <h4 title="flex-direction">Direction</h4>
+              <select value={flexDirection} onChange={e => setFlexDirection(e.target.value)}>
+                <option title="row" value="row">Row</option>
+                <option title="colum" value="colum">Colum</option>
+                <option title="row-reverse" value="row-reverse">Row Reverse</option>
+                <option title="colum-reverse" value="colum-reverse">Colum Reverse</option>
+              </select>
+            </SizeGroup1>
+          </> : null
+      }
       <SizeGroup1>
         <h4 title="position">Position</h4>
         <select value={position} onChange={e => setPosition(e.target.value)}>
@@ -60,7 +65,7 @@ export default function Arrange() {
         position !== "static" ?
           <SizeGroup2>
             <div>
-              <h4 title="left">L</h4>
+              <h4 title="top">T</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
@@ -68,11 +73,11 @@ export default function Arrange() {
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4 title="top">T</h4>
+              <h4 title="bottom">B</h4>
               <input type="text" value={"0px"} />
             </div>
             <div>
-              <h4 title="bottom">B</h4>
+              <h4 title="left">L</h4>
               <input type="text" value={"0px"} />
             </div>
           </SizeGroup2> : null
@@ -96,7 +101,12 @@ const Topic = styled.h2`
 const SizeGroup1 = styled.div`
   display: flex;
   align-items: center;
-  margin: 12px 0px;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  height:22px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
   h4{
     width:60px;
     margin-right: 8px;
@@ -105,7 +115,7 @@ const SizeGroup1 = styled.div`
   }
   select{
     text-overflow: ellipsis;
-    width:calc(100% - 70px);
+    width:calc(100% - 60px);
   }
 `
 const SizeGroup2 = styled.div < { state: string } > `
