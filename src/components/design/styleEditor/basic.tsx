@@ -1,50 +1,15 @@
 import { useState, MouseEvent } from 'react'
 import styled from "styled-components"
-import { ChromePicker } from 'react-color'
-import SVG_eye from "../../../svg/eye.svg"
-import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
-import { TColor } from "../../../types/design"
+import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
 
 export default function Basic() {
-  const [bgColor, setBgColor] = useState<TColor>({ r: "0", g: "0", b: "0", a: "1" })
-  const [bgColorDisable, setBgColorDisable] = useState(false)
-  const [showClrSlctr, setShowClrSlctr] = useState(false)
-  const [colorSelectorTop, setColorSelectorTop] = useState<number>()
-  const [opacityInputValue, setOpacityInputValue] = useState("100")
-  const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
-
-  function colorToHex(color: number) {
-    var hexadecimal = color.toString(16);
-    return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
-  }
-
-  function convertRGBtoHex({ r, g, b }: TColor) {
-    return "#" + colorToHex(Number(r)) + colorToHex(Number(g)) + colorToHex(Number(b));
-  }
-
-  function colorOnClickHandle(e: MouseEvent) {
-    // * ChromePicker(color selector) height = 241.75px
-    const colorPicker = document.getElementById("colorPicker")
-    const colorPickerHeight = colorPicker?.offsetHeight || 250
-    const rightSideBar = document.getElementById("rightSideBar")
-    const scrollTop = rightSideBar?.scrollTop ? rightSideBar?.scrollTop : 0
-    const targetTop = (e.target as HTMLElement).offsetTop - 100 - scrollTop;
-    if (targetTop + colorPickerHeight > window.innerHeight) setColorSelectorTop(window.innerHeight - colorPickerHeight - 5)
-    else if (targetTop < 50) setColorSelectorTop(52)
-    else setColorSelectorTop(targetTop);
-    setShowClrSlctr(!showClrSlctr);
-  }
-
-  function colorPickerOnChangeHandle({ rgb }: { rgb: TColor }) {
-    setBgColor(rgb);
-    setOpacityInputValue(String(Math.floor(Number(rgb.a) * 100)));
-  }
+  const [bgColor, setBgColor] = useState<IColor>({ r: "0", g: "0", b: "0", a: "1", none: false })
 
   return (
     <Container>
       <Topic>Basic</Topic>
-      <ColorPicker color={bgColor} setColor={setBgColor}></ColorPicker>
+      <ColorPicker color={bgColor} setColor={setBgColor} />
     </Container>
   )
 }

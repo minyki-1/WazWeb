@@ -1,21 +1,20 @@
-import { useState, MouseEvent, Dispatch, SetStateAction } from 'react'
+import { useState, MouseEvent, Dispatch, SetStateAction, ChangeEvent, SyntheticEvent } from 'react'
 import styled from "styled-components"
 import { ChromePicker } from 'react-color'
 import SVG_eye from "../../svg/eye.svg"
 import SVG_eye_crossed from "../../svg/eye_crossed.svg"
-import { TColor } from "../../types/design"
+import { IColor } from "../../types/design"
 
 interface IProps {
-  color: TColor;
-  setColor: Dispatch<SetStateAction<TColor>>;
+  color: IColor;
+  setColor: Dispatch<SetStateAction<IColor>>;
 }
 
 export default function ColorPicker({ color, setColor }: IProps) {
-  // const [color, setColor] = useState<TColor>({ r: "0", g: "0", b: "0", a: "1" })
   const [colorDisable, setColorDisable] = useState(false)
-  const [isShow, setIsShow] = useState(false)
+  const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
-  const [opacity, setOpacity] = useState("100")
+  const [opacity, setOpacity] = useState(String(Number(color.a) * 100))
   const eyeBtnProps = { onClick: () => setColorDisable(!colorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
 
   function colorToHex(color: number) {
@@ -23,7 +22,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
     return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
   }
 
-  function convertRGBtoHex({ r, g, b }: TColor) {
+  function convertRGBtoHex({ r, g, b }: IColor) {
     return "#" + colorToHex(Number(r)) + colorToHex(Number(g)) + colorToHex(Number(b));
   }
 
@@ -37,31 +36,36 @@ export default function ColorPicker({ color, setColor }: IProps) {
     if (targetTop + colorPickerHeight > window.innerHeight) setTop(window.innerHeight - colorPickerHeight - 5)
     else if (targetTop < 50) setTop(52)
     else setTop(targetTop);
-    setIsShow(!isShow);
+    setIsPickerShow(!isPickerShow);
   }
 
-  function colorPickerOnChangeHandle({ rgb }: { rgb: TColor }) {
+  function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
     setColor(rgb);
     setOpacity(String(Math.floor(Number(rgb.a) * 100)));
   }
 
+  function opacityHandle(e: SyntheticEvent) {
+    let opacity = (e.target as HTMLInputElement).value
+    if (opacity.indexOf('%') > -1) opacity = opacity.split('%')[0];
+    if (!isNaN(Number(opacity))) setColor({ ...color, a: String(Number(opacity) / 100) });
+    else setOpacity(String(Number(color.a) * 100));
+  }
+
   return (
     <>
-      {isShow &&
+      {isPickerShow &&
         <>
           <ColorPickerWrapper id="colorPicker" top={String(top)}>
             <ChromePicker color={color} onChange={colorPickerOnChangeHandle} />
           </ColorPickerWrapper>
-          <ColorPickerBg onClick={() => setIsShow(false)} />
+          <ColorPickerBg onClick={() => setIsPickerShow(false)} />
         </>
       }
       <SizeGroup1 disable={String(colorDisable)}>
         <h4 title="background-color">Bg Color</h4>
-        <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{
-          width: 18, height: 18, backgroundColor: convertRGBtoHex(color), opacity: colorDisable ? 0.5 : ((Number(color.a) * 100) + "%"), border: "none"
-        }} />
+        <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: colorDisable ? 0.5 : ((Number(color.a) * 100) + "%") }} />
         <input disabled={colorDisable} type="text" value={convertRGBtoHex(color)} />
-        <input onChange={(e) => setOpacity(e.target.value)} disabled={colorDisable} type="text" value={opacity + "%"} />
+        <input onBlur={opacityHandle} onKeyDown={(e) => { if (e.code === "Enter") opacityHandle(e) }} onChange={(e) => setOpacity(e.target.value)} disabled={colorDisable} type="text" value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"} />
         {
           colorDisable ?
             <SVG_eye_crossed {...eyeBtnProps} />
@@ -92,6 +96,12 @@ const SizeGroup1 = styled.div<{ disable: string }>`
     margin-left: 4px;
     height:100%;
     width:calc((100% - 60px - 8px - 8px - 20px - 8px) / 2 - 10px);
+  }
+  button {
+    width: 18px;
+    height: 18px;
+    border: none; 
+    cursor: pointer;
   }
 `
 const ColorPickerWrapper = styled.div<{ top: string }>`
