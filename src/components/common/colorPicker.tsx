@@ -63,7 +63,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
       }
       <SizeGroup1 disable={String(colorDisable)}>
         <h4 title="background-color">Bg Color</h4>
-        <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: colorDisable ? 0.5 : ((Number(color.a) * 100) + "%") }} />
+        <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color) }} />
         <input disabled={colorDisable} type="text" value={convertRGBtoHex(color)} />
         <input
           onBlur={opacityHandle}

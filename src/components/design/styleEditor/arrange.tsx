@@ -116,6 +116,8 @@ const SizeGroup1 = styled.div`
   select{
     text-overflow: ellipsis;
     width:calc(100% - 60px);
+    padding: 8px 0px;
+    cursor: pointer;
   }
 `
 const SizeGroup2 = styled.div < { state: string } > `
