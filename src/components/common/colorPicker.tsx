@@ -14,6 +14,7 @@ interface IProps {
 export default function ColorPicker({ color, setColor, disable }: IProps) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
+  const [opacity, setOpacity] = useState(String(color.a * 100))
 
   function colorToHex(color: number) {
     var hexadecimal = color.toString(16);
@@ -41,6 +42,13 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
     setColor({ ...rgb });
   }
 
+  function opacityHandle(e: SyntheticEvent) {
+    let opacityValue = (e.target as HTMLInputElement).value
+    if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
+    if (!isNaN(Number(opacityValue))) setColor({ ...color, a: Number(opacityValue) / 100 });
+    else setOpacity(String(Math.floor(color.a * 100)));
+  }
+
   return (
     <>
       {isPickerShow &&
@@ -53,7 +61,18 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
       }
       <SizeGroup1 disable={String(disable)}>
         <button disabled={disable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: color.a }} />
-        <input disabled={disable} type="text" value={convertRGBtoHex(color)} />
+        <input
+          style={{ width: 65, marginRight: 4 }}
+          disabled={disable} type="text" value={convertRGBtoHex(color)} />
+        <input
+          onBlur={opacityHandle}
+          onKeyDown={e => { if (e.code === "Enter") opacityHandle(e) }}
+          onChange={e => setOpacity(e.target.value)}
+          disabled={disable}
+          type="text"
+          value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"}
+          style={{ width: 45, opacity: `${disable === true ? 0.5 : 1}` }}
+        />
       </SizeGroup1>
     </>
   )
@@ -62,12 +81,11 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
 const SizeGroup1 = styled.div<{ disable: string }>`
   display: flex;
   align-items: center;
-  width:90px;
+  width:150px;
   input{
     opacity: ${({ disable }: { disable: string }) => disable === "true" ? 0.5 : 1};
     margin-left: 4px;
     height:100%;
-    width:calc(100% - 18px);
   }
   button {
     width: 18px;

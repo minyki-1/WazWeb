@@ -10,15 +10,7 @@ export default function Basic() {
   const [borderColor, setBorderColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [bgColorDisable, setBgColorDisable] = useState(false)
   const [borderColorDisable, setBorderColorDisable] = useState(false)
-  const [opacity, setOpacity] = useState(String(bgColor.a * 100))
   const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
-
-  function opacityHandle(e: SyntheticEvent) {
-    let opacityValue = (e.target as HTMLInputElement).value
-    if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
-    if (!isNaN(Number(opacityValue))) setBgColor({ ...bgColor, a: Number(opacityValue) / 100 });
-    else setOpacity(String(Math.floor(bgColor.a * 100)));
-  }
 
   return (
     <Container>
@@ -28,25 +20,16 @@ export default function Basic() {
           <h4 title="background-color">Bg Color</h4>
           <ColorPicker color={bgColor} setColor={setBgColor} disable={bgColorDisable} />
         </div>
-        <input
-          onBlur={opacityHandle}
-          onKeyDown={e => { if (e.code === "Enter") opacityHandle(e) }}
-          onChange={e => setOpacity(e.target.value)}
-          disabled={bgColorDisable}
-          type="text"
-          value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"}
-          style={{ width: 45, opacity: `${bgColorDisable === true ? 0.5 : 1}` }}
-        />
         {
           bgColorDisable ?
             <SVG_eye_crossed {...eyeBtnProps} />
             : <SVG_eye {...eyeBtnProps} />
         }
       </SizeGroup1>
-      <SizeGroup1>
-        <div>
+      <SizeGroup2>
+        <BorderWrapper>
           <h4>Border</h4>
-          <input type={"text"} style={{ width: 45 }} />
+          <input type={"text"} />
           <select>
             <option value="solid">Solid</option>
             <option value="none">None</option>
@@ -57,9 +40,11 @@ export default function Basic() {
             <option value="groove">Groove</option>
             <option value="outset">Outset</option>
           </select>
-        </div>
-        {/* <ColorPicker color={borderColor} setColor={setBorderColor} disable={borderColorDisable} /> */}
-      </SizeGroup1>
+        </BorderWrapper>
+        <span>
+          <ColorPicker color={borderColor} setColor={setBorderColor} disable={borderColorDisable} />
+        </span>
+      </SizeGroup2>
     </Container>
   )
 }
@@ -100,23 +85,35 @@ const SizeGroup1 = styled.div`
 `
 const SizeGroup2 = styled.div`
   display:flex;
-  align-items: center;
-  justify-content: space-between;
-  height:22px;
+  flex-direction: column;
   margin: 6px -8px;
   padding: 6px 8px;
   &:hover{
     box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
+  span{
+    display:flex;
+    align-items: center;
+    margin-left: 72px;
+  }
+`
+const BorderWrapper = styled.div`
+  margin-bottom: 10px;
+  display:flex;
   h4{
     width:60px;
     opacity: 0.7;
     margin-right: 4px;
     padding: 4px;
   }
+  input{
+    width:calc((100% - 68px) / 2);
+    margin-right: 10px;
+  }
   select{
-    width:60px;
+    width:calc((100% - 68px) / 2);
     padding: 4px 0px;
     margin: -4px 0px;
+    margin-right: 10px;
   }
 `
