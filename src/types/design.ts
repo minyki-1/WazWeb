@@ -1,7 +1,7 @@
 export interface IColor {
-  a: string;
-  b: string;
-  g: string;
-  r: string;
+  a: number;
+  b: number;
+  g: number;
+  r: number;
   none: boolean;
 }

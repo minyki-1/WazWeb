@@ -14,7 +14,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
   const [colorDisable, setColorDisable] = useState(color.none)
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
-  const [opacity, setOpacity] = useState(String(Number(color.a) * 100))
+  const [opacity, setOpacity] = useState(String(color.a * 100))
   const eyeBtnProps = { onClick: () => { setColor({ ...color, none: !colorDisable }); setColorDisable(!colorDisable); }, fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
 
   function colorToHex(color: number) {
@@ -23,7 +23,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
   }
 
   function convertRGBtoHex({ r, g, b }: IColor) {
-    return "#" + colorToHex(Number(r)) + colorToHex(Number(g)) + colorToHex(Number(b));
+    return "#" + colorToHex(r) + colorToHex(g) + colorToHex(b);
   }
 
   function colorOnClickHandle(e: MouseEvent) {
@@ -40,16 +40,15 @@ export default function ColorPicker({ color, setColor }: IProps) {
   }
 
   function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
-    // ! rgb값을 변경할때 타입에 안맞춰 문자에서 숫자로 변경되고 none이 사라짐
-    setColor(rgb);
-    setOpacity(String(Math.floor(Number(rgb.a) * 100)));
+    setColor({ ...rgb, none: false });
+    setOpacity(String(Math.floor(rgb.a * 100)));
   }
 
   function opacityHandle(e: SyntheticEvent) {
-    let opacity = (e.target as HTMLInputElement).value
-    if (opacity.indexOf('%') > -1) opacity = opacity.split('%')[0];
-    if (!isNaN(Number(opacity))) setColor({ ...color, a: String(Number(opacity) / 100) });
-    else setOpacity(String(Number(color.a) * 100));
+    let opacityValue = (e.target as HTMLInputElement).value
+    if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
+    if (!isNaN(Number(opacityValue))) setColor({ ...color, a: Number(opacityValue) / 100, none: false });
+    else setOpacity(String(Math.floor(color.a * 100)));
   }
 
   return (
@@ -66,7 +65,14 @@ export default function ColorPicker({ color, setColor }: IProps) {
         <h4 title="background-color">Bg Color</h4>
         <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: colorDisable ? 0.5 : ((Number(color.a) * 100) + "%") }} />
         <input disabled={colorDisable} type="text" value={convertRGBtoHex(color)} />
-        <input onBlur={opacityHandle} onKeyDown={(e) => { if (e.code === "Enter") opacityHandle(e) }} onChange={(e) => setOpacity(e.target.value)} disabled={colorDisable} type="text" value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"} />
+        <input
+          onBlur={opacityHandle}
+          onKeyDown={e => { if (e.code === "Enter") opacityHandle(e) }}
+          onChange={e => setOpacity(e.target.value)}
+          disabled={colorDisable}
+          type="text"
+          value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"}
+        />
         {
           colorDisable ?
             <SVG_eye_crossed {...eyeBtnProps} />
