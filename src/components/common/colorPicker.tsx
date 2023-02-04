@@ -8,14 +8,12 @@ import { IColor } from "../../types/design"
 interface IProps {
   color: IColor;
   setColor: Dispatch<SetStateAction<IColor>>;
+  disable: boolean;
 }
 
-export default function ColorPicker({ color, setColor }: IProps) {
-  const [colorDisable, setColorDisable] = useState(color.none)
+export default function ColorPicker({ color, setColor, disable }: IProps) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
-  const [opacity, setOpacity] = useState(String(color.a * 100))
-  const eyeBtnProps = { onClick: () => { setColor({ ...color, none: !colorDisable }); setColorDisable(!colorDisable); }, fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
 
   function colorToHex(color: number) {
     var hexadecimal = color.toString(16);
@@ -40,15 +38,7 @@ export default function ColorPicker({ color, setColor }: IProps) {
   }
 
   function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
-    setColor({ ...rgb, none: false });
-    setOpacity(String(Math.floor(rgb.a * 100)));
-  }
-
-  function opacityHandle(e: SyntheticEvent) {
-    let opacityValue = (e.target as HTMLInputElement).value
-    if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
-    if (!isNaN(Number(opacityValue))) setColor({ ...color, a: Number(opacityValue) / 100, none: false });
-    else setOpacity(String(Math.floor(color.a * 100)));
+    setColor({ ...rgb });
   }
 
   return (
@@ -61,23 +51,9 @@ export default function ColorPicker({ color, setColor }: IProps) {
           <ColorPickerBg onClick={() => setIsPickerShow(false)} />
         </>
       }
-      <SizeGroup1 disable={String(colorDisable)}>
-        <h4 title="background-color">Bg Color</h4>
-        <button disabled={colorDisable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color) }} />
-        <input disabled={colorDisable} type="text" value={convertRGBtoHex(color)} />
-        <input
-          onBlur={opacityHandle}
-          onKeyDown={e => { if (e.code === "Enter") opacityHandle(e) }}
-          onChange={e => setOpacity(e.target.value)}
-          disabled={colorDisable}
-          type="text"
-          value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"}
-        />
-        {
-          colorDisable ?
-            <SVG_eye_crossed {...eyeBtnProps} />
-            : <SVG_eye {...eyeBtnProps} />
-        }
+      <SizeGroup1 disable={String(disable)}>
+        <button disabled={disable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: color.a }} />
+        <input disabled={disable} type="text" value={convertRGBtoHex(color)} />
       </SizeGroup1>
     </>
   )
@@ -86,23 +62,12 @@ export default function ColorPicker({ color, setColor }: IProps) {
 const SizeGroup1 = styled.div<{ disable: string }>`
   display: flex;
   align-items: center;
-  height:22px;
-  margin: 6px -8px;
-  padding: 6px 8px;
-  &:hover{
-    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
-  }
-  h4{
-    width:60px;
-    margin-right: 8px;
-    padding: 4px;
-    opacity: 0.7;
-  }
+  width:90px;
   input{
     opacity: ${({ disable }: { disable: string }) => disable === "true" ? 0.5 : 1};
     margin-left: 4px;
     height:100%;
-    width:calc((100% - 60px - 8px - 8px - 20px - 8px) / 2 - 10px);
+    width:calc(100% - 18px);
   }
   button {
     width: 18px;

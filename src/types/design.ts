@@ -3,5 +3,4 @@ export interface IColor {
   b: number;
   g: number;
   r: number;
-  none: boolean;
 }
