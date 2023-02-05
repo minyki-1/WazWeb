@@ -1,23 +1,108 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { IColor } from '../../../types/design'
+import ColorPicker from '../../common/colorPicker'
+
+const fontFamily = [
+  `Default Style`,
+  `serif`,
+  `cursive`,
+  `fantasy`,
+  `monospace`,
+  `sans-serif`,
+  `Arial, Helvetica, sans-serif`,
+  `'Times New Roman', Times, serif`,
+  `'Courier New', Courier, monospace`,
+  `Verdana, Geneva, Tahoma, sans-serif`,
+  `Georgia, 'Times New Roman', Times, serif`,
+  `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`,
+]
 
 export default function Font() {
-  const [display, setDisplay] = useState("flex")
-  const [justifyContent, setJustifyContent] = useState("flex-start")
-  const [alignItems, setAlignItems] = useState("flex-start")
-  const [flexDirection, setFlexDirection] = useState("row")
-  const [position, setPosition] = useState("static")
-
+  const [fontColor, setFontColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   return (
     <Container>
       <Topic>Font</Topic>
-      {/* //* size, weight, color, align, style,  */}
+      {/* //* size, weight, color, align, style, decoration, family, overflow */}
 
       <SizeGroup1>
-        <h4 title="font-size">Size</h4>
-        <input type="text" />
+        <div>
+          <h4 title="font-size">Size</h4>
+          <input type="text" />
+        </div>
+        <div>
+          <h4 title="font-weight">Weight</h4>
+          <select>
+            <option value="normal">Normal</option>
+            <option value="200">Thin</option>
+            <option value="400">Light</option>
+            <option value="bold">Bold</option>
+          </select>
+        </div>
       </SizeGroup1>
-
+      <SizeGroup1>
+        <div>
+          <h4 title="text-align">Align</h4>
+          <select>
+            <option value="start">Start</option>
+            <option value="end">End</option>
+            <option value="center">Center</option>
+            <option value="justify">Justify</option>
+          </select>
+        </div>
+        <div>
+          <h4 title="font-style">Style</h4>
+          <select>
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+          </select>
+        </div>
+      </SizeGroup1>
+      <SizeGroup2>
+        <h4>Color</h4>
+        <ColorPicker color={fontColor} setColor={setFontColor} disable={false} />
+      </SizeGroup2>
+      <SizeGroup3>
+        <h4 title="text-decoration">Decoration</h4>
+        <select>
+          <option value="none">None</option>
+          <option value="underline">Underline</option>
+        </select>
+      </SizeGroup3>
+      <SizeGroup3>
+        <h4 title="font-family">Family</h4>
+        <select>
+          {
+            fontFamily.map((value, index) => (
+              <option key={index} value={value}>{value}</option>
+            ))
+          }
+        </select>
+      </SizeGroup3>
+      <SizeGroup1>
+        <div>
+          <h4 title="text-overflow">Overflow</h4>
+          <select>
+            <option value="clip">Clip</option>
+            <option value="ellipsis">Ellipsis</option>
+          </select>
+        </div>
+        <div>
+          <h4 title="white-space">Space</h4>
+          <select>
+            <option value="normal">Normal</option>
+            <option value="italic">Italic</option>
+          </select>
+        </div>
+      </SizeGroup1>
+      <SizeGroup3>
+        <h4 title="list-style">List Style</h4>
+        <select>
+          <option value="none">None</option>
+          <option value="square">Square</option>
+          <option value="inside">Inside</option>
+        </select>
+      </SizeGroup3>
     </Container>
   )
 }
@@ -37,6 +122,29 @@ const Topic = styled.h2`
 const SizeGroup1 = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  height:22px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
+  div{
+    display:flex;
+    align-items: center;
+    h4{
+      margin-right: 8px;
+      padding: 4px;
+      opacity: 0.7;
+    }
+    input{
+      width:calc((100%) / 2);
+    }
+  }
+`
+const SizeGroup2 = styled.div`
+  display: flex;
+  align-items: center;
   margin: 6px -8px;
   padding: 6px 8px;
   height:22px;
@@ -45,11 +153,28 @@ const SizeGroup1 = styled.div`
   }
   h4{
     width:60px;
+    margin-right: 4px;
+    padding: 4px;
+    opacity: 0.7;
+  }
+`
+const SizeGroup3 = styled.div`
+  display:flex;
+  align-items: center;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  height:22px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
+  h4{
+    width: 60px;
     margin-right: 8px;
     padding: 4px;
     opacity: 0.7;
   }
-  input{
-    width:calc(100% - 72px);
+  select{
+    width:50%;
+    text-overflow: ellipsis;
   }
 `

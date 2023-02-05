@@ -8,9 +8,9 @@ import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
 export default function Basic() {
   const [bgColor, setBgColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [borderColor, setBorderColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
+  const [shadowColor, setShadowColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [bgColorDisable, setBgColorDisable] = useState(false)
   const [borderSize, setBorderSize] = useState("0px")
-  const [borderColorDisable, setBorderColorDisable] = useState(false)
   const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
 
   return (
@@ -43,10 +43,14 @@ export default function Basic() {
           </select>
         </BorderWrapper>
         <span>
-          <ColorPicker color={borderColor} setColor={setBorderColor} disable={borderColorDisable} />
+          <ColorPicker color={borderColor} setColor={setBorderColor} disable={false} />
         </span>
       </SizeGroup2>
       <SizeGroup3>
+        <h4>Radius</h4>
+        <input type="text" />
+      </SizeGroup3>
+      <SizeGroup4>
         <ShadowWrapper>
           <h4 title="box-shadow">Shadow</h4>
           <div>
@@ -63,9 +67,9 @@ export default function Basic() {
           </div>
         </ShadowWrapper>
         <span>
-          <ColorPicker color={borderColor} setColor={setBorderColor} disable={borderColorDisable} />
+          <ColorPicker color={shadowColor} setColor={setShadowColor} disable={false} />
         </span>
-      </SizeGroup3>
+      </SizeGroup4>
     </Container>
   )
 }
@@ -141,6 +145,24 @@ const BorderWrapper = styled.div`
 `
 const SizeGroup3 = styled.div`
   display:flex;
+  align-items: center;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
+  h4{
+    width:60px;
+    opacity: 0.7;
+    margin-right: 4px;
+    padding: 4px;
+  }
+  input{
+    width:calc(100% - 96px);
+  }
+`
+const SizeGroup4 = styled.div`
+  display:flex;
   flex-direction: column;
   margin: 6px -8px;
   padding: 6px 8px;
@@ -170,5 +192,25 @@ const ShadowWrapper = styled.div`
       width:auto;
       margin-right: 6px;
     }
+  }
+`
+const SizeGroup5 = styled.div`
+  display:flex;
+  align-items: center;
+  margin: 6px -8px;
+  padding: 6px 8px;
+  height:22px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
+  h4{
+    width: 60px;
+    margin-right: 8px;
+    padding: 4px;
+    opacity: 0.7;
+  }
+  select{
+    width:50%;
+    text-overflow: ellipsis;
   }
 `
