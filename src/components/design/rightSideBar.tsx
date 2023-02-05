@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import Arrange from './styleEditor/arrange'
 import Size from './styleEditor/size'
 import Basic from './styleEditor/basic'
+import Font from './styleEditor/font'
 
 export default function RightSideBar() {
   return (
@@ -9,6 +10,7 @@ export default function RightSideBar() {
       <Size />
       <Basic />
       <Arrange />
+      <Font />
     </Container>
   )
 }
