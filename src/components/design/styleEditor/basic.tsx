@@ -1,4 +1,4 @@
-import { useState, useEffect, SyntheticEvent } from 'react'
+import { useState } from 'react'
 import styled from "styled-components"
 import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
