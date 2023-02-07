@@ -5,6 +5,8 @@ import SVG_expand from "../../../svg/expand.svg"
 export default function Size() {
   const [marginExpand, setMarginExpand] = useState(false)
   const [paddingExpand, setPaddingExpand] = useState(false)
+  const [width, setWidth] = useState<string>()
+  const [height, setHeight] = useState<string>()
 
   return (
     <Container>
@@ -12,11 +14,11 @@ export default function Size() {
       <SizeGroup1>
         <div>
           <h4 title="width">W</h4>
-          <input type="text" />
+          <input type="text" value={width} onChange={e => setWidth(e.target.value)} />
         </div>
         <div>
           <h4 title="height">H</h4>
-          <input type="text" value={"300px"} />
+          <input type="text" value={height} onChange={e => setHeight(e.target.value)} />
         </div>
       </SizeGroup1>
       <ExpandSize text={"Margin"} expand={marginExpand} setExpand={setMarginExpand} />
@@ -26,6 +28,7 @@ export default function Size() {
 }
 
 function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean, setExpand: Dispatch<SetStateAction<boolean>> }) {
+  // const [top,setTop] = useState()
   return (
     <SizeGroup2>
       <SizeGroup3 state={String(expand)}>

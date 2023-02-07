@@ -15,6 +15,7 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
   const [opacity, setOpacity] = useState(String(color.a * 100))
+  const [colorInput, setColorInput] = useState<string>()
 
   function colorToHex(color: number) {
     var hexadecimal = color.toString(16);
@@ -24,6 +25,20 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
   function convertRGBtoHex({ r, g, b }: IColor) {
     return "#" + colorToHex(r) + colorToHex(g) + colorToHex(b);
   }
+
+  function convertHexToRgb(hex: string) {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (r, g, b) => {
+      return r + r + g + g + b + b;
+    });
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+
 
   function colorOnClickHandle(e: MouseEvent) {
     // * ChromePicker(color selector) height = 241.75px
@@ -39,7 +54,8 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
   }
 
   function colorPickerOnChangeHandle({ rgb }: { rgb: IColor }) {
-    setColor({ ...rgb });
+    setColor(rgb);
+    setColorInput(convertRGBtoHex(rgb));
   }
 
   function opacityHandle(e: SyntheticEvent) {
@@ -47,6 +63,14 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
     if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
     if (!isNaN(Number(opacityValue))) setColor({ ...color, a: Number(opacityValue) / 100 });
     else setOpacity(String(Math.floor(color.a * 100)));
+  }
+
+  function colorHandle(e: SyntheticEvent) {
+    let colorValue = (e.target as HTMLInputElement).value
+    if (colorValue.indexOf("#") < 0) colorValue = "#" + colorValue;
+    const rgb = convertHexToRgb(colorValue)
+    if (rgb) { setColor({ ...rgb, a: color.a }); setColorInput(colorValue); }
+    else setColorInput(convertRGBtoHex(color))
   }
 
   return (
@@ -63,7 +87,13 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
         <button disabled={disable} title="background-color" onClick={colorOnClickHandle} style={{ backgroundColor: convertRGBtoHex(color), opacity: color.a }} />
         <input
           style={{ width: 65, marginRight: 4 }}
-          disabled={disable} type="text" value={convertRGBtoHex(color)} />
+          disabled={disable}
+          type="text"
+          value={colorInput}
+          onChange={e => setColorInput(e.target.value)}
+          onBlur={colorHandle}
+          onKeyDown={e => { if (e.code === "Enter") colorHandle(e) }}
+        />
         <input
           onBlur={opacityHandle}
           onKeyDown={e => { if (e.code === "Enter") opacityHandle(e) }}

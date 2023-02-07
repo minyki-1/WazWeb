@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
 
 export default function Arrange() {
@@ -7,6 +7,22 @@ export default function Arrange() {
   const [alignItems, setAlignItems] = useState("flex-start")
   const [flexDirection, setFlexDirection] = useState("row")
   const [position, setPosition] = useState("static")
+  const [offset, setOffset] = useState({ top: "0", bottom: "0", left: "0", right: "0" })
+
+  const useOffsetOnChange = (offName: "top" | "bottom" | "left" | "right") => {
+    return {
+      type: "text",
+      onChange: (e: ChangeEvent<HTMLInputElement>) => {
+        setOffset({ ...offset, [offName]: e.target.value })
+      },
+      value: offset[offName]
+    }
+  }
+
+  const offsetTop = useOffsetOnChange("top")
+  const offsetRight = useOffsetOnChange("right")
+  const offsetBottom = useOffsetOnChange("bottom")
+  const offsetLeft = useOffsetOnChange("left")
 
   return (
     <Container>
@@ -66,19 +82,19 @@ export default function Arrange() {
           <SizeGroup2>
             <div>
               <h4 title="top">T</h4>
-              <input type="text" value={"0px"} />
+              <input {...offsetTop} />
             </div>
             <div>
               <h4 title="right">R</h4>
-              <input type="text" value={"0px"} />
+              <input {...offsetRight} />
             </div>
             <div>
               <h4 title="bottom">B</h4>
-              <input type="text" value={"0px"} />
+              <input {...offsetBottom} />
             </div>
             <div>
               <h4 title="left">L</h4>
-              <input type="text" value={"0px"} />
+              <input {...offsetLeft} />
             </div>
           </SizeGroup2> : null
       }
@@ -103,7 +119,7 @@ const SizeGroup1 = styled.div`
   align-items: center;
   margin: 6px -8px;
   padding: 6px 8px;
-  height:22px;
+  height:24px;
   &:hover{
     box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
@@ -124,7 +140,13 @@ const SizeGroup2 = styled.div < { state: string } > `
   margin: 12px 0px;
   display:flex;
   align-items: center;
+  margin: 6px -8px;
+  padding: 6px 8px;
   margin-top: 8px;
+  height:24px;
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
+  }
   div{
     width:calc(100% / 4);
     display:flex;

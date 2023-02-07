@@ -1,14 +1,15 @@
 import styled from 'styled-components'
 import Header from '../components/design/header'
 import RightSideBar from '../components/design/rightSideBar'
+import CompyView from '../components/design/compyView'
 
 export default function Design() {
   return (
     <Container>
       <Header />
       <Main>
-        <div></div>
-        <div></div>
+        <div style={{ width: 300,backgroundColor:"white" }}></div>
+        <CompyView />
         <RightSideBar />
       </Main>
     </Container>

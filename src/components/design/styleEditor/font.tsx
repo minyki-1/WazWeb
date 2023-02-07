@@ -19,20 +19,27 @@ const fontFamily = [
 ]
 
 export default function Font() {
-  const [fontColor, setFontColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
+  const [color, setColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
+  const [size, setSize] = useState<string>()
+  const [weight, setWeight] = useState<string>()
+  const [align, setAlign] = useState<string>()
+  const [style, setStyle] = useState<string>()
+  const [decoration, setDecoration] = useState<string>()
+  const [family, setFamily] = useState<string>()
+  const [overflow, setOverflow] = useState<string>()
+  const [space, setSpace] = useState<string>()
+  const [listStyle, setListStyle] = useState<string>()
   return (
     <Container>
       <Topic>Font</Topic>
-      {/* //* size, weight, color, align, style, decoration, family, overflow */}
-
       <SizeGroup1>
         <div>
           <h4 title="font-size">Size</h4>
-          <input type="text" />
+          <input value={size} type="text" onChange={e => setSize(e.target.value)} />
         </div>
         <div>
           <h4 title="font-weight">Weight</h4>
-          <select>
+          <select value={weight} onChange={e => setWeight(e.target.value)}>
             <option value="normal">Normal</option>
             <option value="200">Thin</option>
             <option value="400">Light</option>
@@ -43,7 +50,7 @@ export default function Font() {
       <SizeGroup1>
         <div>
           <h4 title="text-align">Align</h4>
-          <select>
+          <select value={align} onChange={e => setAlign(e.target.value)}>
             <option value="start">Start</option>
             <option value="end">End</option>
             <option value="center">Center</option>
@@ -52,7 +59,7 @@ export default function Font() {
         </div>
         <div>
           <h4 title="font-style">Style</h4>
-          <select>
+          <select value={style} onChange={e => setStyle(e.target.value)}>
             <option value="normal">Normal</option>
             <option value="italic">Italic</option>
           </select>
@@ -60,18 +67,18 @@ export default function Font() {
       </SizeGroup1>
       <SizeGroup2>
         <h4>Color</h4>
-        <ColorPicker color={fontColor} setColor={setFontColor} disable={false} />
+        <ColorPicker color={color} setColor={setColor} disable={false} />
       </SizeGroup2>
       <SizeGroup3>
         <h4 title="text-decoration">Decoration</h4>
-        <select>
+        <select value={decoration} onChange={e => setDecoration(e.target.value)}>
           <option value="none">None</option>
           <option value="underline">Underline</option>
         </select>
       </SizeGroup3>
       <SizeGroup3>
         <h4 title="font-family">Family</h4>
-        <select>
+        <select value={family} onChange={e => setFamily(e.target.value)}>
           {
             fontFamily.map((value, index) => (
               <option key={index} value={value}>{value}</option>
@@ -82,14 +89,14 @@ export default function Font() {
       <SizeGroup1>
         <div>
           <h4 title="text-overflow">Overflow</h4>
-          <select>
+          <select value={overflow} onChange={e => setOverflow(e.target.value)}>
             <option value="clip">Clip</option>
             <option value="ellipsis">Ellipsis</option>
           </select>
         </div>
         <div>
           <h4 title="white-space">Space</h4>
-          <select>
+          <select value={space} onChange={e => setSpace(e.target.value)}>
             <option value="normal">Normal</option>
             <option value="italic">Italic</option>
           </select>
@@ -97,7 +104,7 @@ export default function Font() {
       </SizeGroup1>
       <SizeGroup3>
         <h4 title="list-style">List Style</h4>
-        <select>
+        <select value={listStyle} onChange={e => setListStyle(e.target.value)}>
           <option value="none">None</option>
           <option value="square">Square</option>
           <option value="inside">Inside</option>
@@ -123,9 +130,9 @@ const SizeGroup1 = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 6px -8px;
+  margin: 12px -8px;
   padding: 6px 8px;
-  height:22px;
+  height:24px;
   &:hover{
     box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
@@ -145,9 +152,9 @@ const SizeGroup1 = styled.div`
 const SizeGroup2 = styled.div`
   display: flex;
   align-items: center;
-  margin: 6px -8px;
+  margin: 12px -8px;
   padding: 6px 8px;
-  height:22px;
+  height:24px;
   &:hover{
     box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
@@ -161,9 +168,9 @@ const SizeGroup2 = styled.div`
 const SizeGroup3 = styled.div`
   display:flex;
   align-items: center;
-  margin: 6px -8px;
+  margin: 12px -8px;
   padding: 6px 8px;
-  height:22px;
+  height:24px;
   &:hover{
     box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
