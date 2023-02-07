@@ -15,7 +15,7 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
   const [opacity, setOpacity] = useState(String(color.a * 100))
-  const [colorInput, setColorInput] = useState<string>()
+  const [colorInput, setColorInput] = useState<string>(convertRGBtoHex(color))
 
   function colorToHex(color: number) {
     var hexadecimal = color.toString(16);

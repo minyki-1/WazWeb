@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import SVG_expand from "../../../svg/expand.svg"
 
 export default function Size() {
-  const [marginExpand, setMarginExpand] = useState(false)
-  const [paddingExpand, setPaddingExpand] = useState(false)
-  const [width, setWidth] = useState<string>()
-  const [height, setHeight] = useState<string>()
+  const [width, setWidth] = useState("0px")
+  const [height, setHeight] = useState("0px")
+  // const [margin, setMargin] = useState("0px")
+  // const [padding, setPadding] = useState("0px")
 
   return (
     <Container>
@@ -21,20 +21,39 @@ export default function Size() {
           <input type="text" value={height} onChange={e => setHeight(e.target.value)} />
         </div>
       </SizeGroup1>
-      <ExpandSize text={"Margin"} expand={marginExpand} setExpand={setMarginExpand} />
-      <ExpandSize text={"Padding"} expand={paddingExpand} setExpand={setPaddingExpand} />
+      <ExpandSize text={"Margin"} />
+      <ExpandSize text={"Padding"} />
     </Container>
   )
 }
 
-function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean, setExpand: Dispatch<SetStateAction<boolean>> }) {
-  // const [top,setTop] = useState()
+function ExpandSize({ text }: { text: string }) {
+  const [expand, setExpand] = useState(false)
+  const [total, setTotal] = useState("0px")
+  const [partValue, setPartValue] = useState({ top: "0px", right: "0px", bottom: "0px", left: "0px" })
+
+  const useExpand = (location: "top" | "right" | "bottom" | "left") => {
+    function onChange(e: ChangeEvent) {
+      setPartValue({ ...partValue, [location]: (e.target as HTMLInputElement).value })
+    }
+    return { type: "text", value: partValue[location], onChange }
+  }
+
+  const top = useExpand("top")
+  const right = useExpand("right")
+  const bottom = useExpand("bottom")
+  const left = useExpand("left")
+
   return (
     <SizeGroup2>
       <SizeGroup3 state={String(expand)}>
         <div>
           <h4>{text}</h4>
-          <input disabled={expand} type="text" value={"0px"} />
+          <input
+            disabled={expand}
+            type="text"
+            value={total}
+            onChange={({ target }) => setTotal(target.value)} />
         </div>
         <SVG_expand onClick={() => setExpand(!expand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer" }} />
       </SizeGroup3>
@@ -43,19 +62,19 @@ function ExpandSize({ text, expand, setExpand }: { text: string, expand: boolean
           <ExpandInput>
             <div>
               <h4 title={`${text.toLowerCase()}-top`}>T</h4>
-              <input type="text" value={"0px"} />
+              <input {...top} />
             </div>
             <div>
               <h4 title={`${text.toLowerCase()}-right`}>R</h4>
-              <input type="text" value={"0px"} />
+              <input {...right} />
             </div>
             <div>
               <h4 title={`${text.toLowerCase()}-bottom`}>B</h4>
-              <input type="text" value={"0px"} />
+              <input {...bottom} />
             </div>
             <div>
               <h4 title={`${text.toLowerCase()}-left`}>L</h4>
-              <input type="text" value={"0px"} />
+              <input {...left} />
             </div>
           </ExpandInput>
           : null

@@ -12,7 +12,7 @@ export default function Basic() {
   const [bgColorDisable, setBgColorDisable] = useState(false)
   const [borderSize, setBorderSize] = useState("0px")
   const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
-  const [radius, setRadius] = useState<string>()
+  const [radius, setRadius] = useState("0px")
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
   const [borderStyle, setBorderStyle] = useState("solid")
 

@@ -20,15 +20,16 @@ const fontFamily = [
 
 export default function Font() {
   const [color, setColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
-  const [size, setSize] = useState<string>()
-  const [weight, setWeight] = useState<string>()
-  const [align, setAlign] = useState<string>()
-  const [style, setStyle] = useState<string>()
-  const [decoration, setDecoration] = useState<string>()
-  const [family, setFamily] = useState<string>()
-  const [overflow, setOverflow] = useState<string>()
-  const [space, setSpace] = useState<string>()
-  const [listStyle, setListStyle] = useState<string>()
+  const [size, setSize] = useState("0px")
+  const [weight, setWeight] = useState("normal")
+  const [align, setAlign] = useState("start")
+  const [style, setStyle] = useState("normal")
+  const [decoration, setDecoration] = useState("none")
+  const [family, setFamily] = useState("Default Style")
+  const [overflow, setOverflow] = useState("clip")
+  const [space, setSpace] = useState("normal")
+  const [listStyle, setListStyle] = useState("none")
+
   return (
     <Container>
       <Topic>Font</Topic>
