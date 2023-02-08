@@ -22,7 +22,8 @@
     "react-color": "^2.19.3",
     "react-dom": "latest",
     "react-is": "^18.2.0",
-    "styled-components": "latest"
+    "styled-components": "latest",
+    "zustand": "^4.3.2"
   },
   "devDependencies": {
     "@svgr/webpack": "latest",
