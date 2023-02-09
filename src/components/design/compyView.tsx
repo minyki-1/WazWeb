@@ -6,6 +6,7 @@ export default function CompyView() {
   const [selectComp, setSelectComp] = useState<HTMLElement | undefined>();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const { setSelectId } = useStore();
+  const [zoom, setZoom] = useState(1);
 
   const viewMouseOverEvent = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
@@ -48,9 +49,28 @@ export default function CompyView() {
     }
   }
 
+  const viewWheelEvent = (e: any) => {
+    e.preventDefault();
+    const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
+    const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId) as HTMLElement | null
+    const container = document.querySelector("." + Container.styledComponentId)
+    const zoomValue = zoom + e.deltaY * 0.001
+    if (view && viewWrapper && container) {
+      setZoom(zoomValue)
+      view.style.transform = `scale(${zoomValue},${zoomValue})`
+      viewWrapper.style.width = (view.offsetWidth * zoomValue) + 200 + "px"
+      viewWrapper.style.height = (view.offsetHeight * zoomValue) + 200 + "px"
+    }
+  }
+
+
+
   return (
     <Container>
-      <ViewWrapper onClick={viewBgClickEvent}>
+      <ViewWrapper
+        onClick={viewBgClickEvent}
+      // onWheel={viewWheelEvent}
+      >
         <View
           className="App"
           id="compyDesign"
@@ -85,5 +105,4 @@ const ViewWrapper = styled.div`
   /* width:920px; // * View의 transform을 바꿀때 wrapper의 w,h 또한 동일한 비율 + 200px의 사이즈로 변경해야함
   height:1640px; */
   z-index: 2;
-  
 `

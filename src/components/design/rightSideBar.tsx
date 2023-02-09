@@ -3,6 +3,7 @@ import Arrange from './styleEditor/arrange'
 import Size from './styleEditor/size'
 import Basic from './styleEditor/basic'
 import Font from './styleEditor/font'
+import Background from './styleEditor/background'
 import { useEffect, useState } from 'react'
 import { useStore } from '../../zustand/store'
 
@@ -39,14 +40,14 @@ export default function RightSideBar() {
   useEffect(() => {
     let comp: HTMLElement | null = null;
     if (selectId) comp = document.getElementById(selectId);
-    if (comp) { setSelectComp(comp); console.log(compData[comp.tagName.toLowerCase()]); }
-
+    if (comp) setSelectComp(comp);
   }, [selectId])
 
   return (
     <Container id="rightSideBar">
+      {selectId === "&background" && <Background />}
       {
-        selectId && selectComp &&
+        selectId && selectId !== "&background" && selectComp &&
         compData[selectComp.tagName.toLowerCase()]
           .map((Editor, key) => (
             <Editor key={key} />
