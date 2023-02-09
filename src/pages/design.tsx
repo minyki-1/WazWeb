@@ -8,7 +8,7 @@ export default function Design() {
     <Container>
       <Header />
       <Main>
-        <div style={{ width: 300,backgroundColor:"white" }}></div>
+        <div style={{ width: 300, backgroundColor: "white", zIndex: 1, boxShadow: "2px 0px 10px rgba(0,0,0,0.25)" }}></div>
         <CompyView />
         <RightSideBar />
       </Main>

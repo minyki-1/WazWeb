@@ -3,18 +3,15 @@ import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 
 export default function CompyView() {
-  const [selectComp, setSelectComp] = useState<HTMLElement | null>(null);
-  const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | null>(null);
-  const { selectId, setSelectId } = useStore();
+  const [selectComp, setSelectComp] = useState<HTMLElement | undefined>();
+  const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
+  const { setSelectId } = useStore();
 
   const viewMouseOverEvent = (e: MouseEvent) => {
-    // const hvId = JSON.parse(sessionStorage.getItem("hvId") || JSON.stringify(null));
     const target = e.target as HTMLElement;
-    // const selectComp = getSelectComp(hvId);
     if (target !== selectComp) {
       if (mouseoverComp) mouseoverComp.style.outline = "";
       target.style.outline = "rgba(43, 112, 240, 0.4) solid 2.5px";
-      // mouseoverComp = target;
       setMouseoverComp(target)
     }
   }
@@ -22,7 +19,6 @@ export default function CompyView() {
   const viewClickEvent = (e: MouseEvent) => {
     const target = e.target as HTMLElement;
     if (target !== selectComp) {
-      console.log(selectComp)
       if (selectComp) {
         selectComp.contentEditable = "false"; //* 만약 글수정 상태에서 바꿀때 그걸 false해줌
         selectComp.style.outline = ""
@@ -30,55 +26,64 @@ export default function CompyView() {
       if (mouseoverComp) mouseoverComp.style.outline = ""
       setSelectComp(target)
       setSelectId(target.id)
-      setMouseoverComp(null)
+      setMouseoverComp(undefined)
       target.style.outline = "rgba(43, 112, 240, 0.8) solid 2.5px"
-      // setSelectComp(hvId, target.className);
     }
   }
 
-  useEffect(() => {
-    console.log()
-  }, [selectComp])
-
   const viewBgClickEvent = (e: MouseEvent) => {
-    if (e.target !== selectComp && selectComp) {
+    const target = e.target as HTMLElement
+    const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId)
+    if (viewWrapper === target && target !== selectComp && selectComp) {
       selectComp.contentEditable = "false";
       selectComp.style.outline = "";
-      setSelectComp(null)
-      // sessionStorage.removeItem(hvId + "selectComp");
-      // useStore.setState({ isSelectChange: true });
+      setSelectComp(undefined)
+      setSelectId("&background")
     }
   }
   const viewMouseOutEvent = () => {
-    // const hvId = JSON.parse(sessionStorage.getItem("hvId") || JSON.stringify(null));
-    // const selectComp = getSelectComp(hvId);
-
-    if (mouseoverComp && mouseoverComp !== selectComp) mouseoverComp.style.outline = "";
+    if (mouseoverComp && mouseoverComp !== selectComp) {
+      mouseoverComp.style.outline = "";
+      setMouseoverComp(undefined);
+    }
   }
 
   return (
-    <Container onClick={viewBgClickEvent}>
-      <View
-        onClick={viewClickEvent}
-        onMouseOver={viewMouseOverEvent}
-        onMouseOut={viewMouseOutEvent}
-      >
-        <div>div</div>
-        <h1>h1</h1>
-      </View>
-    </Container>
+    <Container>
+      <ViewWrapper onClick={viewBgClickEvent}>
+        <View
+          className="App"
+          id="compyDesign"
+          onClick={viewClickEvent}
+          onMouseOver={viewMouseOverEvent}
+          onMouseOut={viewMouseOutEvent}
+        />
+      </ViewWrapper>
+    </Container >
   )
 }
 
 const Container = styled.div`
   width:calc(100% - 300px - 310px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  overflow: scroll;
+  z-index: 0;
 `
 const View = styled.div`
   width:360px;
   height:720px;
   background-color: white;
   border-radius: 12px;
+  z-index: 2;
+  /* transform: scale(2,2); */
+`
+const ViewWrapper = styled.div`
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  min-width:100%;
+  min-height:100%;
+  /* width:920px; // * View의 transform을 바꿀때 wrapper의 w,h 또한 동일한 비율 + 200px의 사이즈로 변경해야함
+  height:1640px; */
+  z-index: 2;
+  
 `

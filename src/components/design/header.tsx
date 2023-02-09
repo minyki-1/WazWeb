@@ -18,6 +18,7 @@ export default function Header() {
 const Container = styled.section`
   width:100vw;
   height:48px;
+  z-index: 2;
   background-color: #242424;
   display:flex;
   align-items: center;
