@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import SVG_project from "../../svg/project.svg"
 import SVG_community from "../../svg/community.svg"
-import SVG_plus from "../../svg/plus.svg"
+import SVG_plus_thin from "../../svg/plus_thin.svg"
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -25,7 +25,7 @@ export default function LeftSideBar() {
         <TeamTitle>
           <h2>Teams</h2>
           <TeamAddBtn>
-            <SVG_plus width={10} height={10} fill={"#363636"} />
+            <SVG_plus_thin width={10} height={10} fill={"#363636"} />
             <h5>New Team</h5>
           </TeamAddBtn>
         </TeamTitle>

@@ -45,13 +45,13 @@ export default function RightSideBar() {
 
   return (
     <Container id="rightSideBar">
-      {selectId === "&background" && <Background />}
       {
-        selectId && selectId !== "&background" && selectComp &&
-        compData[selectComp.tagName.toLowerCase()]
-          .map((Editor, key) => (
-            <Editor key={key} />
-          ))
+        selectId ? selectComp &&
+          compData[selectComp.tagName.toLowerCase()]
+            .map((Editor, key) => (
+              <Editor key={key} />
+            ))
+          : <Background />
       }
     </Container>
   )

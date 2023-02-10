@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface ISelectIdState {
   selectId: string | undefined;
-  setSelectId: (select: string) => void;
+  setSelectId: (select: string | undefined) => void;
 }
 
 export const useStore = create<ISelectIdState>((set) => ({

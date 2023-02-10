@@ -2,13 +2,14 @@ import styled from 'styled-components'
 import Header from '../components/design/header'
 import RightSideBar from '../components/design/rightSideBar'
 import CompyView from '../components/design/compyView'
+import LeftSideBar from '../components/design/leftSideBar'
 
 export default function Design() {
   return (
     <Container>
       <Header />
       <Main>
-        <div style={{ width: 300, backgroundColor: "white", zIndex: 1, boxShadow: "2px 0px 10px rgba(0,0,0,0.25)" }}></div>
+        <LeftSideBar />
         <CompyView />
         <RightSideBar />
       </Main>

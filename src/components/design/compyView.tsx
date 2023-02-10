@@ -39,7 +39,7 @@ export default function CompyView() {
       selectComp.contentEditable = "false";
       selectComp.style.outline = "";
       setSelectComp(undefined)
-      setSelectId("&background")
+      setSelectId(undefined)
     }
   }
   const viewMouseOutEvent = () => {
@@ -58,8 +58,8 @@ export default function CompyView() {
     if (view && viewWrapper && container) {
       setZoom(zoomValue)
       view.style.transform = `scale(${zoomValue},${zoomValue})`
-      viewWrapper.style.width = (view.offsetWidth * zoomValue) + 200 + "px"
-      viewWrapper.style.height = (view.offsetHeight * zoomValue) + 200 + "px"
+      viewWrapper.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
+      viewWrapper.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
     }
   }
 
@@ -84,7 +84,7 @@ export default function CompyView() {
 }
 
 const Container = styled.div`
-  width:calc(100% - 300px - 310px);
+  width:calc(100% - 280px - 310px);
   overflow: scroll;
   z-index: 0;
 `
@@ -102,6 +102,9 @@ const ViewWrapper = styled.div`
   justify-content: center;
   min-width:100%;
   min-height:100%;
+  width:460px;
+  height:820px;
+  overflow: scroll;
   /* width:920px; // * View의 transform을 바꿀때 wrapper의 w,h 또한 동일한 비율 + 200px의 사이즈로 변경해야함
   height:1640px; */
   z-index: 2;
