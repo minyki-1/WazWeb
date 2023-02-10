@@ -73,7 +73,7 @@ export default function CompyView() {
       >
         <View
           className="App"
-          id="compyDesign"
+          id="compy_view"
           onClick={viewClickEvent}
           onMouseOver={viewMouseOverEvent}
           onMouseOut={viewMouseOutEvent}

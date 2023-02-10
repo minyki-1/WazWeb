@@ -16,7 +16,14 @@ export default function Comp({ name, descript, html }: ICompProps) {
   const { selectId } = useStore();
 
   const addComp = () => {
-    console.log(selectId)
+    const compyView = document.getElementById("compy_view")
+    // * 추가할 컴포넌트에 고유 id를 부여하고 class값도 부여해야함
+    if (selectId) {
+      const selectComp = document.getElementById(selectId)
+      selectComp?.insertAdjacentHTML("beforeend", html)
+    } else if (compyView) {
+      compyView?.insertAdjacentHTML("beforeend", html)
+    }
   }
 
   useEffect(() => {
