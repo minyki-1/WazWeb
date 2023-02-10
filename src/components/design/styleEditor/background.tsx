@@ -2,8 +2,6 @@ import { useState } from 'react'
 import styled from "styled-components"
 import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
-import SVG_eye from "../../../svg/eye.svg"
-import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
 
 export default function Basic() {
   const [bgColor, setBgColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
