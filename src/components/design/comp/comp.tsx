@@ -8,9 +8,10 @@ interface ICompProps {
   name: string;
   descript: string;
   html: string;
+  id: number;
 }
 
-export default function Comp({ name, descript, html }: ICompProps) {
+export default function Comp({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "white", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectId } = useStore();
@@ -27,13 +28,13 @@ export default function Comp({ name, descript, html }: ICompProps) {
   }
 
   useEffect(() => {
-    const compView = document.querySelector('.' + CompView.styledComponentId);
-    if (compView && !compView.hasChildNodes()) compView?.insertAdjacentHTML("beforeend", html);
-  }, [html])
+    const compView = document.getElementById(String(id));
+    if (compView && !compView.hasChildNodes()) compView.insertAdjacentHTML("beforeend", html);
+  }, [html, id])
 
   return (
     <Container>
-      <CompView></CompView>
+      <CompView id={id} />
       <InfoBar>
         <h2>{name}</h2>
         <div>

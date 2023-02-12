@@ -1,0 +1,46 @@
+input {
+	min-width: 0px;
+	min-height: 0px;
+	outline: none;
+}
+
+a {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+* {
+	outline: none;
+	color: #363636;
+	background-color: initial;
+}
+
+h1 {
+	font-size: 19px;
+}
+
+h2 {
+	font-size: 16px;
+}
+
+h3 {
+	font-size: 14px;
+}
+
+h4 {
+	font-size: 12px;
+}
+
+h5 {
+	font-size: 11px;
+}
+
+input {
+	border: none;
+	font-size: 14px;
+}
+
+select {
+	border: none;
+	font-size: 14px;
+}
