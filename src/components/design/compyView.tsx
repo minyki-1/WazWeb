@@ -3,56 +3,53 @@ import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 
 export default function CompyView() {
-  // const [selectComp, setSelectComp] = useState<HTMLElement | undefined>();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
+  const [view, setView] = useState<HTMLElement>()
 
-  const viewMouseOverEvent = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target !== selectComp) {
-      if (mouseoverComp) mouseoverComp.style.outline = "";
-      target.style.outline = "rgba(43, 112, 240, 0.4) solid 2.5px";
-      setMouseoverComp(target)
-    }
+  const handleMouseOver = ({ target }: { target: HTMLElement }) => {
+    if (target === selectComp) return; //* selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
+    if (mouseoverComp) mouseoverComp.style.outline = ""; //* 기존 mouseOverComp의 outline을 초기화해줌
+    target.style.outline = "rgba(43, 112, 240, 0.4) solid 3px";
+    setMouseoverComp(target)
   }
 
-  const viewClickEvent = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (target !== selectComp) {
-      if (selectComp) {
-        selectComp.contentEditable = "false"; //* 만약 글수정 상태에서 바꿀때 그걸 false해줌
-        selectComp.style.outline = ""
-      }
-      if (mouseoverComp) mouseoverComp.style.outline = ""
-      setSelectComp(target)
-      setMouseoverComp(undefined)
-      target.style.outline = "rgba(43, 112, 240, 0.8) solid 2.5px"
+  const handleClick = ({ target }: { target: HTMLElement }) => {
+    if (target === selectComp) return; //* target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
+    if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+      selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
+      selectComp.style.outline = ""
     }
+    if (mouseoverComp) mouseoverComp.style.outline = ""
+    setSelectComp(target)
+    setMouseoverComp(undefined)
+    target.style.outline = "rgba(43, 112, 240, 0.8) solid 3px"
   }
 
-  const viewBgClickEvent = (e: MouseEvent) => {
-    const target = e.target as HTMLElement
+  const viewBgClickEvent = ({ target }: { target: HTMLElement }) => {
     const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId)
-    if (viewWrapper === target && target !== selectComp && selectComp) {
-      selectComp.contentEditable = "false";
-      selectComp.style.outline = "";
-      setSelectComp(undefined)
-    }
+    //* viewWrapper !== target : target이 viewWrapper일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
+    if (viewWrapper !== target || !selectComp) return;
+    selectComp.contentEditable = "false";
+    selectComp.style.outline = "";
+    setSelectComp(undefined)
   }
-  const viewMouseOutEvent = () => {
-    if (mouseoverComp && mouseoverComp !== selectComp) {
-      mouseoverComp.style.outline = "";
-      setMouseoverComp(undefined);
-    }
+  const handleMouseOut = () => {
+    if (mouseoverComp) mouseoverComp.style.outline = "";
+    setMouseoverComp(undefined);
   }
 
-  const viewWheelEvent = (e: any) => {
-    e.preventDefault();
+  const handleKeyDown = ({ key }: { key: string }) => {
+    if (!selectComp || selectComp === view) return; //* view에는 이벤트가 발생하면 안되기에 제외
+    if (key === "Delete") selectComp.remove();
+  }
+
+  const handleWheel = ({ deltaY }: { deltaY: number }) => {
     const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
     const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId) as HTMLElement | null
     const container = document.querySelector("." + Container.styledComponentId)
-    const zoomValue = zoom + e.deltaY * 0.001
+    const zoomValue = zoom + deltaY * 0.001
     if (view && viewWrapper && container) {
       setZoom(zoomValue)
       view.style.transform = `scale(${zoomValue})`
@@ -61,17 +58,26 @@ export default function CompyView() {
     }
   }
 
+  useEffect(() => {
+    const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
+    if (!view) return;
+    view.className = `App ${view.className.split(" ")[1]}`
+    setView(view)
+  }, [])
+
   return (
     <Container>
       <ViewWrapper
         onClick={viewBgClickEvent}
-      // onWheel={viewWheelEvent}
+      // onWheel={handleWheel}
       >
         <View
-          className="App &app"
-          onClick={viewClickEvent}
-          onMouseOver={viewMouseOverEvent}
-          onMouseOut={viewMouseOutEvent}
+          onClick={handleClick}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
+          onKeyDown={handleKeyDown}
+          onDoubleClick={() => { console.log("dblclick") }}
+          tabIndex="0"
         />
       </ViewWrapper>
     </Container >

@@ -18,7 +18,6 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
   const { selectComp } = useStore();
 
   const addComp = () => {
-    // let selectComp = (selectComp ? document.querySelector("." + selectComp) : null) || document.getElementById("compy_view")
     if (!selectComp) return;
     const parentComp = document.createElement("div")
     parentComp.innerHTML = html.trim()

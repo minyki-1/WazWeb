@@ -4,7 +4,6 @@ import Size from './styleEditor/size'
 import Basic from './styleEditor/basic'
 import Font from './styleEditor/font'
 import Background from './styleEditor/background'
-import { useEffect, useState } from 'react'
 import { useStore } from '../../zustand/store'
 
 const compData: { [key: string]: (() => JSX.Element)[] } = {
@@ -35,12 +34,6 @@ const compData: { [key: string]: (() => JSX.Element)[] } = {
 
 export default function RightSideBar() {
   const { selectComp } = useStore();
-
-  // useEffect(() => {
-  //   let comp: HTMLElement | null = null;
-  //   if (selectComp) comp = document.querySelector("." + selectComp);
-  //   if (comp) setSelectComp(comp);
-  // }, [selectComp, setSelectComp])
 
   return (
     <Container id="rightSideBar">
