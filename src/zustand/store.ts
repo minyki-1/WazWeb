@@ -1,13 +1,13 @@
 import { create } from "zustand";
 
-interface ISelectIdState {
-  selectId: string | undefined;
-  setSelectId: (select: string | undefined) => void;
+interface IselectCompState {
+  selectComp: HTMLElement | undefined;
+  setSelectComp: (select: HTMLElement | undefined) => void;
 }
 
-export const useStore = create<ISelectIdState>((set) => ({
-  selectId: undefined,
-  setSelectId: (select) => {
-    set((state) => ({ ...state, selectId: select }));
+export const useStore = create<IselectCompState>((set) => ({
+  selectComp: undefined,
+  setSelectComp: (select) => {
+    set((state) => ({ ...state, selectComp: select }));
   },
 }));

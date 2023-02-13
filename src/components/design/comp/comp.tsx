@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import randString from 'crypto-random-string';
 import SVG_plus from "../../../svg/plus.svg"
 import SVG_down_angle from "../../../svg/down_angle.svg"
 import { useEffect, useState } from 'react'
@@ -14,22 +15,42 @@ interface ICompProps {
 export default function Comp({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "white", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
-  const { selectId } = useStore();
+  const { selectComp } = useStore();
 
   const addComp = () => {
-    const compyView = document.getElementById("compy_view")
-    // * 추가할 컴포넌트에 고유 id를 부여하고 class값도 부여해야함
-    if (selectId) {
-      const selectComp = document.getElementById(selectId)
-      selectComp?.insertAdjacentHTML("beforeend", html)
-    } else if (compyView) {
-      compyView?.insertAdjacentHTML("beforeend", html)
-    }
+    // let selectComp = (selectComp ? document.querySelector("." + selectComp) : null) || document.getElementById("compy_view")
+    if (!selectComp) return;
+    const parentComp = document.createElement("div")
+    parentComp.innerHTML = html.trim()
+    const newComp = parentComp.firstChild as HTMLElement;
+    if (!newComp) return;
+    newComp.className = name + " " + randString({ length: 6 })
+    selectComp.append(newComp)
   }
 
   useEffect(() => {
     const compView = document.getElementById(String(id));
-    if (compView && !compView.hasChildNodes()) compView.insertAdjacentHTML("beforeend", html);
+    if (!compView || compView.hasChildNodes()) return;
+
+    const parentComp = document.createElement("div")
+    parentComp.innerHTML = html.trim()
+    const newComp = parentComp.firstChild as HTMLElement;
+
+    if (!newComp) return;
+    compView.append(newComp)
+
+    const newCompWidth = newComp.offsetWidth
+    const newCompHeight = newComp.offsetHeight
+    const viewWidth = compView.offsetWidth - 20
+    const viewHeight = compView.offsetHeight - 20
+
+    let resizeValue = 1;
+    if (newCompWidth / 4 >= newCompHeight / 3 && newCompWidth > viewWidth) {
+      resizeValue = viewWidth / newCompWidth
+    } else if (newCompWidth / 4 <= newCompHeight / 3 && newCompHeight > viewHeight) {
+      resizeValue = viewHeight / newCompHeight
+    }
+    newComp.style.transform = `scale(${resizeValue})`
   }, [html, id])
 
   return (
@@ -57,8 +78,9 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
 }
 
 const Container = styled.section`
-  width:calc(100% - 40px);
-  margin: 20px;
+  width:calc(100% - 24px);
+  margin: 12px;
+  margin-top: 28px;
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
   border-radius: 4px;
   background-color: #4D4D4D;
@@ -66,7 +88,8 @@ const Container = styled.section`
 const CompView = styled.div`
  background-color: #FBFBFB;
   width:100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
   display:flex;
   align-items: center;
   justify-content: center;

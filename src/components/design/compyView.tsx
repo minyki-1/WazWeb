@@ -3,9 +3,9 @@ import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 
 export default function CompyView() {
-  const [selectComp, setSelectComp] = useState<HTMLElement | undefined>();
+  // const [selectComp, setSelectComp] = useState<HTMLElement | undefined>();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
-  const { setSelectId } = useStore();
+  const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
 
   const viewMouseOverEvent = (e: MouseEvent) => {
@@ -26,7 +26,6 @@ export default function CompyView() {
       }
       if (mouseoverComp) mouseoverComp.style.outline = ""
       setSelectComp(target)
-      setSelectId(target.id)
       setMouseoverComp(undefined)
       target.style.outline = "rgba(43, 112, 240, 0.8) solid 2.5px"
     }
@@ -39,7 +38,6 @@ export default function CompyView() {
       selectComp.contentEditable = "false";
       selectComp.style.outline = "";
       setSelectComp(undefined)
-      setSelectId(undefined)
     }
   }
   const viewMouseOutEvent = () => {
@@ -57,13 +55,11 @@ export default function CompyView() {
     const zoomValue = zoom + e.deltaY * 0.001
     if (view && viewWrapper && container) {
       setZoom(zoomValue)
-      view.style.transform = `scale(${zoomValue},${zoomValue})`
+      view.style.transform = `scale(${zoomValue})`
       viewWrapper.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
       viewWrapper.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
     }
   }
-
-
 
   return (
     <Container>
@@ -72,8 +68,7 @@ export default function CompyView() {
       // onWheel={viewWheelEvent}
       >
         <View
-          className="App"
-          id="compy_view"
+          className="App &app"
           onClick={viewClickEvent}
           onMouseOver={viewMouseOverEvent}
           onMouseOut={viewMouseOutEvent}
@@ -94,7 +89,6 @@ const View = styled.div`
   background-color: white;
   border-radius: 12px;
   z-index: 2;
-  /* transform: scale(2,2); */
 `
 const ViewWrapper = styled.div`
   display:flex;
@@ -105,7 +99,5 @@ const ViewWrapper = styled.div`
   width:460px;
   height:820px;
   overflow: scroll;
-  /* width:920px; // * View의 transform을 바꿀때 wrapper의 w,h 또한 동일한 비율 + 200px의 사이즈로 변경해야함
-  height:1640px; */
   z-index: 2;
 `

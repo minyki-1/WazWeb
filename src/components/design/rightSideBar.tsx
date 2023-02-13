@@ -34,19 +34,18 @@ const compData: { [key: string]: (() => JSX.Element)[] } = {
 }
 
 export default function RightSideBar() {
-  const { selectId } = useStore();
-  const [selectComp, setSelectComp] = useState<HTMLElement>();
+  const { selectComp } = useStore();
 
-  useEffect(() => {
-    let comp: HTMLElement | null = null;
-    if (selectId) comp = document.getElementById(selectId);
-    if (comp) setSelectComp(comp);
-  }, [selectId])
+  // useEffect(() => {
+  //   let comp: HTMLElement | null = null;
+  //   if (selectComp) comp = document.querySelector("." + selectComp);
+  //   if (comp) setSelectComp(comp);
+  // }, [selectComp, setSelectComp])
 
   return (
     <Container id="rightSideBar">
       {
-        selectId ? selectComp &&
+        selectComp ? selectComp &&
           compData[selectComp.tagName.toLowerCase()]
             .map((Editor, key) => (
               <Editor key={key} />
