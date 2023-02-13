@@ -7,6 +7,15 @@ export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
   const [view, setView] = useState<HTMLElement>()
+  const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
+
+  const resetSelectComp = () => {
+    if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+      selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
+      selectComp.style.outline = "";
+      selectComp.style.cursor = ""
+    }
+  }
 
   const handleMouseOver = ({ target }: { target: HTMLElement }) => {
     if (target === selectComp) return; //* selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
@@ -15,12 +24,11 @@ export default function CompyView() {
     setMouseoverComp(target)
   }
 
-  const handleClick = ({ target }: { target: HTMLElement }) => {
-    if (target === selectComp) return; //* target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
-    if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
-      selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
-      selectComp.style.outline = ""
-    }
+  const handleClick = (e: MouseEvent) => {
+    e.preventDefault()
+    const target = e.target as HTMLElement | null
+    if (!target || target === selectComp) return; //* target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
+    resetSelectComp();
     if (mouseoverComp) mouseoverComp.style.outline = ""
     setSelectComp(target)
     setMouseoverComp(undefined)
@@ -30,9 +38,8 @@ export default function CompyView() {
   const viewBgClickEvent = ({ target }: { target: HTMLElement }) => {
     const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId)
     //* viewWrapper !== target : target이 viewWrapper일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
-    if (viewWrapper !== target || !selectComp) return;
-    selectComp.contentEditable = "false";
-    selectComp.style.outline = "";
+    if (viewWrapper !== target) return;
+    resetSelectComp();
     setSelectComp(undefined)
   }
   const handleMouseOut = () => {
@@ -43,6 +50,13 @@ export default function CompyView() {
   const handleKeyDown = ({ key }: { key: string }) => {
     if (!selectComp || selectComp === view) return; //* view에는 이벤트가 발생하면 안되기에 제외
     if (key === "Delete") selectComp.remove();
+  }
+
+  const handleDoubleClick = () => {
+    if (selectComp && canEditTag.includes(selectComp.tagName)) {
+      selectComp.contentEditable = "true";
+      selectComp.style.cursor = "text";
+    }
   }
 
   const handleWheel = ({ deltaY }: { deltaY: number }) => {
@@ -76,7 +90,7 @@ export default function CompyView() {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
           onKeyDown={handleKeyDown}
-          onDoubleClick={() => { console.log("dblclick") }}
+          onDoubleClick={handleDoubleClick}
           tabIndex="0"
         />
       </ViewWrapper>
