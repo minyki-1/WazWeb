@@ -6,7 +6,6 @@ export default function CompyView() {
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
-  const [view, setView] = useState<HTMLElement>()
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
 
   const resetSelectComp = () => {
@@ -47,11 +46,6 @@ export default function CompyView() {
     setMouseoverComp(undefined);
   }
 
-  const handleKeyDown = ({ key }: { key: string }) => {
-    if (!selectComp || selectComp === view) return; //* view에는 이벤트가 발생하면 안되기에 제외
-    if (key === "Delete") selectComp.remove();
-  }
-
   const handleDoubleClick = () => {
     if (selectComp && canEditTag.includes(selectComp.tagName)) {
       selectComp.contentEditable = "true";
@@ -72,13 +66,6 @@ export default function CompyView() {
     }
   }
 
-  useEffect(() => {
-    const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
-    if (!view) return;
-    view.className = `App ${view.className.split(" ")[1]}`
-    setView(view)
-  }, [])
-
   return (
     <Container>
       <ViewWrapper
@@ -86,12 +73,12 @@ export default function CompyView() {
       // onWheel={handleWheel}
       >
         <View
+          id="view"
           onClick={handleClick}
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
-          onKeyDown={handleKeyDown}
           onDoubleClick={handleDoubleClick}
-          tabIndex="0"
+          // tabIndex="0"
         />
       </ViewWrapper>
     </Container >
