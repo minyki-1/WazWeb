@@ -26,27 +26,27 @@ export default function Design() {
   }
 
   const undoEvent = () => {
-    const histStorage: string[] | null = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
-    const undoStorage: string[] | null = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
+    const histStorage: string[] = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
+    const undoStorage: string[] = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
     const view = document.getElementById("view")
     if (!view || !histStorage || !undoStorage || histStorage.length < 2) return;
     view.firstChild?.remove()
     view.innerHTML = histStorage[1]
-    localStorage.setItem("undo_" + param, JSON.stringify([histStorage[1], ...undoStorage]))
+    localStorage.setItem("undo_" + param, JSON.stringify([histStorage[0], ...undoStorage]))
     histStorage.shift()
     localStorage.setItem("hist_" + param, JSON.stringify(histStorage))
   }
 
   const redoEvent = () => {
-    const histStorage: string[] | null = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
-    const undoStorage: string[] | null = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
+    const histStorage: string[] = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
+    const undoStorage: string[] = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
     const view = document.getElementById("view")
-    if (!view || !histStorage || !undoStorage || histStorage.length < 2) return;
+    if (!view || !histStorage || !undoStorage || undoStorage.length < 1) return;
     view.firstChild?.remove()
-    view.innerHTML = histStorage[1]
-    localStorage.setItem("undo_" + param, JSON.stringify([histStorage[1], ...undoStorage]))
-    histStorage.shift()
-    localStorage.setItem("hist_" + param, JSON.stringify(histStorage))
+    view.innerHTML = undoStorage[0]
+    localStorage.setItem("hist_" + param, JSON.stringify([undoStorage[0], ...histStorage]))
+    undoStorage.shift()
+    localStorage.setItem("undo_" + param, JSON.stringify(undoStorage))
   }
 
   const copyEvent = () => {
@@ -62,7 +62,7 @@ export default function Design() {
   }
 
   useEffect(() => {
-    saveHTML(String(param)); //* 초기 storage를 만들어줘야함
+    saveHTML(param); //* 초기 storage를 만들어줘야함
   }, [param, saveHTML])
 
   return (

@@ -3,7 +3,7 @@ import { create } from "zustand";
 interface IselectCompState {
   selectComp: HTMLElement | undefined;
   setSelectComp: (select: HTMLElement | undefined) => void;
-  saveHTML: (params: string) => void;
+  saveHTML: (params: string | string[] | undefined) => void;
 }
 
 export const useStore = create<IselectCompState>((set) => ({
@@ -14,7 +14,7 @@ export const useStore = create<IselectCompState>((set) => ({
   saveHTML: (param) => {
     const histStorage: string[] | null = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
     const view = document.getElementById("view")
-    if (!view) return;
+    if (!view || !param || param instanceof Array) return;
 
     const htmlText = view.innerHTML
       .replace('outline: rgba(43, 112, 240, 0.8) solid 3px; ', '')
