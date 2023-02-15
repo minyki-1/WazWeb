@@ -1,9 +1,10 @@
 import styled from 'styled-components'
-import randString from 'crypto-random-string';
 import SVG_plus from "../../../svg/plus.svg"
 import SVG_down_angle from "../../../svg/down_angle.svg"
 import { useEffect, useState } from 'react'
 import { useStore } from '../../../zustand/store';
+import { getCompUID } from "../../../lib/randomString"
+import { useRouter } from 'next/router';
 
 interface ICompProps {
   name: string;
@@ -15,16 +16,18 @@ interface ICompProps {
 export default function Comp({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "white", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
-  const { selectComp } = useStore();
+  const { selectComp, saveHTML } = useStore();
+  const param = useRouter().query.id
 
   const addComp = () => {
     if (!selectComp) return;
     const parentComp = document.createElement("div")
     parentComp.innerHTML = html.trim()
-    const newComp = parentComp.firstChild as HTMLElement;
+    const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
-    newComp.className = name + " " + randString({ length: 6 })
+    newComp.className = name + " " + getCompUID(6)
     selectComp.append(newComp)
+    saveHTML(String(param))
   }
 
   useEffect(() => {

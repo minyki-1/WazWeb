@@ -17,7 +17,8 @@ export default function CompyView() {
   }
 
   const handleMouseOver = ({ target }: { target: HTMLElement }) => {
-    if (target === selectComp) return; //* selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
+    //* view는 이벤트 적용용이라 제외, selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
+    if (target.id === "view" || target === selectComp) return;
     if (mouseoverComp) mouseoverComp.style.outline = ""; //* 기존 mouseOverComp의 outline을 초기화해줌
     target.style.outline = "rgba(43, 112, 240, 0.4) solid 3px";
     setMouseoverComp(target)
@@ -26,7 +27,8 @@ export default function CompyView() {
   const handleClick = (e: MouseEvent) => {
     e.preventDefault()
     const target = e.target as HTMLElement | null
-    if (!target || target === selectComp) return; //* target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
+    //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
+    if (!target || target.id === "view" || target === selectComp) return;
     resetSelectComp();
     if (mouseoverComp) mouseoverComp.style.outline = ""
     setSelectComp(target)
@@ -78,8 +80,12 @@ export default function CompyView() {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
           onDoubleClick={handleDoubleClick}
-          // tabIndex="0"
-        />
+        >
+          <div
+            className="App app"
+            style={{ width: "100%", height: "100%", backgroundColor: "white", borderRadius: 12 }}
+          />
+        </View>
       </ViewWrapper>
     </Container >
   )
@@ -93,8 +99,6 @@ const Container = styled.div`
 const View = styled.div`
   width:360px;
   height:720px;
-  background-color: white;
-  border-radius: 12px;
   z-index: 2;
 `
 const ViewWrapper = styled.div`
