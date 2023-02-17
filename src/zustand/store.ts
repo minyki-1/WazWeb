@@ -21,7 +21,8 @@ export const useStore = create<IselectCompState>((set) => ({
       .replace('outline: rgba(43, 112, 240, 0.4) solid 3px; ', '')
       .replace('outline: rgba(43, 112, 240, 0.8) solid 3px;', '')
       .replace('outline: rgba(43, 112, 240, 0.4) solid 3px;', '');
-
+    console.log(htmlText)
+    console.log(view.style)
     if (histStorage && htmlText !== histStorage[0]) localStorage.setItem("hist_" + param, JSON.stringify([htmlText, ...histStorage]));
     else if (!histStorage) localStorage.setItem("hist_" + param, JSON.stringify([htmlText]));
     localStorage.setItem("undo_" + param, JSON.stringify([]));

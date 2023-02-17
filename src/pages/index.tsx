@@ -5,11 +5,18 @@ import LeftSideBar from "../components/home/leftSideBar"
 const temp = [
   {
     id: "0",
-    title: "test",
+    title: "test1",
     owner: "0",
-    style: "",
-    html: ""
-  }
+    style: `.app{width:100%;height:100%;background-color:green;border-radius:12px;}`,
+    html: `<div class="App app">test1</div>`
+  },
+  {
+    id: "1",
+    title: "test2",
+    owner: "0",
+    style: `.app{width:100%;height:100%;background-color:green;border-radius:12px;}`,
+    html: `<div class="App app">test2</div>`
+  },
 ]
 
 export default function Home() {
