@@ -62,7 +62,7 @@ export default function Design() {
   }
 
   useEffect(() => {
-    saveHTML(param); //* 초기 storage를 만들어줘야함
+    saveHTML(param); //* 초기 storage를 만들어주기 위해 실행
   }, [param, saveHTML])
 
   return (

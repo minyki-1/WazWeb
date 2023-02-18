@@ -27,7 +27,7 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
     if (!newComp) return;
     newComp.className = name + " " + getCompUID(6)
     selectComp.append(newComp)
-    saveHTML(String(param))
+    saveHTML(param)
   }
 
   useEffect(() => {
