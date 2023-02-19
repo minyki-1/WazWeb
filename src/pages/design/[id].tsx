@@ -7,6 +7,7 @@ import { useStore } from '../../zustand/store'
 import { useEffect, useState } from 'react'
 import { getCompUID } from '../../lib/randomString'
 import { useRouter } from 'next/router'
+import history from '../../lib/history'
 
 export default function Design() {
   const { selectComp, saveHTML } = useStore();
@@ -15,10 +16,9 @@ export default function Design() {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     const { key, ctrlKey, shiftKey } = e;
-    if (!selectComp) return;
-    const selectIsNotView = selectComp.id !== "&app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
+    const selectIsNotView = selectComp && selectComp.id !== "&app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
     if (selectIsNotView && key === 'Delete') selectComp.remove();
-    if (!ctrlKey) return;
+    if (!ctrlKey) return; //* 이 밑의 기능은 전부 ctrl을 누르고 있을때만 실행
     if (shiftKey && key === 'Z') redoEvent();
     else if (key === 'z') undoEvent();
     else if (selectIsNotView && key === 'c') copyEvent();
@@ -26,27 +26,17 @@ export default function Design() {
   }
 
   const undoEvent = () => {
-    const histStorage: string[] = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
-    const undoStorage: string[] = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
-    const view = document.getElementById("view")
-    if (!view || !histStorage || !undoStorage || histStorage.length < 2) return;
-    view.firstChild?.remove()
-    view.innerHTML = histStorage[1]
-    localStorage.setItem("undo_" + param, JSON.stringify([histStorage[0], ...undoStorage]))
-    histStorage.shift()
-    localStorage.setItem("hist_" + param, JSON.stringify(histStorage))
+    const changeComp = document.getElementById("view")
+    if (!changeComp || !param || param instanceof Array) return;
+    const { undoEvent } = history({ uid: param, changeComp })
+    undoEvent()
   }
 
   const redoEvent = () => {
-    const histStorage: string[] = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
-    const undoStorage: string[] = JSON.parse(localStorage.getItem("undo_" + param) || JSON.stringify(null))
-    const view = document.getElementById("view")
-    if (!view || !histStorage || !undoStorage || undoStorage.length < 1) return;
-    view.firstChild?.remove()
-    view.innerHTML = undoStorage[0]
-    localStorage.setItem("hist_" + param, JSON.stringify([undoStorage[0], ...histStorage]))
-    undoStorage.shift()
-    localStorage.setItem("undo_" + param, JSON.stringify(undoStorage))
+    const changeComp = document.getElementById("view")
+    if (!changeComp || !param || param instanceof Array) return;
+    const { redoEvent } = history({ uid: param, changeComp })
+    redoEvent()
   }
 
   const copyEvent = () => {

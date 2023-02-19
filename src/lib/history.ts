@@ -1,21 +1,22 @@
 interface IHistValue {
-  histName: string;
-  undoName: string;
+  storage?: Storage;
+  histName?: string;
+  undoName?: string;
   uid: string;
   changeComp: HTMLElement | null;
 }
 
 type TStorage = [string[] | null, (value: string[]) => void]
 
-const storageManager = (name: string, uid: string): TStorage => {
-  const storageValue: string[] | null = JSON.parse(localStorage.getItem(name + uid) || JSON.stringify(null))
-  const setStorage = (value: string[]) => localStorage.setItem(name + uid, JSON.stringify(value))
+const storageManager = (name: string, uid: string, storage: Storage): TStorage => {
+  const storageValue: string[] | null = JSON.parse(storage.getItem(name + uid) || JSON.stringify(null))
+  const setStorage = (value: string[]) => storage.setItem(name + uid, JSON.stringify(value))
   return [storageValue, setStorage]
 }
 
-export const history = ({ histName, undoName, uid, changeComp }: IHistValue) => {
-  const [hist, setHist] = storageManager(histName, uid)
-  const [undo, setUndo] = storageManager(undoName, uid)
+const history = ({ storage = sessionStorage, histName = "hist_", undoName = "undo_", uid, changeComp }: IHistValue) => {
+  const [hist, setHist] = storageManager(histName, uid, storage)
+  const [undo, setUndo] = storageManager(undoName, uid, storage)
 
   const undoEvent = () => {
     if (!changeComp || !hist || !undo || hist.length < 2) return;
@@ -36,7 +37,6 @@ export const history = ({ histName, undoName, uid, changeComp }: IHistValue) => 
   }
 
   const saveEvent = (value: string) => {
-    if (!changeComp || !uid) return;
     if (hist && value !== hist[0]) setHist([value, ...hist]);
     else if (!hist) setHist([value]);
     setUndo([]);
@@ -44,3 +44,5 @@ export const history = ({ histName, undoName, uid, changeComp }: IHistValue) => 
 
   return { undoEvent, redoEvent, saveEvent }
 }
+
+export default history

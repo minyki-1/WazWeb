@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import history from "../lib/history"
 
 interface IselectCompState {
   selectComp: HTMLElement | undefined;
@@ -12,17 +13,17 @@ export const useStore = create<IselectCompState>((set) => ({
     set((state) => ({ ...state, selectComp: select }));
   },
   saveHTML: (param) => {
-    const histStorage: string[] | null = JSON.parse(localStorage.getItem("hist_" + param) || JSON.stringify(null))
     const view = document.getElementById("view")
     if (!view || !param || param instanceof Array) return;
+
+    const { saveEvent } = history({ storage: sessionStorage, uid: param, changeComp: view })
 
     const htmlText = view.innerHTML
       .replace('outline: rgba(43, 112, 240, 0.8) solid 3px; ', '')
       .replace('outline: rgba(43, 112, 240, 0.4) solid 3px; ', '')
       .replace('outline: rgba(43, 112, 240, 0.8) solid 3px;', '')
       .replace('outline: rgba(43, 112, 240, 0.4) solid 3px;', '');
-    if (histStorage && htmlText !== histStorage[0]) localStorage.setItem("hist_" + param, JSON.stringify([htmlText, ...histStorage]));
-    else if (!histStorage) localStorage.setItem("hist_" + param, JSON.stringify([htmlText]));
-    localStorage.setItem("undo_" + param, JSON.stringify([]));
+
+    saveEvent(htmlText)
   }
 }));
