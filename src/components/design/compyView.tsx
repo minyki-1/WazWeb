@@ -92,7 +92,7 @@ export default function CompyView() {
 }
 
 const Container = styled.div`
-  width:calc(100% - 280px - 310px);
+  width:calc(100% - 300px - 310px);
   overflow: scroll;
   z-index: 0;
 `

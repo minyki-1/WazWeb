@@ -9,38 +9,43 @@ a {
 	cursor: pointer;
 }
 
-* {
-	outline: none;
-	color: #363636;
-	background-color: initial;
-}
-
 h1 {
+	color: #363636;
 	font-size: 19px;
 }
 
 h2 {
+	color: #363636;
 	font-size: 16px;
 }
 
 h3 {
+	color: #363636;
 	font-size: 14px;
 }
 
 h4 {
+	color: #363636;
 	font-size: 12px;
 }
 
 h5 {
+	color: #363636;
 	font-size: 11px;
 }
 
 input {
+	color: #363636;
 	border: none;
 	font-size: 14px;
+	outline: none;
+	background-color: initial;
 }
 
 select {
+	color: #363636;
 	border: none;
 	font-size: 14px;
+	outline: none;
+	background-color: initial;
 }

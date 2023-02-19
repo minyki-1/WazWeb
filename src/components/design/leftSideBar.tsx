@@ -42,7 +42,7 @@ export default function RightSideBar() {
 }
 
 const Container = styled.section`
-  width:280px;
+  width:300px;
   z-index: 2;
   overflow-y: scroll;
   display:flex;

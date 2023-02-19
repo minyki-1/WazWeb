@@ -80,8 +80,8 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
 }
 
 const Container = styled.section`
-  width:calc(100% - 24px);
-  margin: 12px;
+  width:calc(100% - 28px);
+  margin: 14px;
   margin-top: 28px;
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
   border-radius: 4px;

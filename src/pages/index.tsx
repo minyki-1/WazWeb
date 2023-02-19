@@ -7,15 +7,13 @@ const temp = [
     id: "0",
     title: "test1",
     owner: "0",
-    style: `.app{width:100%;height:100%;background-color:green;border-radius:12px;}`,
-    html: `<div class="App app">test1</div>`
+    html: `<div class="App app" style="width:100%;height:100%;background-color:green;border-radius:12px;">test1</div>`
   },
   {
     id: "1",
     title: "test2",
     owner: "0",
-    style: `.app{width:100%;height:100%;background-color:green;border-radius:12px;}`,
-    html: `<div class="App app">test2</div>`
+    html: `<div class="App app" style="width:100%;height:100%;background-color:blue;border-radius:12px;">test2</div>`
   },
 ]
 
