@@ -49,3 +49,7 @@ select {
 	outline: none;
 	background-color: initial;
 }
+
+button {
+	background-color: initial;
+}

@@ -29,15 +29,14 @@ export default function LeftSideBar() {
             <h5>New Team</h5>
           </TeamAddBtn>
         </TeamTitle>
-
       </Team>
     </Container>
   )
 }
 
 const Container = styled.section`
-  width:220px;
-  height:100%;
+  width:240px;
+  height:calc(100vh - 48px);
   display:flex;
   flex-direction: column;
   border-right: 2px solid rgba(54,54,54,0.1);

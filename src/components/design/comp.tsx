@@ -2,8 +2,8 @@ import styled from 'styled-components'
 import SVG_plus from "../../../svg/plus.svg"
 import SVG_down_angle from "../../../svg/down_angle.svg"
 import { useEffect, useState } from 'react'
-import { useStore } from '../../../zustand/store';
-import { getCompUID } from "../../../lib/randomString"
+import { useStore } from '../../zustand/store';
+import { getCompUID } from "../../lib/randomString"
 import { useRouter } from 'next/router';
 
 interface ICompProps {
@@ -14,7 +14,7 @@ interface ICompProps {
 }
 
 export default function Comp({ name, descript, html, id }: ICompProps) {
-  const svgProps = { width: 24, height: 24, fill: "white", style: { marginLeft: 8, cursor: "pointer" } }
+  const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp, saveHTML } = useStore();
   const param = useRouter().query.id
@@ -84,8 +84,9 @@ const Container = styled.section`
   margin: 14px;
   margin-top: 28px;
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
+  outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  background-color: #4D4D4D;
+  /* background-color: #4D4D4D; */
 `
 const CompView = styled.div`
  background-color: #FBFBFB;
@@ -96,6 +97,7 @@ const CompView = styled.div`
   align-items: center;
   justify-content: center;
   border-radius: 4px 4px 0px 0px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 `
 const InfoBar = styled.div`
   display:flex;
@@ -104,14 +106,13 @@ const InfoBar = styled.div`
   width:calc(100% - 24px);
   padding: 6px 12px;
   h2{
-    color:white;
+    /* color:white; */
   }
 `
 const MoreInfo = styled.div`
   padding: 6px 12px;
   padding-bottom: 18px;
   h3{
-    color:rgba(255,255,255,0.8);
     word-wrap:break-word;
   }
 `
