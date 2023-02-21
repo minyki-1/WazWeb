@@ -1,10 +1,11 @@
 import styled from 'styled-components'
-import SVG_plus from "../../../svg/plus.svg"
-import SVG_down_angle from "../../../svg/down_angle.svg"
+import SVG_plus from "../../svg/plus.svg"
+import SVG_down_angle from "../../svg/down_angle.svg"
 import { useEffect, useState } from 'react'
 import { useStore } from '../../zustand/store';
 import { getCompUID } from "../../lib/randomString"
 import { useRouter } from 'next/router';
+import { resizeHTML } from '../../lib/resize';
 
 interface ICompProps {
   name: string;
@@ -41,18 +42,7 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
     if (!newComp) return;
     compView.append(newComp)
 
-    const newCompWidth = newComp.offsetWidth
-    const newCompHeight = newComp.offsetHeight
-    const viewWidth = compView.offsetWidth - 20
-    const viewHeight = compView.offsetHeight - 20
-
-    let resizeValue = 1;
-    if (newCompWidth / 4 >= newCompHeight / 3 && newCompWidth > viewWidth) {
-      resizeValue = viewWidth / newCompWidth
-    } else if (newCompWidth / 4 <= newCompHeight / 3 && newCompHeight > viewHeight) {
-      resizeValue = viewHeight / newCompHeight
-    }
-    newComp.style.transform = `scale(${resizeValue})`
+    resizeHTML(newComp, compView, -20)
   }, [html, id])
 
   return (
@@ -63,8 +53,8 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
         <div>
           <SVG_plus onClick={addComp} {...svgProps} />
           <SVG_down_angle
-            onClick={() => setShowInfo(!showInfo)}
             {...svgProps}
+            onClick={() => setShowInfo(!showInfo)}
             style={{ transform: showInfo ? "rotate(180deg)" : null, marginLeft: 8, cursor: "pointer" }}
           />
         </div>
@@ -86,7 +76,6 @@ const Container = styled.section`
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
   outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  /* background-color: #4D4D4D; */
 `
 const CompView = styled.div`
  background-color: #FBFBFB;
@@ -105,9 +94,6 @@ const InfoBar = styled.div`
   align-items: center;
   width:calc(100% - 24px);
   padding: 6px 12px;
-  h2{
-    /* color:white; */
-  }
 `
 const MoreInfo = styled.div`
   padding: 6px 12px;

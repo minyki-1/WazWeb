@@ -4,3 +4,10 @@ export interface IColor {
   g: number;
   r: number;
 }
+
+export interface IDesgin {
+  id: string;
+  title: string;
+  owner: string;
+  html: string;
+}

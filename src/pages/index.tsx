@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
 import Design from '../components/home/design';
+import { IDesgin } from '../types/design';
 
-const temp = [
+const temp: IDesgin[] = [
   {
     id: "0",
     title: "test1",
@@ -20,7 +21,7 @@ const temp = [
 ]
 
 export default function Home() {
-  const [list, setList] = useState<{ [key: string]: string }[]>()
+  const [list, setList] = useState<IDesgin[]>()
 
   useEffect(() => {
     setList(temp)
@@ -32,12 +33,11 @@ export default function Home() {
       <Main>
         <LeftSideBar />
         <DesignList>
-          {/* {
+          {
             list?.map((value, key) => (
-              
+              <Design key={key} {...value} />
             ))
-          } */}
-          <Design></Design>
+          }
         </DesignList>
       </Main>
     </Container>

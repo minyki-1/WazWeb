@@ -1,10 +1,25 @@
+import Link from 'next/link'
+import { useEffect } from 'react'
 import styled from 'styled-components'
+import { resizeHTML } from '../../lib/resize'
 
-export default function Design() {
+export default function Design({ id, html }: { id: string, html: string }) {
+  useEffect(() => {
+    const wrap = document.getElementById(`wrap_${id}`);
+    const view = document.getElementById(`view_${id}`)
+    if (!wrap || !view || view.hasChildNodes()) return;
+    view.innerHTML = html;
+    resizeHTML(view, wrap, -30)
+  }, [html, id])
+
   return (
     <Container>
-      <DesignView></DesignView>
-      <DesignInfo>Desgin Name</DesignInfo>
+      <Link href={`/design/${id}`}>
+        <DesignWrapper id={`wrap_${id}`}>
+          <DesginView id={`view_${id}`} />
+        </DesignWrapper>
+        <DesignInfo>Desgin Name</DesignInfo>
+      </Link>
     </Container>
   )
 }
@@ -16,11 +31,19 @@ const Container = styled.div`
   outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 `
-const DesignView = styled.div`
+const DesignWrapper = styled.div`
   width:100%;
   aspect-ratio: 3 / 2;
   background-color: #F8FAFB;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`
+const DesginView = styled.div`
+  width:360px;
+  height:720px;
 `
 const DesignInfo = styled.h2`
   width:calc(100% - 28px);
