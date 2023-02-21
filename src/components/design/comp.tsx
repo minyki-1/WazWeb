@@ -6,6 +6,7 @@ import { useStore } from '../../zustand/store';
 import { getCompUID } from "../../lib/randomString"
 import { useRouter } from 'next/router';
 import { resizeHTML } from '../../lib/resize';
+import { saveHTML } from '../../lib/saveHTML';
 
 interface ICompProps {
   name: string;
@@ -17,7 +18,7 @@ interface ICompProps {
 export default function Comp({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
-  const { selectComp, saveHTML } = useStore();
+  const { selectComp } = useStore();
   const param = useRouter().query.id
 
   const addComp = () => {
@@ -28,7 +29,7 @@ export default function Comp({ name, descript, html, id }: ICompProps) {
     if (!newComp) return;
     newComp.className = name + " " + getCompUID(6)
     selectComp.append(newComp)
-    saveHTML(param)
+    if (typeof param === "string") saveHTML(param)
   }
 
   useEffect(() => {

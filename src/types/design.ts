@@ -10,4 +10,5 @@ export interface IDesgin {
   title: string;
   owner: string;
   html: string;
+  updatedAt: string;
 }

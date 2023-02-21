@@ -3,7 +3,6 @@ interface IHistValue {
   histName?: string;
   undoName?: string;
   uid: string;
-  changeComp: HTMLElement | null;
 }
 
 type TStorage = [string[] | null, (value: string[]) => void]
@@ -14,35 +13,50 @@ const storageManager = (name: string, uid: string, storage: Storage): TStorage =
   return [storageValue, setStorage]
 }
 
-const history = ({ storage = sessionStorage, histName = "hist_", undoName = "undo_", uid, changeComp }: IHistValue) => {
+export const undoHistory = (
+  { storage = sessionStorage,
+    histName = "hist_",
+    undoName = "undo_",
+    uid,
+    changeComp
+  }: IHistValue & { changeComp: HTMLElement | null }) => {
   const [hist, setHist] = storageManager(histName, uid, storage)
   const [undo, setUndo] = storageManager(undoName, uid, storage)
-
-  const undoEvent = () => {
-    if (!changeComp || !hist || !undo || hist.length < 2) return;
-    changeComp.firstChild?.remove()
-    changeComp.innerHTML = hist[1]
-    setUndo([hist[0], ...undo])
-    hist.shift()
-    setHist(hist)
-  }
-
-  const redoEvent = () => {
-    if (!changeComp || !hist || !undo || undo.length < 1) return;
-    changeComp.firstChild?.remove()
-    changeComp.innerHTML = undo[0]
-    setHist([undo[0], ...hist])
-    undo.shift()
-    setUndo(undo)
-  }
-
-  const saveEvent = (value: string) => {
-    if (hist && value !== hist[0]) setHist([value, ...hist]);
-    else if (!hist) setHist([value]);
-    setUndo([]);
-  }
-
-  return { undoEvent, redoEvent, saveEvent }
+  if (!changeComp || !hist || hist.length < 2) return;
+  changeComp.firstChild?.remove()
+  changeComp.innerHTML = hist[1]
+  if (!undo) setUndo([hist[0]])
+  else setUndo([hist[0], ...undo])
+  hist.shift()
+  setHist(hist)
 }
 
-export default history
+export const redoHistory = (
+  { storage = sessionStorage,
+    histName = "hist_",
+    undoName = "undo_",
+    uid,
+    changeComp
+  }: IHistValue & { changeComp: HTMLElement | null }) => {
+
+  const [hist, setHist] = storageManager(histName, uid, storage)
+  const [undo, setUndo] = storageManager(undoName, uid, storage)
+  if (!changeComp || !hist || !undo || undo.length < 1) return;
+  changeComp.firstChild?.remove()
+  changeComp.innerHTML = undo[0]
+  setHist([undo[0], ...hist])
+  undo.shift()
+  setUndo(undo)
+}
+
+export const saveHistory = (
+  { value,
+    storage = sessionStorage,
+    histName = "hist_",
+    uid
+  }: IHistValue & { value: string }) => {
+
+  const [hist, setHist] = storageManager(histName, uid, storage)
+  if (hist && value !== hist[0]) setHist([value, ...hist]);
+  else if (!hist) setHist([value]);
+}
