@@ -10,6 +10,7 @@ import { useRouter } from 'next/router'
 import { undoHistory, redoHistory, getHistory, saveHistory } from '../../lib/history'
 import { IDesgin } from '../../types/design'
 import { saveHTML } from '../../lib/saveHTML'
+import { refreshExpired, setRefresh } from '../../lib/refresh'
 
 export default function Design() {
   const { selectComp } = useStore();
@@ -31,13 +32,13 @@ export default function Design() {
   const redoEvent = () => {
     const changeComp = document.getElementById("view")
     if (typeof param !== "string") return
-    redoHistory(({ uid: param, changeComp }));
+    redoHistory(({ id: param, changeComp }));
   }
 
   const undoEvent = () => {
     const changeComp = document.getElementById("view")
     if (typeof param !== "string") return
-    undoHistory({ uid: param, changeComp });
+    undoHistory({ id: param, changeComp });
   }
 
   const pasteEvent = () => {
@@ -57,18 +58,15 @@ export default function Design() {
       return
     }
 
-    const refreshStorage = sessionStorage.getItem("refresh")
     const view = document.getElementById("view")
     if (typeof param !== "string" || !view) return
-    const history = getHistory({ uid: param })
-    if (!history || !refreshStorage || new Date(refreshStorage) < new Date()) {
+    const history = getHistory({ id: param })
+    if (!history || refreshExpired({ id: "design" })) {
       sessionStorage.clear()
-      const refreshDate = new Date()
-      refreshDate.setMinutes(refreshDate.getMinutes() + 3)
-      sessionStorage.setItem("refresh", refreshDate.toISOString())
+      setRefresh({ id: "design" })
       const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
       view.innerHTML = temp
-      saveHistory({ uid: temp, value: temp })
+      saveHistory({ id: temp, value: temp })
     } else if (history) view.innerHTML = history[0];
   }, [param])
 

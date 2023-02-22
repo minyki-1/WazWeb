@@ -2,26 +2,26 @@ interface IHistValue {
   storage?: Storage;
   histName?: string;
   undoName?: string;
-  uid: string;
+  id: string;
 }
 
 type TStorage = [string[] | null, (value: string[]) => void]
 
-const storageManager = (name: string, uid: string, storage: Storage): TStorage => {
-  const storageValue: string[] | null = JSON.parse(storage.getItem(name + uid) || JSON.stringify(null))
-  const setStorage = (value: string[]) => storage.setItem(name + uid, JSON.stringify(value))
+const storageManager = (name: string, id: string, storage: Storage): TStorage => {
+  const storageValue: string[] | null = JSON.parse(storage.getItem(name + id) || JSON.stringify(null))
+  const setStorage = (value: string[]) => storage.setItem(name + id, JSON.stringify(value))
   return [storageValue, setStorage]
 }
 
 export const undoHistory = (
   { storage = sessionStorage,
-    uid,
+    id,
     histName = "hist_",
     undoName = "undo_",
     changeComp
   }: IHistValue & { changeComp: HTMLElement | null }) => {
-  const [hist, setHist] = storageManager(histName, uid, storage)
-  const [undo, setUndo] = storageManager(undoName, uid, storage)
+  const [hist, setHist] = storageManager(histName, id, storage)
+  const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || hist.length < 2) return;
   changeComp.firstChild?.remove()
   changeComp.innerHTML = hist[1]
@@ -33,14 +33,14 @@ export const undoHistory = (
 
 export const redoHistory = (
   { storage = sessionStorage,
-    uid,
+    id,
     histName = "hist_",
     undoName = "undo_",
     changeComp
   }: IHistValue & { changeComp: HTMLElement | null }) => {
 
-  const [hist, setHist] = storageManager(histName, uid, storage)
-  const [undo, setUndo] = storageManager(undoName, uid, storage)
+  const [hist, setHist] = storageManager(histName, id, storage)
+  const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || !undo || undo.length < 1) return;
   changeComp.firstChild?.remove()
   changeComp.innerHTML = undo[0]
@@ -51,21 +51,21 @@ export const redoHistory = (
 
 export const saveHistory = (
   { value,
-    uid,
+    id,
     storage = sessionStorage,
     histName = "hist_",
   }: IHistValue & { value: string }) => {
 
-  const [hist, setHist] = storageManager(histName, uid, storage)
+  const [hist, setHist] = storageManager(histName, id, storage)
   if (hist && value !== hist[0]) setHist([value, ...hist]);
   else if (!hist) setHist([value]);
 }
 
 export const getHistory = (
-  { uid,
+  { id,
     storage = sessionStorage,
     histName = "hist_",
   }: IHistValue) => {
-  const [hist] = storageManager(histName, uid, storage)
+  const [hist] = storageManager(histName, id, storage)
   return hist
 }

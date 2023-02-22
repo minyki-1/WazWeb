@@ -17,5 +17,5 @@ export const saveHTML = (param: string) => {
     })
     sessionStorage.setItem("designList", JSON.stringify(designList))
   }
-  saveHistory({ value: htmlText, uid: param })
+  saveHistory({ value: htmlText, id: param })
 }
