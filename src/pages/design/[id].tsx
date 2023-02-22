@@ -7,7 +7,7 @@ import { useStore } from '../../zustand/store'
 import { useEffect, useState } from 'react'
 import { getCompUID } from '../../lib/randomString'
 import { useRouter } from 'next/router'
-import { undoHistory, redoHistory } from '../../lib/history'
+import { undoHistory, redoHistory, getHistory, saveHistory } from '../../lib/history'
 import { IDesgin } from '../../types/design'
 import { saveHTML } from '../../lib/saveHTML'
 
@@ -57,17 +57,19 @@ export default function Design() {
       return
     }
 
-    const designListStorage: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
+    const refreshStorage = sessionStorage.getItem("refresh")
     const view = document.getElementById("view")
     if (typeof param !== "string" || !view) return
-    if (designListStorage) {
-      const data = designListStorage.filter(data => data.id === param)[0]
-      if (data) view.innerHTML = data.html
-    } else { //* 추후 서버에서 데이터를 받아오는것으로 변경
-      const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">Error</h1></div>`
+    const history = getHistory({ uid: param })
+    if (!history || !refreshStorage || new Date(refreshStorage) < new Date()) {
+      sessionStorage.clear()
+      const refreshDate = new Date()
+      refreshDate.setMinutes(refreshDate.getMinutes() + 3)
+      sessionStorage.setItem("refresh", refreshDate.toISOString())
+      const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
       view.innerHTML = temp
-    }
-    saveHTML(param)
+      saveHistory({ uid: temp, value: temp })
+    } else if (history) view.innerHTML = history[0];
   }, [param])
 
   return (

@@ -15,9 +15,9 @@ const storageManager = (name: string, uid: string, storage: Storage): TStorage =
 
 export const undoHistory = (
   { storage = sessionStorage,
+    uid,
     histName = "hist_",
     undoName = "undo_",
-    uid,
     changeComp
   }: IHistValue & { changeComp: HTMLElement | null }) => {
   const [hist, setHist] = storageManager(histName, uid, storage)
@@ -33,9 +33,9 @@ export const undoHistory = (
 
 export const redoHistory = (
   { storage = sessionStorage,
+    uid,
     histName = "hist_",
     undoName = "undo_",
-    uid,
     changeComp
   }: IHistValue & { changeComp: HTMLElement | null }) => {
 
@@ -51,12 +51,21 @@ export const redoHistory = (
 
 export const saveHistory = (
   { value,
+    uid,
     storage = sessionStorage,
     histName = "hist_",
-    uid
   }: IHistValue & { value: string }) => {
 
   const [hist, setHist] = storageManager(histName, uid, storage)
   if (hist && value !== hist[0]) setHist([value, ...hist]);
   else if (!hist) setHist([value]);
+}
+
+export const getHistory = (
+  { uid,
+    storage = sessionStorage,
+    histName = "hist_",
+  }: IHistValue) => {
+  const [hist] = storageManager(histName, uid, storage)
+  return hist
 }

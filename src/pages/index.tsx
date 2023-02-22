@@ -4,6 +4,7 @@ import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
 import Design from '../components/home/design';
 import { IDesgin } from '../types/design';
+import { saveHistory } from '../lib/history';
 
 const temp: IDesgin[] = [
   {
@@ -31,10 +32,12 @@ export default function Home() {
     if (designListStorage && refreshStorage && new Date(refreshStorage) > new Date()) { //* 새롭게 받아올 필요없이 기존값을 보내줌
       setList(designListStorage)
     } else { //* 새롭게 리프레시 값을 만들어 주고 값도 새로 받아와야함
+      sessionStorage.clear()
       const refreshDate = new Date()
       refreshDate.setMinutes(refreshDate.getMinutes() + 3)
       sessionStorage.setItem("refresh", refreshDate.toISOString())
       sessionStorage.setItem("designList", JSON.stringify(temp))
+      temp.forEach(data => saveHistory({ value: data.html, uid: data.id }))
       setList(temp)
     }
   }, [])
