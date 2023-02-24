@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
 import SVG_expand from "../../../svg/expand.svg"
@@ -45,65 +45,33 @@ export default function Size() {
             onChange={e => setHeight(e.target.value)} />
         </div>
       </SizeGroup1>
-      <ExpandSize text={"Margin"} selectComp={selectComp} />
-      <ExpandSize text={"Padding"} selectComp={selectComp} />
+      <ExpandSize text={"Out M"} value={"margin"} />
+      <ExpandSize text={"In M"} value={"padding"} />
     </Container>
   )
 }
 
-function ExpandSize({ text, selectComp }: { text: string, selectComp: HTMLElement | undefined }) {
+function ExpandSize({ text, value }: { text: string, value: string }) {
   const [expand, setExpand] = useState(false)
-  const [total, setTotal] = useState("0px")
-  const [partValue, setPartValue] = useState({ top: "0px", right: "0px", bottom: "0px", left: "0px" })
-  const s = useStyler("padding", "0px")
+  const total = useStyler(value)
 
-  useEffect(() => {
-    if (!selectComp) return;
-    const style = selectComp.style[text.toLowerCase() as any]
-    const styleName = (loc: string, comp: HTMLElement) => comp.style[text.toLowerCase() + loc as any]
-    const top = styleName("Top", selectComp)
-    const right = styleName("Right", selectComp)
-    const bottom = styleName("Bottom", selectComp)
-    const left = styleName("Left", selectComp)
-    setPartValue({ top, right, bottom, left })
-    setTotal(style ? style : "0px")
-  }, [selectComp, text])
-  
-
-  const styleEnterHandle = () => {
-    if (!selectComp) return;
-    const before = selectComp.style[text.toLowerCase() as any]
-    selectComp.style[text.toLowerCase() as any] = total
-    if (before === selectComp.style[text.toLowerCase() as any]) setTotal(before ? before : "0px");
-    const styleName = (loc: string, comp: HTMLElement) => comp.style[text.toLowerCase() + loc as any]
-    const top = styleName("Top", selectComp)
-    const right = styleName("Right", selectComp)
-    const bottom = styleName("Bottom", selectComp)
-    const left = styleName("Left", selectComp)
-    setPartValue({ top, right, bottom, left })
+  const part = {
+    top: useStyler(value + "Top"),
+    right: useStyler(value + "Right"),
+    bottom: useStyler(value + "Bottom"),
+    left: useStyler(value + "Left"),
   }
 
-  const useExpand = (location: "top" | "right" | "bottom" | "left") => {
-    function onChange(e: ChangeEvent) {
-      setPartValue({ ...partValue, [location]: (e.target as HTMLInputElement).value })
+  const useExpand = (loc: "top" | "right" | "bottom" | "left") => {
+    const onKeyDown = ({ code }: { code: string }) => {
+      part[loc].props.onKeyDown({ code });
+      total.setValue(total.getCompStyle())
     }
-    function onKeyDown({ code }: { code: string }) {
-      if (!selectComp || code !== "Enter") return;
-      const newStr = location.charAt(0).toUpperCase() + location.slice(1);
-      const before = selectComp.style[text.toLowerCase() + newStr as any]
-      selectComp.style[text.toLowerCase() + newStr as any] = partValue[location]
-      if (before === selectComp.style[text.toLowerCase() + newStr as any]) setPartValue({ ...partValue, [location]: before });
-      else setTotal(selectComp.style[text.toLowerCase() as any])
+    const onBlur = () => {
+      part[loc].props.onBlur()
+      total.setValue(total.getCompStyle())
     }
-    function onBlur() {
-      if (!selectComp) return;
-      const newStr = location.charAt(0).toUpperCase() + location.slice(1);
-      const before = selectComp.style[text.toLowerCase() + newStr as any]
-      selectComp.style[text.toLowerCase() + newStr as any] = partValue[location]
-      if (before === selectComp.style[text.toLowerCase() + newStr as any]) setPartValue({ ...partValue, [location]: before });
-      else setTotal(selectComp.style[text.toLowerCase() as any])
-    }
-    return { type: "text", value: partValue[location], onChange, onKeyDown, onBlur }
+    return { ...part[loc].props, onKeyDown, onBlur }
   }
 
   const top = useExpand("top")
@@ -118,10 +86,21 @@ function ExpandSize({ text, selectComp }: { text: string, selectComp: HTMLElemen
         <input
           disabled={expand}
           type="text"
-          value={total}
-          onChange={({ target }) => setTotal(target.value)}
-          onKeyDown={e => e.code === "Enter" ? styleEnterHandle() : null}
-          onBlur={styleEnterHandle}
+          {...total.props}
+          onKeyDown={({ code }) => {
+            total.props.onKeyDown({ code });
+            part.top.setValue(part.top.getCompStyle())
+            part.bottom.setValue(part.bottom.getCompStyle())
+            part.left.setValue(part.left.getCompStyle())
+            part.right.setValue(part.right.getCompStyle())
+          }}
+          onBlur={() => {
+            total.props.onBlur();
+            part.top.setValue(part.top.getCompStyle())
+            part.bottom.setValue(part.bottom.getCompStyle())
+            part.left.setValue(part.left.getCompStyle())
+            part.right.setValue(part.right.getCompStyle())
+          }}
         />
         <SVG_expand onClick={() => setExpand(!expand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer", marginLeft: 4 }} />
       </SizeGroup3>
@@ -129,19 +108,19 @@ function ExpandSize({ text, selectComp }: { text: string, selectComp: HTMLElemen
         expand ?
           <ExpandInput>
             <div>
-              <h4 title={`${text.toLowerCase()}-top`}>T</h4>
+              <h4 title={`${value}-top`}>T</h4>
               <input {...top} />
             </div>
             <div>
-              <h4 title={`${text.toLowerCase()}-right`}>R</h4>
+              <h4 title={`${value}-right`}>R</h4>
               <input {...right} />
             </div>
             <div>
-              <h4 title={`${text.toLowerCase()}-bottom`}>B</h4>
+              <h4 title={`${value}-bottom`}>B</h4>
               <input {...bottom} />
             </div>
             <div>
-              <h4 title={`${text.toLowerCase()}-left`}>L</h4>
+              <h4 title={`${value}-left`}>L</h4>
               <input {...left} />
             </div>
           </ExpandInput>
@@ -200,9 +179,9 @@ const SizeGroup3 = styled.div < { state: string } > `
   display:flex;
   align-items: center;
   h4{
-    width:60px;
+    width:40px;
     opacity: 0.7;
-    margin-right: 4px;
+    margin-right: 8px;
     padding: 4px;
   }
   input{
