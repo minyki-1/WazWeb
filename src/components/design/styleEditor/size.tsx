@@ -68,6 +68,7 @@ function ExpandSize({ text, selectComp }: { text: string, selectComp: HTMLElemen
     setPartValue({ top, right, bottom, left })
     setTotal(style ? style : "0px")
   }, [selectComp, text])
+  
 
   const styleEnterHandle = () => {
     if (!selectComp) return;
