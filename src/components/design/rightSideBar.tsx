@@ -29,7 +29,7 @@ const compData: { [key: string]: (() => JSX.Element)[] } = {
   option: [Font],
   article: [Size, Basic, Arrange],
   section: [Size, Basic, Arrange],
-  main: [Size, Basic, Arrange]
+  main: [Size, Basic, Arrange],
 }
 
 export default function RightSideBar() {

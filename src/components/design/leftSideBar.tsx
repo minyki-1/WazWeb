@@ -5,7 +5,7 @@ const defaultComp: { name: string, descript: string, html: string }[] = [
   {
     name: "Box",
     descript: "Basic box component. Default size is 50px x 50px.",
-    html: `<div style="width:50px;height:50px;background:gray" />`
+    html: `<div style="width:50px;height:50px;background:gray;" />`
   },
   {
     name: "Text",

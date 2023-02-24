@@ -8,7 +8,9 @@ export const saveHTML = (param: string) => {
     .replace('outline: rgba(43, 112, 240, 0.8) solid 3px; ', '')
     .replace('outline: rgba(43, 112, 240, 0.4) solid 3px; ', '')
     .replace('outline: rgba(43, 112, 240, 0.8) solid 3px;', '')
-    .replace('outline: rgba(43, 112, 240, 0.4) solid 3px;', '');
+    .replace('outline: rgba(43, 112, 240, 0.4) solid 3px;', '')
+    .replace('contenteditable="false"', '')
+    .replace('contenteditable="true"', '');
 
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
   if (designList) {

@@ -8,8 +8,6 @@ import { useEffect, useState } from 'react'
 import { getCompUID } from '../../lib/randomString'
 import { useRouter } from 'next/router'
 import { undoHistory, redoHistory, getHistory, saveHistory } from '../../lib/history'
-import { IDesgin } from '../../types/design'
-import { saveHTML } from '../../lib/saveHTML'
 import { refreshExpired, setRefresh } from '../../lib/refresh'
 
 export default function Design() {
@@ -61,13 +59,14 @@ export default function Design() {
     const view = document.getElementById("view")
     if (typeof param !== "string" || !view) return
     const history = getHistory({ id: param })
-    if (!history || refreshExpired({ id: "design" })) {
-      sessionStorage.clear()
-      setRefresh({ id: "design" })
-      const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
-      view.innerHTML = temp
-      saveHistory({ id: temp, value: temp })
-    } else if (history) view.innerHTML = history[0];
+    // if (!history || refreshExpired({ id: "design" })) {
+    //   sessionStorage.clear()
+    //   setRefresh({ id: "design" })
+    //   const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
+    //   view.innerHTML = temp
+    //   saveHistory({ id: temp, value: temp })
+    // } else if (history) view.innerHTML = history[0];
+    if (history) view.innerHTML = history[0];
   }, [param])
 
   return (

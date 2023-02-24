@@ -12,7 +12,7 @@ const temp: IDesgin[] = [
     id: "0",
     title: "test1",
     owner: "0",
-    html: `<div class="App app" style="width:100%;height:100%;background-color:green;border-radius:12px;display:flex;align-items:center;justify-content:center;"><h1>test1</h1></div>`,
+    html: `<div class="App app" style="width:100%;height:100%;background-color:white;border-radius:12px;display:flex;align-items:center;justify-content:center;"><h1>test1</h1></div>`,
     updatedAt: "1"
   },
   {
