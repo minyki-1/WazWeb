@@ -1,12 +1,14 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { useStore } from "../../zustand/store";
+import { useStore } from "../../../zustand/store";
 
 export default function CompyView() {
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
+  const router = useRouter()
 
   const resetSelectComp = () => {
     if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -55,47 +57,47 @@ export default function CompyView() {
     }
   }
 
-  const handleWheel = ({ deltaY }: { deltaY: number }) => {
-    const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
-    const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId) as HTMLElement | null
-    const container = document.querySelector("." + Container.styledComponentId)
-    const zoomValue = zoom + deltaY * 0.001
-    if (view && viewWrapper && container) {
-      setZoom(zoomValue)
-      view.style.transform = `scale(${zoomValue})`
-      viewWrapper.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
-      viewWrapper.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
-    }
-  }
+  // const handleWheel = ({ deltaY }: { deltaY: number }) => {
+  //   const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
+  //   const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId) as HTMLElement | null
+  //   const container = document.querySelector("." + Container.styledComponentId)
+  //   const zoomValue = zoom + deltaY * 0.001
+  //   if (view && viewWrapper && container) {
+  //     setZoom(zoomValue)
+  //     view.style.transform = `scale(${zoomValue})`
+  //     viewWrapper.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
+  //     viewWrapper.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
+  //   }
+  // }
 
   return (
-    <Container>
-      <ViewWrapper
-        onClick={viewBgClickEvent}
-      // onWheel={handleWheel}
+    <ViewWrapper
+      onClick={viewBgClickEvent}
+    // onWheel={handleWheel}
+    >
+      <View
+        id="view"
+        onClick={handleClick}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
+        onDoubleClick={handleDoubleClick}
       >
-        <View
-          id="view"
-          onClick={handleClick}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-          onDoubleClick={handleDoubleClick}
-        >
-          <div
-            className="App app compy_design"
+        {
+          router.query.id ?
+            <iframe
+              src={`${router.asPath}/view`}
+              style={{ width: "100%", height: "100%", border: "none" }}
+            /> : null
+        }
+        {/* <div
+            className="App app"
             style={{ width: "100%", height: "100%", backgroundColor: "white", borderRadius: 12 }}
-          />
-        </View>
-      </ViewWrapper>
-    </Container >
+          /> */}
+      </View>
+    </ViewWrapper>
   )
 }
 
-const Container = styled.div`
-  width:calc(100% - 300px - 310px);
-  overflow: scroll;
-  z-index: 0;
-`
 const View = styled.div`
   width:360px;
   height:720px;

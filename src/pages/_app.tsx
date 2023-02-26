@@ -1,16 +1,26 @@
-import '../css/reset.css'
-import '../css/globals.css'
 import type { AppProps } from 'next/app'
 import { Inter } from '@next/font/google'
+import { GlobalStyle } from '../css/globals';
+import { useRouter } from 'next/router';
 
 const font = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter()
   return (
     <>
-      <style jsx global>{`
-        html { font-family: ${font.style.fontFamily}; }
-      `}</style>
+      {
+        router.pathname !== "/design/[id]/view"
+          ? <>
+            <style jsx global>{`
+              html { font-family: ${font.style.fontFamily}; }
+            `}</style>
+            <GlobalStyle />
+          </>
+          : <style jsx global>{`
+            @import url("https://necolas.github.io/normalize.css/8.0.1/normalize.css");
+          `}</style>
+      }
       <Component {...pageProps} />
     </>
   )
