@@ -88,6 +88,9 @@ const CompView = styled.div`
   justify-content: center;
   border-radius: 4px 4px 0px 0px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  *{
+    all:unset;
+  }
 `
 const InfoBar = styled.div`
   display:flex;

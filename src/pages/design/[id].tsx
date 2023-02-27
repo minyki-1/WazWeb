@@ -1,13 +1,13 @@
 import styled from 'styled-components'
-import Header from '../../../components/design/header'
-import RightSideBar from '../../../components/design/rightSideBar'
-import CompyView from '../../../components/design/compyView'
-import LeftSideBar from '../../../components/design/leftSideBar'
-import { useStore } from '../../../zustand/store'
+import Header from '../../components/design/header'
+import RightSideBar from '../../components/design/rightSideBar'
+import CompyView from '../../components/design/compyView'
+import LeftSideBar from '../../components/design/leftSideBar'
+import { useStore } from '../../zustand/store'
 import { useEffect, useState } from 'react'
-import { getCompUID } from '../../../lib/randomString'
+import { getCompUID } from '../../lib/randomString'
 import { useRouter } from 'next/router'
-import { undoHistory, redoHistory, getHistory } from '../../../lib/history'
+import { undoHistory, redoHistory, getHistory } from '../../lib/history'
 
 export default function Design() {
   const { selectComp } = useStore();
@@ -85,7 +85,6 @@ const Container = styled.main`
   min-height:100vh;
   display: flex;
   flex-direction: column;
-  background-color: #C7C7C7;
 `
 const Main = styled.div`
   width:100vw;

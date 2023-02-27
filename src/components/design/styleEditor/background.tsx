@@ -1,10 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from "styled-components"
 import { IColor } from "../../../types/design"
+import { useStore } from '../../../zustand/store'
 import ColorPicker from '../../common/colorPicker'
+import { hexToRgb, rgbToHex } from "../../../lib/colorChange"
+import { useRouter } from 'next/router'
 
-export default function Basic() {
-  const [bgColor, setBgColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
+export default function Background() {
+  const [bgColor, setBgColor] = useState<IColor>({ r: 199, g: 199, b: 199, a: 0 })
+  // const { selectComp } = useStore();
+  const router = useRouter();
+
+  const defaultColorSetting = () => {
+    const viewBg = document.getElementById("viewBg")
+    const storage = localStorage.getItem(router.query.id + "_background")
+    if (bgColor.a === 1 || !viewBg || !router.query.id) return;
+    if (storage) {
+      const storageColor = hexToRgb(storage)
+      if (storageColor) setBgColor({ ...storageColor, a: 1 })
+      viewBg.style.backgroundColor = storage
+    } else {
+      viewBg.style.backgroundColor = rgbToHex(bgColor);
+      setBgColor({ ...bgColor, a: 1 });
+    }
+  }
+
+  useEffect(() => {
+    const viewBg = document.getElementById("viewBg")
+    if (!viewBg || !router.query.id) return;
+    defaultColorSetting()
+    if (bgColor.a !== 1) return
+    localStorage.setItem(router.query.id + "_background", rgbToHex(bgColor))
+    viewBg.style.backgroundColor = rgbToHex(bgColor)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [bgColor, router.query.id])
 
   return (
     <Container>

@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
 import SVG_expand from "../../../svg/expand.svg"
-import { useStore } from '../../../zustand/store'
 
-export default function Size() {
+export default function Size({ selectComp }: { selectComp: HTMLElement | undefined }) {
   const [width, setWidth] = useState("0px")
   const [height, setHeight] = useState("0px")
-  const { selectComp } = useStore()
 
   useEffect(() => {
     if (!selectComp) return;

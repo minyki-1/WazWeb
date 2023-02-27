@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 
@@ -10,8 +10,8 @@ export default function CompyView() {
 
   const resetSelectComp = () => {
     if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
-      selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
-      selectComp.style.outline = "";
+      if (canEditTag.includes(selectComp.tagName)) selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
+      selectComp.style.boxShadow = "";
       selectComp.style.cursor = ""
     }
   }
@@ -19,8 +19,8 @@ export default function CompyView() {
   const handleMouseOver = ({ target }: { target: HTMLElement }) => {
     //* view는 이벤트 적용용이라 제외, selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
     if (target.id === "view" || target === selectComp) return;
-    if (mouseoverComp) mouseoverComp.style.outline = ""; //* 기존 mouseOverComp의 outline을 초기화해줌
-    target.style.outline = "rgba(43, 112, 240, 0.4) solid 3px";
+    if (mouseoverComp) mouseoverComp.style.boxShadow = ""; //* 기존 mouseOverComp의 boxShadow을 초기화해줌
+    target.style.boxShadow = "inset 0px 0px 0px 2.8px #6A9BF5";
     setMouseoverComp(target)
   }
 
@@ -30,21 +30,21 @@ export default function CompyView() {
     //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
     if (!target || target.id === "view" || target === selectComp) return;
     resetSelectComp();
-    if (mouseoverComp) mouseoverComp.style.outline = ""
+    if (mouseoverComp) mouseoverComp.style.boxShadow = ""
     setSelectComp(target)
     setMouseoverComp(undefined)
-    target.style.outline = "rgba(43, 112, 240, 0.8) solid 3px"
+    target.style.boxShadow = "inset 0px 0px 0px 2.8px #2B70F0"
   }
 
-  const viewBgClickEvent = ({ target }: { target: HTMLElement }) => {
-    const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId)
-    //* viewWrapper !== target : target이 viewWrapper일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
-    if (viewWrapper !== target) return;
+  const HandleViewBgClick = ({ target }: { target: HTMLElement }) => {
+    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0]
+    //* viewBg !== target : target이 viewBg일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
+    if (viewBg !== target) return;
     resetSelectComp();
     setSelectComp(undefined)
   }
   const handleMouseOut = () => {
-    if (mouseoverComp) mouseoverComp.style.outline = "";
+    if (mouseoverComp) mouseoverComp.style.boxShadow = "";
     setMouseoverComp(undefined);
   }
 
@@ -56,22 +56,24 @@ export default function CompyView() {
   }
 
   const handleWheel = ({ deltaY }: { deltaY: number }) => {
-    const view = document.querySelector("." + View.styledComponentId) as HTMLElement | null
-    const viewWrapper = document.querySelector("." + ViewWrapper.styledComponentId) as HTMLElement | null
-    const container = document.querySelector("." + Container.styledComponentId)
+    const view = document.getElementsByClassName(View.styledComponentId)[0] as HTMLElement | null
+    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0] as HTMLElement | null
+    const container = document.getElementsByClassName(Container.styledComponentId)[0]
     const zoomValue = zoom + deltaY * 0.001
-    if (view && viewWrapper && container) {
+    if (view && viewBg && container) {
       setZoom(zoomValue)
       view.style.transform = `scale(${zoomValue})`
-      viewWrapper.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
-      viewWrapper.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
+      viewBg.style.width = (view.offsetWidth * zoomValue) + 100 + "px"
+      viewBg.style.height = (view.offsetHeight * zoomValue) + 100 + "px"
     }
   }
 
   return (
     <Container>
-      <ViewWrapper
-        onClick={viewBgClickEvent}
+      <ViewBg
+        id="viewBg"
+        style={{ backgroundColor: "#C7C7C7" }}
+        onClick={HandleViewBgClick}
       // onWheel={handleWheel}
       >
         <View
@@ -80,19 +82,14 @@ export default function CompyView() {
           onMouseOver={handleMouseOver}
           onMouseOut={handleMouseOut}
           onDoubleClick={handleDoubleClick}
-        >
-          <div
-            className="App app compy_design"
-            style={{ width: "100%", height: "100%", backgroundColor: "white", borderRadius: 12 }}
-          />
-        </View>
-      </ViewWrapper>
+        />
+      </ViewBg>
     </Container >
   )
 }
 
 const Container = styled.div`
-  width:calc(100% - 300px - 310px);
+  flex:1;
   overflow: scroll;
   z-index: 0;
 `
@@ -100,8 +97,11 @@ const View = styled.div`
   width:360px;
   height:720px;
   z-index: 2;
+  *{
+    all:unset;
+  }
 `
-const ViewWrapper = styled.div`
+const ViewBg = styled.div`
   display:flex;
   align-items: center;
   justify-content: center;

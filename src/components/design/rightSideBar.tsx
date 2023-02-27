@@ -6,7 +6,7 @@ import Font from './styleEditor/font'
 import Background from './styleEditor/background'
 import { useStore } from '../../zustand/store'
 
-const compData: { [key: string]: (() => JSX.Element)[] } = {
+const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
   div: [Size, Basic, Arrange],
   span: [Size, Basic, Arrange],
   input: [Size, Basic, Arrange, Font],
@@ -41,7 +41,7 @@ export default function RightSideBar() {
         selectComp ? selectComp &&
           compData[selectComp.tagName.toLowerCase()]
             .map((Editor, key) => (
-              <Editor key={key} />
+              <Editor key={key} selectComp={selectComp} />
             ))
           : <Background />
       }

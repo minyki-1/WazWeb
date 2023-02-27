@@ -5,10 +5,10 @@ export const saveHTML = (param: string) => {
   const view = document.getElementById("view")
   if (!view) return;
   const htmlText = view.innerHTML
-    .replace('outline: rgba(43, 112, 240, 0.8) solid 3px; ', '')
-    .replace('outline: rgba(43, 112, 240, 0.4) solid 3px; ', '')
-    .replace('outline: rgba(43, 112, 240, 0.8) solid 3px;', '')
-    .replace('outline: rgba(43, 112, 240, 0.4) solid 3px;', '')
+    .replace('box-shadow: inset 0px 0px 0px 2.8px #2B70F0; ', '')
+    .replace('box-shadow: inset 0px 0px 0px 2.8px #6A9BF5; ', '')
+    .replace('box-shadow: inset 0px 0px 0px 2.8px #2B70F0;', '')
+    .replace('box-shadow: inset 0px 0px 0px 2.8px #6A9BF5;', '')
     .replace('contenteditable="false"', '')
     .replace('contenteditable="true"', '');
 
