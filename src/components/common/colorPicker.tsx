@@ -56,8 +56,6 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
     }
     else setColorInput(rgbToHex(color))
   }
-
-  
   return (
     <>
       {isPickerShow &&
