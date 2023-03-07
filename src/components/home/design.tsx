@@ -1,12 +1,16 @@
 import Link from 'next/link'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { resizeHTML } from '../../lib/resize'
 
 export default function Design({ id, html }: { id: string, html: string }) {
+  const [bgColor, setBgColor] = useState("#F8FAFB")
+
   useEffect(() => {
+    const sColor = localStorage.getItem(id + "_background")
+    if (sColor) setBgColor(sColor)
     const wrap = document.getElementById(`wrap_${id}`);
-    const view = document.getElementById(`view_${id}`)
+    const view = document.getElementById(`view_${id}`);
     if (!wrap || !view || view.hasChildNodes()) return;
     view.innerHTML = html;
     resizeHTML(view, wrap, -30)
@@ -15,7 +19,7 @@ export default function Design({ id, html }: { id: string, html: string }) {
   return (
     <Container>
       <Link href={`/design/${id}`}>
-        <DesignWrapper id={`wrap_${id}`}>
+        <DesignWrapper style={{ backgroundColor: bgColor }} id={`wrap_${id}`}>
           <DesginView id={`view_${id}`} />
         </DesignWrapper>
         <DesignInfo>Desgin Name</DesignInfo>
@@ -34,7 +38,6 @@ const Container = styled.div`
 const DesignWrapper = styled.div`
   width:100%;
   aspect-ratio: 3 / 2;
-  background-color: #F8FAFB;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   display:flex;
   align-items: center;

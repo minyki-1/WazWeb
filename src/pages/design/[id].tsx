@@ -56,7 +56,7 @@ export default function Design() {
     }
 
     const view = document.getElementById("view")
-    if (typeof param !== "string" || !view) return
+    if (typeof param !== "string" || !view) return;
     const history = getHistory({ id: param })
     // if (!history || refreshExpired({ id: "design" })) {
     //   sessionStorage.clear()
