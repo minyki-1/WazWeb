@@ -2,10 +2,11 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import CompList from './compList'
 import SVG_world from "../../svg/world.svg"
-import SVG_resources from "../../svg/resources.svg"
+import SVG_cube from "../../svg/cube.svg"
+import SVG_comps from "../../svg/comps.svg"
 
 export default function RightSideBar() {
-  const [select, setSelect] = useState("resources")
+  const [select, setSelect] = useState("cube")
   const iconProps = (name: string) => ({
     fill: "white", width: 24, height: 24,
     onClick: () => setSelect(name),
@@ -14,10 +15,11 @@ export default function RightSideBar() {
   return (
     <Container>
       <Nav>
-        <SVG_resources id="resources" {...iconProps("resources")} />
+        <SVG_cube id="cube" {...iconProps("cube")} />
         <SVG_world id="world" {...iconProps("world")} />
+        <SVG_comps id="world" {...iconProps("comps")} />
       </Nav>
-      {select === "resources" ? <CompList /> : null}
+      {select === "cube" ? <CompList /> : null}
     </Container>
   )
 }

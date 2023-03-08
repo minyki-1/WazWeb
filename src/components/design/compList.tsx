@@ -26,6 +26,11 @@ const defaultComp: { name: string, descript: string, html: string }[] = [
     name: "Input",
     descript: "Component that allow you to enter text, numbers, dates, etc. Default is text.",
     html: `<input type="text" value="Input" style="border:2px solid grey" />`
+  },
+  {
+    name: "Button",
+    descript: "1",
+    html: `<button>Button</button>`
   }
 ]
 
@@ -40,15 +45,3 @@ export default function CompList() {
     </>
   )
 }
-
-const Container = styled.section`
-  width:300px;
-  z-index: 2;
-  overflow-y: scroll;
-  display:flex;
-  flex-direction: column;
-  box-shadow: -2px 0px 10px rgba(0,0,0,0.25);
-  background-color: white;
-  display:flex;
-  flex-direction: column;
-`

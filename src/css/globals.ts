@@ -8,9 +8,6 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     cursor: pointer;
   }
-  img{
-    user-select: none;
-  }
   h1,h2,h3,h4,h5 { color: #363636; }
   h1 { font-size: 19px; }
   h2 { font-size: 16px; }

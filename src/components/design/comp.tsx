@@ -79,7 +79,7 @@ const Container = styled.section`
   border-radius: 4px;
 `
 const CompView = styled.div`
- background-color: #FBFBFB;
+  background-color: #f2f2f2;
   width:100%;
   aspect-ratio: 3 / 2;
   overflow: hidden;

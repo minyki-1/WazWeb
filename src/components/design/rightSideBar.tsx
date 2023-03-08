@@ -30,20 +30,21 @@ const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
   article: [Size, Basic, Arrange],
   section: [Size, Basic, Arrange],
   main: [Size, Basic, Arrange],
+  button: [Size, Basic, Font],
+  etc: [Size, Basic, Arrange, Font]
 }
 
 export default function RightSideBar() {
   const { selectComp } = useStore();
+  const tagName = String(selectComp?.tagName.toLowerCase())
+  const compKey = tagName in compData ? tagName : "etc"
 
   return (
     <Container id="rightSideBar">
       {
-        selectComp ? selectComp &&
-          compData[selectComp.tagName.toLowerCase()]
-            .map((Editor, key) => (
-              <Editor key={key} selectComp={selectComp} />
-            ))
-          : <Background />
+        selectComp === undefined
+          ? <Background />
+          : compData[compKey].map((Editor, key) => (<Editor key={key} selectComp={selectComp} />))
       }
     </Container>
   )
