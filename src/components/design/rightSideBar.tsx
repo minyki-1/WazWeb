@@ -34,6 +34,7 @@ const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
   etc: [Size, Basic, Arrange, Font]
 }
 
+
 export default function RightSideBar() {
   const { selectComp } = useStore();
   const tagName = String(selectComp?.tagName.toLowerCase())
