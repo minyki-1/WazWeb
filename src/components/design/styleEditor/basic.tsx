@@ -15,7 +15,11 @@ export default function Basic() {
   const [radius, setRadius] = useState("0px")
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
   const [borderStyle, setBorderStyle] = useState("solid")
-
+  const shadowInputProps = (value: "x" | "y" | "blur") => ({
+    onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
+    value: shadow[value],
+    type: "text"
+  })
   return (
     <Container>
       <Topic>Basic</Topic>
@@ -58,15 +62,15 @@ export default function Basic() {
           <h4 title="box-shadow">Shadow</h4>
           <div>
             <h4 title="x">X</h4>
-            <input type={"text"} value={shadow.x} onChange={e => setShadow({ ...shadow, x: e.target.value })} />
+            <input {...shadowInputProps("x")} />
           </div>
           <div>
             <h4 title="y">Y</h4>
-            <input type={"text"} value={shadow.y} onChange={e => setShadow({ ...shadow, y: e.target.value })} />
+            <input {...shadowInputProps("y")} />
           </div>
           <div>
             <h4 title="blur">B</h4>
-            <input type={"text"} value={shadow.blur} onChange={e => setShadow({ ...shadow, blur: e.target.value })} />
+            <input {...shadowInputProps("blur")} />
           </div>
         </ShadowWrapper>
         <span>

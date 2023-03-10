@@ -1,25 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
 import SVG_expand from "../../../svg/expand.svg"
+import { IStylerReturns } from "../../../lib/useStyler"
 
 export default function Size({ selectComp }: { selectComp: HTMLElement | undefined }) {
-  const [width, setWidth] = useState("0px")
-  const [height, setHeight] = useState("0px")
+  const width = useStyler("width")
+  const height = useStyler("height")
 
-  useEffect(() => {
-    if (!selectComp) return;
-    const { width, height } = selectComp.style
-    setWidth(width ? width : "None")
-    setHeight(height ? height : "None")
-  }, [selectComp])
+  // useEffect(() => {
+  //   if (!selectComp) return;
+  //   const { width, height } = selectComp.style
+  //   setWidth(width ? width : "None")
+  //   setHeight(height ? height : "None")
+  // }, [selectComp])
 
-  const widthEnterHandle = () => {
-    if (!selectComp) return;
-    const before = selectComp.style.width
-    selectComp.style.width = width
-    if (before === selectComp.style.width) setWidth(before ? before : "None");
-  }
+  // const widthEnterHandle = () => {
+  //   if (!selectComp) return;
+  //   const before = selectComp.style.width
+  //   selectComp.style.width = width
+  //   if (before === selectComp.style.width) setWidth(before ? before : "None");
+  // }
 
   return (
     <Container>
@@ -27,20 +28,11 @@ export default function Size({ selectComp }: { selectComp: HTMLElement | undefin
       <SizeGroup1>
         <div>
           <h4 title="width">W</h4>
-          <input
-            type="text"
-            value={width}
-            onChange={e => setWidth(e.target.value)}
-            onKeyDown={e => e.code === "Enter" ? widthEnterHandle() : null}
-            onBlur={widthEnterHandle}
-          />
+          <input {...width.props} />
         </div>
         <div>
           <h4 title="height">H</h4>
-          <input
-            type="text"
-            value={height}
-            onChange={e => setHeight(e.target.value)} />
+          <input {...height.props} />
         </div>
       </SizeGroup1>
       <ExpandSize text={"Out M"} value={"margin"} />
@@ -53,7 +45,7 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
   const [expand, setExpand] = useState(false)
   const total = useStyler(value)
 
-  const part = {
+  const part: { [key: string]: IStylerReturns } = {
     top: useStyler(value + "Top"),
     right: useStyler(value + "Right"),
     bottom: useStyler(value + "Bottom"),
@@ -77,29 +69,23 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
   const bottom = useExpand("bottom")
   const left = useExpand("left")
 
+  const NotExpandProps = () => {
+    function onKeyDown({ code }: { code: string }) {
+      total.props.onKeyDown({ code });
+      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getCompStyle()))
+    }
+    function onBlur() {
+      total.props.onBlur();
+      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getCompStyle()))
+    }
+    return { ...total.props, onKeyDown, onBlur, disabled: expand }
+  }
+
   return (
     <SizeGroup2>
       <SizeGroup3 state={String(expand)}>
         <h4>{text}</h4>
-        <input
-          disabled={expand}
-          type="text"
-          {...total.props}
-          onKeyDown={({ code }) => {
-            total.props.onKeyDown({ code });
-            part.top.setValue(part.top.getCompStyle())
-            part.bottom.setValue(part.bottom.getCompStyle())
-            part.left.setValue(part.left.getCompStyle())
-            part.right.setValue(part.right.getCompStyle())
-          }}
-          onBlur={() => {
-            total.props.onBlur();
-            part.top.setValue(part.top.getCompStyle())
-            part.bottom.setValue(part.bottom.getCompStyle())
-            part.left.setValue(part.left.getCompStyle())
-            part.right.setValue(part.right.getCompStyle())
-          }}
-        />
+        <input {...NotExpandProps()} />
         <SVG_expand onClick={() => setExpand(!expand)} fill="#363636" width={16} height={16} style={{ cursor: "pointer", marginLeft: 4 }} />
       </SizeGroup3>
       {

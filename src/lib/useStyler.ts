@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "../zustand/store";
+import { Dispatch, SetStateAction } from "react";
 
-interface IStyler {
+export interface IStylerReturns {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
   getCompStyle: () => string;
@@ -16,28 +17,30 @@ interface IStyler {
   };
 }
 
-export const useStyler = (name: string, resetText = "0px") => {
+export type TUseStyler = (name: any, resetText?: string) => IStylerReturns
+
+export const useStyler: TUseStyler = (name, resetText = "0px") => {
   const { selectComp } = useStore();
-  const style = selectComp?.style[name as any]
+  const style = selectComp?.style[name]
   const [value, setValue] = useState(style ? style : resetText)
 
   useEffect(() => {
     if (!selectComp) return;
-    const style = selectComp.style[name as any]
+    const style = selectComp.style[name]
     setValue(style ? style : resetText)
   }, [name, resetText, selectComp])
 
   const getCompStyle = () => {
     if (!selectComp) return resetText;
-    const style = selectComp.style[name as any]
+    const style = selectComp.style[name]
     return style ? style : resetText
   }
 
   const changeStyle = () => {
     if (!selectComp) return;
-    const before = selectComp.style[name as any]
-    selectComp.style[name as any] = value
-    if (before === selectComp.style[name as any]) setValue(before ? before : resetText);
+    const before = selectComp.style[name]
+    selectComp.style[name] = value
+    if (before === selectComp.style[name]) setValue(before ? before : resetText);
   }
 
   const onChange = ({ target }: { target: HTMLInputElement }) => setValue(target.value)
