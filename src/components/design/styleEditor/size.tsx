@@ -81,7 +81,6 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
     return { ...total.props, onKeyDown, onBlur, disabled: expand }
   }
 
-
   return (
     <SizeGroup2>
       <SizeGroup3 state={String(expand)}>
