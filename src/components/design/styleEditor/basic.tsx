@@ -20,6 +20,7 @@ export default function Basic() {
     value: shadow[value],
     type: "text"
   })
+
   return (
     <Container>
       <Topic>Basic</Topic>
