@@ -1,4 +1,3 @@
-import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
 
@@ -8,18 +7,6 @@ export default function Arrange() {
   const alignItems = useStyler("alignItems", "flex-start")
   const flexDirection = useStyler("flexDirection", "row")
   const position = useStyler("position", "static")
-  const [offset, setOffset] = useState({ top: "0", bottom: "0", left: "0", right: "0" })
-
-  const useOffsetOnChange = (offName: "top" | "bottom" | "left" | "right") => {
-    return {
-      type: "text",
-      onChange: (e: ChangeEvent<HTMLInputElement>) => {
-        setOffset({ ...offset, [offName]: e.target.value })
-      },
-      value: offset[offName]
-    }
-  }
-
   const offsetTop = useStyler("top", "")
   const offsetRight = useStyler("right", "")
   const offsetBottom = useStyler("bottom", "")
