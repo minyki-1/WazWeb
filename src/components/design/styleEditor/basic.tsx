@@ -15,6 +15,7 @@ export default function Basic() {
   const [radius, setRadius] = useState("0px")
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
   const [borderStyle, setBorderStyle] = useState("solid")
+  
   const shadowInputProps = (value: "x" | "y" | "blur") => ({
     onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
     value: shadow[value],

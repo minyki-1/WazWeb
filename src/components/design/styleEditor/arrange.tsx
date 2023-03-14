@@ -1,12 +1,13 @@
 import { ChangeEvent, useState } from 'react'
 import styled from 'styled-components'
+import { useStyler } from '../../../lib/useStyler'
 
 export default function Arrange() {
-  const [display, setDisplay] = useState("flex")
-  const [justifyContent, setJustifyContent] = useState("flex-start")
-  const [alignItems, setAlignItems] = useState("flex-start")
-  const [flexDirection, setFlexDirection] = useState("row")
-  const [position, setPosition] = useState("static")
+  const display = useStyler("display", "flex")
+  const justifyContent = useStyler("justifyContent", "flex-start")
+  const alignItems = useStyler("alignItems", "flex-start")
+  const flexDirection = useStyler("flexDirection", "row")
+  const position = useStyler("position", "static")
   const [offset, setOffset] = useState({ top: "0", bottom: "0", left: "0", right: "0" })
 
   const useOffsetOnChange = (offName: "top" | "bottom" | "left" | "right") => {
@@ -19,28 +20,28 @@ export default function Arrange() {
     }
   }
 
-  const offsetTop = useOffsetOnChange("top")
-  const offsetRight = useOffsetOnChange("right")
-  const offsetBottom = useOffsetOnChange("bottom")
-  const offsetLeft = useOffsetOnChange("left")
+  const offsetTop = useStyler("top", "")
+  const offsetRight = useStyler("right", "")
+  const offsetBottom = useStyler("bottom", "")
+  const offsetLeft = useStyler("left", "")
 
   return (
     <Container>
       <Topic>Arrange</Topic>
       <SizeGroup1>
         <h4 title="display">Display</h4>
-        <select value={display} onChange={e => setDisplay(e.target.value)}>
+        <select {...display.select}>
           <option title="flex" value="flex">Flex Box</option>
           <option title="inline" value="inline">Auto Size</option>
           <option title="none" value="none">None</option>
         </select>
       </SizeGroup1>
       {
-        display === "flex" ?
+        display.value === "flex" ?
           <>
             <SizeGroup1>
               <h4 title='justify-content'>Row</h4>
-              <select value={justifyContent} onChange={e => setJustifyContent(e.target.value)}>
+              <select {...justifyContent.select}>
                 <option title="flex-start" value="flex-start">Left</option>
                 <option title="flex-end" value="flex-end">Right</option>
                 <option title="center" value="center">Center</option>
@@ -51,7 +52,7 @@ export default function Arrange() {
             </SizeGroup1>
             <SizeGroup1>
               <h4 title='align-items'>Colum</h4>
-              <select value={alignItems} onChange={e => setAlignItems(e.target.value)}>
+              <select {...alignItems.select}>
                 <option title="flex-start" value="flex-start">Top</option>
                 <option title="flex-end" value="flex-end">Bottom</option>
                 <option title="center" value="center">Center</option>
@@ -59,18 +60,18 @@ export default function Arrange() {
             </SizeGroup1>
             <SizeGroup1>
               <h4 title="flex-direction">Direction</h4>
-              <select value={flexDirection} onChange={e => setFlexDirection(e.target.value)}>
+              <select {...flexDirection.select}>
                 <option title="row" value="row">Row</option>
-                <option title="colum" value="colum">Colum</option>
+                <option title="column" value="column">Column</option>
                 <option title="row-reverse" value="row-reverse">Row Reverse</option>
-                <option title="colum-reverse" value="colum-reverse">Colum Reverse</option>
+                <option title="column-reverse" value="column-reverse">Column Reverse</option>
               </select>
             </SizeGroup1>
           </> : null
       }
       <SizeGroup1>
         <h4 title="position">Position</h4>
-        <select value={position} onChange={e => setPosition(e.target.value)}>
+        <select {...position.select}>
           <option title="static" value="static">Flow</option>
           <option title="relative" value="relative">Flow (Offsettable)</option>
           <option title="absolute" value="absolute">X,Y (Scrollable)</option>
@@ -78,23 +79,23 @@ export default function Arrange() {
         </select>
       </SizeGroup1>
       {
-        position !== "static" ?
+        position.value !== "static" ?
           <SizeGroup2>
             <div>
               <h4 title="top">T</h4>
-              <input {...offsetTop} />
+              <input {...offsetTop.input} />
             </div>
             <div>
               <h4 title="right">R</h4>
-              <input {...offsetRight} />
+              <input {...offsetRight.input} />
             </div>
             <div>
               <h4 title="bottom">B</h4>
-              <input {...offsetBottom} />
+              <input {...offsetBottom.input} />
             </div>
             <div>
               <h4 title="left">L</h4>
-              <input {...offsetLeft} />
+              <input {...offsetLeft.input} />
             </div>
           </SizeGroup2> : null
       }

@@ -5,14 +5,22 @@ import { Dispatch, SetStateAction } from "react";
 export interface IStylerReturns {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
-  getCompStyle: () => string;
-  changeStyle: () => void;
-  props: {
+  getStyle: () => string;
+  changeStyle: (style?: string) => void;
+  input: {
     onChange: ({ target }: {
       target: HTMLInputElement;
     }) => void;
-    onKeyDown: ({ code }: { code: string }) => void | null;
+    onKeyDown: ({ code }: {
+      code: string;
+    }) => void | null;
     onBlur: () => void;
+    value: string;
+  };
+  select: {
+    onChange: ({ target }: {
+      target: HTMLSelectElement;
+    }) => void;
     value: string;
   };
 }
@@ -30,16 +38,16 @@ export const useStyler: TUseStyler = (name, resetText = "0px") => {
     setValue(style ? style : resetText)
   }, [name, resetText, selectComp])
 
-  const getCompStyle = () => {
+  const getStyle = () => {
     if (!selectComp) return resetText;
     const style = selectComp.style[name]
     return style ? style : resetText
   }
 
-  const changeStyle = () => {
+  const changeStyle = (style?: string) => {
     if (!selectComp) return;
     const before = selectComp.style[name]
-    selectComp.style[name] = value
+    selectComp.style[name] = style ? style : value
     if (before === selectComp.style[name]) setValue(before ? before : resetText);
   }
 
@@ -49,5 +57,14 @@ export const useStyler: TUseStyler = (name, resetText = "0px") => {
 
   const onKeyDown = ({ code }: { code: string }) => code === "Enter" ? changeStyle() : null
 
-  return { value, setValue, getCompStyle, changeStyle, props: { onChange, onKeyDown, onBlur, value } }
+  return {
+    value, setValue, getStyle, changeStyle,
+    input: { onChange, onKeyDown, onBlur, value },
+    select: {
+      onChange: ({ target }: { target: HTMLSelectElement }) => {
+        setValue(target.value)
+        changeStyle(target.value)
+      }, value
+    }
+  }
 }

@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Header from '../../components/design/header'
 import RightSideBar from '../../components/design/rightSideBar'
-import CompyView from '../../components/design/compyView'
+import CompyView from '../../components/design/designView'
 import LeftSideBar from '../../components/design/leftSideBar'
 import { useStore } from '../../zustand/store'
 import { useEffect, useState } from 'react'

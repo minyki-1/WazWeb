@@ -4,23 +4,9 @@ import { useStyler } from '../../../lib/useStyler'
 import SVG_expand from "../../../svg/expand.svg"
 import { IStylerReturns } from "../../../lib/useStyler"
 
-export default function Size({ selectComp }: { selectComp: HTMLElement | undefined }) {
+export default function Size() {
   const width = useStyler("width")
   const height = useStyler("height")
-
-  // useEffect(() => {
-  //   if (!selectComp) return;
-  //   const { width, height } = selectComp.style
-  //   setWidth(width ? width : "None")
-  //   setHeight(height ? height : "None")
-  // }, [selectComp])
-
-  // const widthEnterHandle = () => {
-  //   if (!selectComp) return;
-  //   const before = selectComp.style.width
-  //   selectComp.style.width = width
-  //   if (before === selectComp.style.width) setWidth(before ? before : "None");
-  // }
 
   return (
     <Container>
@@ -28,11 +14,11 @@ export default function Size({ selectComp }: { selectComp: HTMLElement | undefin
       <SizeGroup1>
         <div>
           <h4 title="width">W</h4>
-          <input {...width.props} />
+          <input {...width.input} />
         </div>
         <div>
           <h4 title="height">H</h4>
-          <input {...height.props} />
+          <input {...height.input} />
         </div>
       </SizeGroup1>
       <ExpandSize text={"Out M"} value={"margin"} />
@@ -54,31 +40,33 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
 
   const useExpand = (loc: "top" | "right" | "bottom" | "left") => {
     const onKeyDown = ({ code }: { code: string }) => {
-      part[loc].props.onKeyDown({ code });
-      total.setValue(total.getCompStyle())
+      part[loc].input.onKeyDown({ code });
+      total.setValue(total.getStyle())
     }
     const onBlur = () => {
-      part[loc].props.onBlur()
-      total.setValue(total.getCompStyle())
+      part[loc].input.onBlur()
+      total.setValue(total.getStyle())
     }
-    return { ...part[loc].props, onKeyDown, onBlur }
+    return { ...part[loc].input, onKeyDown, onBlur }
   }
 
-  const top = useExpand("top")
-  const right = useExpand("right")
-  const bottom = useExpand("bottom")
-  const left = useExpand("left")
+  const partObject = {
+    Top: useExpand("top"),
+    Right: useExpand("right"),
+    Bottom: useExpand("bottom"),
+    Left: useExpand("left"),
+  }
 
   const NotExpandProps = () => {
     function onKeyDown({ code }: { code: string }) {
-      total.props.onKeyDown({ code });
-      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getCompStyle()))
+      total.input.onKeyDown({ code });
+      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getStyle()))
     }
     function onBlur() {
-      total.props.onBlur();
-      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getCompStyle()))
+      total.input.onBlur();
+      Object.keys(part).forEach((v: string) => part[v].setValue(part[v].getStyle()))
     }
-    return { ...total.props, onKeyDown, onBlur, disabled: expand }
+    return { ...total.input, onKeyDown, onBlur, disabled: expand }
   }
 
   return (
@@ -91,22 +79,14 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
       {
         expand ?
           <ExpandInput>
-            <div>
-              <h4 title={`${value}-top`}>T</h4>
-              <input {...top} />
-            </div>
-            <div>
-              <h4 title={`${value}-right`}>R</h4>
-              <input {...right} />
-            </div>
-            <div>
-              <h4 title={`${value}-bottom`}>B</h4>
-              <input {...bottom} />
-            </div>
-            <div>
-              <h4 title={`${value}-left`}>L</h4>
-              <input {...left} />
-            </div>
+            {
+              Object.keys(partObject).map((loc, key) => (
+                <div key={key}>
+                  <h4 title={`${value}-${loc}`}>{loc[0]}</h4>
+                  <input {...partObject[loc as "Top" | "Right" | "Bottom" | "Left"]} />
+                </div>
+              ))
+            }
           </ExpandInput>
           : null
       }

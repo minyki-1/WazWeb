@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Comp from './comp'
+import Comp from './widget'
 
 const defaultComp: { name: string, descript: string, html: string }[] = [
   {
