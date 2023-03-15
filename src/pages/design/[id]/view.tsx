@@ -56,7 +56,7 @@ export default function CompyView() {
       return
     }
 
-    const view = document.getElementsByClassName(View.styledComponentId)[0]
+    const view = document.getElementById("view")
     if (typeof param !== "string" || !view) return;
     const history = getHistory({ id: param })
     // if (!history || refreshExpired({ id: "design" })) {
@@ -71,6 +71,7 @@ export default function CompyView() {
 
   return (
     <View
+      id="view"
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
@@ -79,4 +80,6 @@ export default function CompyView() {
   )
 }
 
-const View = styled.div``
+const View = styled.div`
+  border-radius: 12px;
+`

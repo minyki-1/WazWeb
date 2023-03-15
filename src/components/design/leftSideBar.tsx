@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import CompList from './widgetList'
+import WidgetList from './widgetList'
 import SVG_world from "../../svg/world.svg"
 import SVG_cube from "../../svg/cube.svg"
 import SVG_comps from "../../svg/comps.svg"
@@ -19,7 +19,7 @@ export default function RightSideBar() {
         <SVG_world {...iconProps("world")} />
         <SVG_comps {...iconProps("comps")} />
       </Nav>
-      {select === "cube" ? <CompList /> : null}
+      {select === "cube" ? <WidgetList /> : null}
     </Container>
   )
 }

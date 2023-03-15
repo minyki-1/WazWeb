@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app'
 import { Inter } from '@next/font/google'
 import { GlobalStyle } from '../css/globals';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const font = Inter({ subsets: ['latin'] });
 

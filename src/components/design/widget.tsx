@@ -15,7 +15,7 @@ interface ICompProps {
   id: number;
 }
 
-export default function Comp({ name, descript, html, id }: ICompProps) {
+export default function Widget({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
@@ -89,7 +89,8 @@ const CompView = styled.div`
   border-radius: 4px 4px 0px 0px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
   *{
-    all:unset;
+    /* all:null; */
+    /* @import url("https://necolas.github.io/normalize.css/8.0.1/normalize.css"); */
   }
 `
 const InfoBar = styled.div`

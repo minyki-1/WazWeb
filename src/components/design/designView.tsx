@@ -1,12 +1,13 @@
-import { useState } from "react"
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 
 export default function CompyView() {
-  const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
+  const router = useRouter()
 
   const resetSelectComp = () => {
     if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -16,43 +17,12 @@ export default function CompyView() {
     }
   }
 
-  const handleMouseOver = ({ target }: { target: HTMLElement }) => {
-    //* view는 이벤트 적용용이라 제외, selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
-    if (target.id === "view" || target === selectComp) return;
-    if (mouseoverComp) mouseoverComp.style.boxShadow = ""; //* 기존 mouseOverComp의 boxShadow을 초기화해줌
-    target.style.boxShadow = "inset 0px 0px 0px 2.8px #6A9BF5";
-    setMouseoverComp(target)
-  }
-
-  const handleClick = (e: MouseEvent) => {
-    e.preventDefault()
-    const target = e.target as HTMLElement | null
-    //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
-    if (!target || target.id === "view" || target === selectComp) return;
-    resetSelectComp();
-    if (mouseoverComp) mouseoverComp.style.boxShadow = ""
-    setSelectComp(target)
-    setMouseoverComp(undefined)
-    target.style.boxShadow = "inset 0px 0px 0px 2.8px #2B70F0"
-  }
-
   const HandleViewBgClick = ({ target }: { target: HTMLElement }) => {
     const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0]
     //* viewBg !== target : target이 viewBg일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
     if (viewBg !== target) return;
     resetSelectComp();
     setSelectComp(undefined)
-  }
-  const handleMouseOut = () => {
-    if (mouseoverComp) mouseoverComp.style.boxShadow = "";
-    setMouseoverComp(undefined);
-  }
-
-  const handleDoubleClick = () => {
-    if (selectComp && canEditTag.includes(selectComp.tagName)) {
-      selectComp.contentEditable = "true";
-      selectComp.style.cursor = "text";
-    }
   }
 
   const handleWheel = ({ deltaY }: { deltaY: number }) => {
@@ -68,6 +38,10 @@ export default function CompyView() {
     }
   }
 
+  useEffect(() => {
+    console.log(router.asPath)
+  }, [router])
+
   return (
     <Container>
       <ViewBg
@@ -76,13 +50,7 @@ export default function CompyView() {
         onClick={HandleViewBgClick}
       // onWheel={handleWheel}
       >
-        <View
-          id="view"
-          onClick={handleClick}
-          onMouseOver={handleMouseOver}
-          onMouseOut={handleMouseOut}
-          onDoubleClick={handleDoubleClick}
-        />
+        {/* <View src={router.asPath + "/view"} /> */}
       </ViewBg>
     </Container >
   )
@@ -93,13 +61,10 @@ const Container = styled.div`
   overflow: scroll;
   z-index: 0;
 `
-const View = styled.div`
+const View = styled.iframe`
   width:360px;
   height:720px;
   z-index: 2;
-  *{
-    all:unset;
-  }
 `
 const ViewBg = styled.div`
   display:flex;

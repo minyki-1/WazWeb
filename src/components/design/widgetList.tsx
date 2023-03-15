@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Comp from './widget'
+import Widget from './widget'
 
 const defaultComp: { name: string, descript: string, html: string }[] = [
   {
@@ -34,12 +34,12 @@ const defaultComp: { name: string, descript: string, html: string }[] = [
   }
 ]
 
-export default function CompList() {
+export default function WidgetList() {
   return (
     <>
       {
         defaultComp.map((data, key) => (
-          <Comp key={key} {...data} id={key} />
+          <Widget key={key} {...data} id={key} />
         ))
       }
     </>
