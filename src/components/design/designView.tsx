@@ -1,13 +1,16 @@
 import { useRouter } from "next/router";
+import * as ReactDOM from 'react-dom/client';
 import { useEffect, useState } from "react"
 import styled from "styled-components"
+import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
+import NewView from "../design/newView"
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
-  const router = useRouter()
+  const param = useRouter().query.id;
 
   const resetSelectComp = () => {
     if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -16,7 +19,6 @@ export default function CompyView() {
       selectComp.style.cursor = ""
     }
   }
-
   const HandleViewBgClick = ({ target }: { target: HTMLElement }) => {
     const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0]
     //* viewBg !== target : target이 viewBg일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
@@ -38,6 +40,35 @@ export default function CompyView() {
     }
   }
 
+  async function appendViewInIframe(html: string) {
+    const iDoc = (document.getElementById("iframe") as HTMLIFrameElement | null)?.contentWindow?.document
+    if (!iDoc) return;
+    const main = iDoc.createElement("div")
+    iDoc.body.appendChild(main)
+    const root = ReactDOM.createRoot(main);
+    await root.render(<NewView html={html} dom={iDoc} param={param} />);
+  }
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
+    const id = "0"
+    if (!user.id || id !== user.id) {
+      console.log("옳바른 사용자가 아닙니다.")
+      return
+    }
+    if (typeof param !== "string") return;
+    const history = getHistory({ id: param })
+    // if (!history || refreshExpired({ id: "design" })) {
+    //   sessionStorage.clear()
+    //   setRefresh({ id: "design" })
+    //   const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
+    //   view.innerHTML = temp
+    //   saveHistory({ id: temp, value: temp })
+    // } else if (history) view.innerHTML = history[0];
+    if (history) appendViewInIframe(history[0])
+
+  }, [param])
+
   return (
     <Container>
       <ViewBg
@@ -46,7 +77,7 @@ export default function CompyView() {
         onClick={HandleViewBgClick}
       // onWheel={handleWheel}
       >
-        {/* <View src={router.asPath + "/view"} /> */}
+        <View id="iframe" />
       </ViewBg>
     </Container >
   )
@@ -73,3 +104,4 @@ const ViewBg = styled.div`
   overflow: scroll;
   z-index: 2;
 `
+const Viewa = styled.div``

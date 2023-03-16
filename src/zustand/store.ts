@@ -1,6 +1,4 @@
 import { create } from "zustand";
-import { saveHistory } from "../lib/history"
-import { IDesgin } from "../types/design";
 
 interface IselectCompState {
   selectComp: HTMLElement | undefined;
