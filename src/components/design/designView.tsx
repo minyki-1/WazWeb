@@ -38,10 +38,6 @@ export default function CompyView() {
     }
   }
 
-  useEffect(() => {
-    console.log(router.asPath)
-  }, [router])
-
   return (
     <Container>
       <ViewBg
