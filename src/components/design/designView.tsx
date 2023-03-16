@@ -46,7 +46,7 @@ export default function CompyView() {
     const main = iDoc.createElement("div")
     iDoc.body.appendChild(main)
     const root = ReactDOM.createRoot(main);
-    await root.render(<NewView html={html} dom={iDoc} param={param} />);
+    await root.render(<NewView html={html} isOnlyView={false} dom={iDoc} param={param} />);
   }
 
   useEffect(() => {

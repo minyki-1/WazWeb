@@ -3,7 +3,8 @@ import { useStore } from "../../zustand/store";
 import styled from "styled-components"
 import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
-export default function NewView({ html, dom, param }: { html: string, dom: Document, param: string | string[] | undefined }) {
+
+export default function NewView({ html, isOnlyView, dom, param }: { html: string, isOnlyView: boolean, dom: Document, param: string | string[] | undefined }) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
@@ -53,6 +54,7 @@ export default function NewView({ html, dom, param }: { html: string, dom: Docum
     if (view) view.innerHTML = html
   }, [])
 
+  if (isOnlyView) return (<View />)
   return (
     <View
       tabIndex="0"
