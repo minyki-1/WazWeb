@@ -4,6 +4,16 @@ import { reset } from './reset';
 export const GlobalStyle = createGlobalStyle`
   ${normalize}
   ${reset}
+  *::-webkit-scrollbar{
+    width:7px;
+    height:0px;
+  }
+  *::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.25);
+  }
+  *::-webkit-scrollbar-track {
+    background-color: initial;
+  }
   a {
     text-decoration: none;
     cursor: pointer;

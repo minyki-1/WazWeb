@@ -52,6 +52,27 @@ export default function Home() {
               <Design key={key} {...value} />
             ))
           }
+          {
+            list?.map((value, key) => (
+              <Design key={key} {...value} />
+            ))
+          }
+          {
+            list?.map((value, key) => (
+              <Design key={key} {...value} />
+            ))
+          }
+          {
+            list?.map((value, key) => (
+              <Design key={key} {...value} />
+            ))
+          }
+          {
+            list?.map((value, key) => (
+              <Design key={key} {...value} />
+            ))
+          }
+
         </DesignList>
       </Main>
     </Container>
@@ -72,9 +93,5 @@ const DesignList = styled.div`
   height:100%;
   max-height:calc(100vh - 48px);
   display:flex;
-  overflow: scroll;
   flex-wrap: wrap;
-  #test{
-    color:red;
-  }
 `

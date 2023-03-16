@@ -28,7 +28,7 @@ export default function CompyView() {
   }
 
   const handleWheel = ({ deltaY }: { deltaY: number }) => {
-    const view = document.getElementsByClassName(View.styledComponentId)[0] as HTMLElement | null
+    const view = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLElement | null
     const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0] as HTMLElement | null
     const container = document.getElementsByClassName(Container.styledComponentId)[0]
     const zoomValue = zoom + deltaY * 0.001
@@ -40,22 +40,23 @@ export default function CompyView() {
     }
   }
 
-  async function appendViewInIframe(html: string) {
-    const iDoc = (document.getElementById("iframe") as HTMLIFrameElement | null)?.contentWindow?.document
-    if (!iDoc) return;
-    const main = iDoc.createElement("div")
-    iDoc.body.appendChild(main)
+  function appendViewInIframe(html: string) {
+    const iframeView = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLIFrameElement | null
+    const iframeDom = iframeView?.contentWindow?.document
+    if (!iframeDom) return;
+    const main = iframeDom.createElement("div")
+    iframeDom.body.appendChild(main)
     const root = ReactDOM.createRoot(main);
-    await root.render(<NewView html={html} isOnlyView={false} dom={iDoc} param={param} />);
+    root.render(<NewView html={html} isOnlyView={false} dom={iframeDom} param={param} />);
   }
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
-    const id = "0"
-    if (!user.id || id !== user.id) {
-      console.log("옳바른 사용자가 아닙니다.")
-      return
-    }
+    // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
+    // const id = "0"
+    // if (!user.id || id !== user.id) {
+    //   console.log("옳바른 사용자가 아닙니다.")
+    //   return
+    // }
     if (typeof param !== "string") return;
     const history = getHistory({ id: param })
     // if (!history || refreshExpired({ id: "design" })) {
@@ -77,7 +78,7 @@ export default function CompyView() {
         onClick={HandleViewBgClick}
       // onWheel={handleWheel}
       >
-        <View id="iframe" />
+        <IframeView />
       </ViewBg>
     </Container >
   )
@@ -85,10 +86,10 @@ export default function CompyView() {
 
 const Container = styled.div`
   flex:1;
-  overflow: scroll;
   z-index: 0;
+  overflow: auto;
 `
-const View = styled.iframe`
+const IframeView = styled.iframe`
   width:360px;
   height:720px;
   z-index: 2;
@@ -101,7 +102,5 @@ const ViewBg = styled.div`
   min-height:100%;
   width:460px;
   height:820px;
-  overflow: scroll;
   z-index: 2;
 `
-const Viewa = styled.div``
