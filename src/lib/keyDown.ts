@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, KeyboardEventHandler } from "react";
 import { useStore } from "../zustand/store";
 import { redoHistory, undoHistory } from "./history";
 import { getCompUID } from "./randomString";
@@ -7,7 +7,7 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
   const { selectComp } = useStore()
   const [copyComp, setCopyComp] = useState<HTMLElement>();
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = (e) => {
     const { key, ctrlKey, shiftKey } = e;
     const selectIsNotView = selectComp && selectComp.id !== "&app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
 

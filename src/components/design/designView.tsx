@@ -57,7 +57,7 @@ export default function CompyView() {
     // } else if (history) view.innerHTML = history[0];
     const iframeView = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLIFrameElement | null
     const iframeDom = iframeView?.contentWindow?.document
-    if (history && iframeDom) createNewView(history[0], iframeDom, param)
+    if (history && iframeDom) createNewView(history[0], iframeDom, false, param)
 
   }, [param])
 

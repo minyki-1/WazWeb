@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useStore } from "../../zustand/store";
-import styled from "styled-components"
 import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
+import { resizeHTML } from "../../lib/resize";
 
 export default function NewView({ html, isOnlyView, dom, param }: { html: string, isOnlyView: boolean, dom: Document, param?: string | string[] }) {
   const { selectComp, setSelectComp } = useStore();
@@ -17,7 +17,7 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
       selectComp.style.cursor = ""
     }
   }
-  const handleMouseOver = (e: MouseEvent) => {
+  const handleMouseOver: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLElement | null;
     //* view는 이벤트 적용용이라 제외, selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
     if (!target || target.id === "view" || target === selectComp) return;
@@ -26,7 +26,7 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
     setMouseoverComp(target)
   }
 
-  const handleClick = (e: MouseEvent) => {
+  const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault()
     const target = e.target as HTMLElement | null
     //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
@@ -50,14 +50,24 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
   }
 
   useEffect(() => {
-    const view = dom.querySelector(View.toString()) as HTMLElement | null
-    if (view) view.innerHTML = html
-  }, [dom, html])
+    dom.body.style.margin = "0px"
+    const view = dom.body.childNodes[0].childNodes[0] as HTMLElement | null
+    if (!view) return;
+    view.style.width = "100vw"
+    view.style.height = "100vh"
+    view.style.display = "flex"
+    view.style.justifyContent = "center"
+    view.style.alignItems = "center"
 
-  if (isOnlyView) return (<View />)
+    view.innerHTML = html
+
+    resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
+  }, [param])
+
+  if (isOnlyView) return (<div />)
   return (
-    <View
-      tabIndex="0"
+    <div
+      tabIndex={0}
       onKeyDown={handleKeyDown}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
@@ -66,7 +76,3 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
     />
   )
 }
-
-const View = styled.div`
-  border-radius: 12px;
-`
