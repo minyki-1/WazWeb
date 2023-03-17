@@ -52,27 +52,6 @@ export default function Home() {
               <Design key={key} {...value} />
             ))
           }
-          {
-            list?.map((value, key) => (
-              <Design key={key} {...value} />
-            ))
-          }
-          {
-            list?.map((value, key) => (
-              <Design key={key} {...value} />
-            ))
-          }
-          {
-            list?.map((value, key) => (
-              <Design key={key} {...value} />
-            ))
-          }
-          {
-            list?.map((value, key) => (
-              <Design key={key} {...value} />
-            ))
-          }
-
         </DesignList>
       </Main>
     </Container>

@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
 
-export default function NewView({ html, isOnlyView, dom, param }: { html: string, isOnlyView: boolean, dom: Document, param?: string | string[] | undefined }) {
+export default function NewView({ html, isOnlyView, dom, param }: { html: string, isOnlyView: boolean, dom: Document, param?: string | string[] }) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
@@ -52,7 +52,7 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
   useEffect(() => {
     const view = dom.querySelector(View.toString()) as HTMLElement | null
     if (view) view.innerHTML = html
-  }, [])
+  }, [dom, html])
 
   if (isOnlyView) return (<View />)
   return (

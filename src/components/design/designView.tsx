@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
-import * as ReactDOM from 'react-dom/client';
 import { useEffect, useState } from "react"
 import styled from "styled-components"
 import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
-import NewView from "../design/newView"
+import { createNewView } from "../../lib/createNewView"
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
@@ -40,16 +39,6 @@ export default function CompyView() {
     }
   }
 
-  function appendViewInIframe(html: string) {
-    const iframeView = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLIFrameElement | null
-    const iframeDom = iframeView?.contentWindow?.document
-    if (!iframeDom) return;
-    const main = iframeDom.createElement("div")
-    iframeDom.body.appendChild(main)
-    const root = ReactDOM.createRoot(main);
-    root.render(<NewView html={html} isOnlyView={false} dom={iframeDom} param={param} />);
-  }
-
   useEffect(() => {
     // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
     // const id = "0"
@@ -66,7 +55,9 @@ export default function CompyView() {
     //   view.innerHTML = temp
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
-    if (history) appendViewInIframe(history[0])
+    const iframeView = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLIFrameElement | null
+    const iframeDom = iframeView?.contentWindow?.document
+    if (history && iframeDom) createNewView(history[0], iframeDom, param)
 
   }, [param])
 
