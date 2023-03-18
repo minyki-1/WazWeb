@@ -4,11 +4,10 @@ import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
 import { resizeHTML } from "../../lib/resize";
 
-export default function NewView({ html, isOnlyView, dom, param }: { html: string, isOnlyView: boolean, dom: Document, param?: string | string[] }) {
+export default function NewView({ html, dom, param }: { html: string, dom: Document, param?: string | string[] }) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
-  const handleKeyDown = keyDownFunc(param)
 
   const resetSelectComp = () => {
     if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -49,26 +48,27 @@ export default function NewView({ html, isOnlyView, dom, param }: { html: string
     }
   }
 
+  const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }
+
   useEffect(() => {
     dom.body.style.margin = "0px"
     const view = dom.body.childNodes[0].childNodes[0] as HTMLElement | null
     if (!view) return;
-    view.style.width = "100vw"
-    view.style.height = "100vh"
-    view.style.display = "flex"
-    view.style.justifyContent = "center"
-    view.style.alignItems = "center"
-
+    Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     view.innerHTML = html
 
-    resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
+    if (!param) resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
+
+    if (param) {
+      // console.log(dom.)
+    }
   }, [param])
 
-  if (isOnlyView) return (<div />)
+  if (!param) return (<div />)
   return (
     <div
       tabIndex={0}
-      onKeyDown={handleKeyDown}
+      onKeyDown={keyDownFunc(param)}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}

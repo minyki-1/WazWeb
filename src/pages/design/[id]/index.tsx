@@ -1,16 +1,15 @@
 import styled from 'styled-components'
-import Header from '../../components/design/header'
-import RightSideBar from '../../components/design/rightSideBar'
-import CompyView from '../../components/design/designView'
-import LeftSideBar from '../../components/design/leftSideBar'
+import Header from '../../../components/design/header'
+import RightSideBar from '../../../components/design/rightSideBar'
+import CompyView from '../../../components/design/designView'
+import LeftSideBar from '../../../components/design/leftSideBar'
 import { useRouter } from 'next/router'
-import { keyDownFunc } from '../../lib/keyDown'
+import { keyDownFunc } from '../../../lib/keyDown'
 export default function Design() {
   const param = useRouter().query.id
-  const handleKeyDown = keyDownFunc(param)
 
   return (
-    <Container tabIndex="0" onKeyDown={handleKeyDown} >
+    <Container tabIndex="0" onKeyDown={keyDownFunc(param)} >
       <Header />
       <Main>
         <LeftSideBar />

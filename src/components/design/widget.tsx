@@ -4,8 +4,6 @@ import SVG_down_angle from "../../svg/down_angle.svg"
 import { useEffect, useState } from 'react'
 import { useStore } from '../../zustand/store';
 import { getCompUID } from "../../lib/randomString"
-import { useRouter } from 'next/router';
-import { resizeHTML } from '../../lib/resize';
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 
@@ -20,7 +18,6 @@ export default function Widget({ name, descript, html, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
-  const param = useRouter().query.id
 
   const addComp = () => {
     if (!selectComp) return;
@@ -30,16 +27,14 @@ export default function Widget({ name, descript, html, id }: ICompProps) {
     if (!newComp) return;
     newComp.className = name + " " + getCompUID(6)
     selectComp.append(newComp)
-    if (typeof param === "string") saveHTML(param)
+    if (typeof id === "string") saveHTML(id)
   }
 
   useEffect(() => {
     const iframeView = document.getElementById("iframe" + id) as HTMLIFrameElement | null;
     const iframeDom = iframeView?.contentWindow?.document
     if (!iframeDom || iframeDom.body.childNodes.length > 0) return;
-    createNewView(html, iframeDom, true, param)
-
-    // resizeHTML(newComp, iframeView, -20)
+    createNewView(html, iframeDom)
   }, [html, id])
 
   return (
