@@ -13,8 +13,8 @@ const temp: IDesgin[] = [
     title: "test1",
     owner: "0",
     html: `<div class="App app" style="width:100%;height:100%;background-color:white;display:flex;align-items:center;justify-content:center;"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></div>`,
+    
     updatedAt: "1"
-  
   },
   {
     id: "1",
@@ -29,7 +29,6 @@ export default function Home() {
   const [list, setList] = useState<IDesgin[]>()
 
   useEffect(() => {
-    console.log(document.getElementById("test")?.style.color)
     const designListStorage = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
     if (designListStorage && !refreshExpired({ id: "design" })) { //* 새롭게 받아올 필요없이 기존값을 보내줌
       setList(designListStorage)
