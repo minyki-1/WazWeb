@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
-import Design from '../components/home/design';
+import DesignView from '../components/home/designView';
 import { IDesgin } from '../types/design';
 import { saveHistory } from '../lib/history';
 import { refreshExpired, setRefresh } from '../lib/refresh';
@@ -12,15 +12,14 @@ const temp: IDesgin[] = [
     id: "0",
     title: "test1",
     owner: "0",
-    html: `<div class="App app" style="width:100%;height:100%;background-color:white;display:flex;align-items:center;justify-content:center;"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></div>`,
-    
+    html: `<style>.app{width:100%;height:100%;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}</style><div class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></div>`,
     updatedAt: "1"
   },
   {
     id: "1",
     title: "test2",
     owner: "0",
-    html: `<div class="App app" style="width:100%;height:100%;background-color:blue;display:flex;align-items:center;justify-content:center;"><h1 class="test Qsgold">test2</h1></div>`,
+    html: `<style>.app{width:100%;height:100%;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}</style><div class="App app"><h1 class="test Qsgold">test2</h1></div>`,
     updatedAt: "2"
   },
 ]
@@ -36,7 +35,7 @@ export default function Home() {
       sessionStorage.clear()
       setRefresh({ id: "design" })
       sessionStorage.setItem("designList", JSON.stringify(temp))
-      temp.forEach(data => saveHistory({ value: data.html, id: data.id }))
+      temp.forEach(value => saveHistory(value))
       setList(temp)
     }
   }, [])
@@ -46,13 +45,13 @@ export default function Home() {
       <Header />
       <Main>
         <LeftSideBar />
-        <DesignList>
+        <DesignWrap>
           {
             list?.map((value, key) => (
-              <Design key={key} {...value} />
+              <DesignView key={key} {...value} />
             ))
           }
-        </DesignList>
+        </DesignWrap>
       </Main>
     </Container>
   )
@@ -67,7 +66,7 @@ const Main = styled.div`
   width:100%;
   display:flex;
 `
-const DesignList = styled.div`
+const DesignWrap = styled.div`
   width:calc(100% - 240px);
   height:100%;
   max-height:calc(100vh - 48px);

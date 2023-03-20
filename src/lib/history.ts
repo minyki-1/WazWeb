@@ -50,15 +50,15 @@ export const redoHistory = (
 }
 
 export const saveHistory = (
-  { value,
+  { html,
     id,
     storage = sessionStorage,
     histName = "hist_",
-  }: IHistValue & { value: string }) => {
+  }: IHistValue & { html: string }) => {
 
   const [hist, setHist] = storageManager(histName, id, storage)
-  if (hist && value !== hist[0]) setHist([value, ...hist]);
-  else if (!hist) setHist([value]);
+  if (hist && html !== hist[0]) setHist([html, ...hist]);
+  else if (!hist) setHist([html]);
 }
 
 export const getHistory = (

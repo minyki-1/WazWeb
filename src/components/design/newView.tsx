@@ -62,6 +62,7 @@ export default function NewView({ html, dom, param }: { html: string, dom: Docum
     if (param) {
       // console.log(dom.)
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param])
 
   if (!param) return (<div />)

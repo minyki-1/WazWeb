@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { resizeHTML } from '../../lib/resize'
+import { createNewView } from '../../lib/createNewView'
 
 export default function Design({ id, html }: { id: string, html: string }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
@@ -9,19 +10,21 @@ export default function Design({ id, html }: { id: string, html: string }) {
   useEffect(() => {
     const sColor = localStorage.getItem(id + "_background")
     if (sColor) setBgColor(sColor)
-    const wrap = document.getElementById(`wrap_${id}`);
-    const view = document.getElementById(`view_${id}`);
-    if (!wrap || !view || view.hasChildNodes()) return;
-    view.innerHTML = html;
-    resizeHTML(view, wrap, -30)
+
+    const view = document.getElementById("view" + id) as HTMLIFrameElement | null
+    const viewBg = document.getElementById("bg" + id)
+    const iframeDom = view?.contentWindow?.document
+    if (iframeDom) createNewView(html, iframeDom)
+
+    if (view && viewBg) resizeHTML(view, viewBg, -40)
   }, [html, id])
 
   return (
     <Container>
       <Link href={`/design/${id}`}>
-        <DesignWrapper style={{ backgroundColor: bgColor }} id={`wrap_${id}`}>
-          <DesginView id={`view_${id}`} />
-        </DesignWrapper>
+        <ViewBg style={{ backgroundColor: bgColor }} id={`bg${id}`}>
+          <View id={`view${id}`} />
+        </ViewBg>
         <DesignInfo>Desgin Name</DesignInfo>
       </Link>
     </Container>
@@ -35,7 +38,7 @@ const Container = styled.div`
   outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
 `
-const DesignWrapper = styled.div`
+const ViewBg = styled.div`
   width:100%;
   aspect-ratio: 3 / 2;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
@@ -44,9 +47,10 @@ const DesignWrapper = styled.div`
   justify-content: center;
   overflow: hidden;
 `
-const DesginView = styled.div`
+const View = styled.iframe`
   width:360px;
   height:720px;
+  border-radius:12px;
 `
 const DesignInfo = styled.h2`
   width:calc(100% - 28px);
