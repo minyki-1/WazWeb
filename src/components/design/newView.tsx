@@ -48,22 +48,25 @@ export default function NewView({ html, style, dom, param }: { html: string, sty
     }
   }
 
-  const mainStyle: { [key: string]: string } = { minWidth: "100vw", minHeight: "100vh", backgroundColor: "white", display: "flex", justifyContent: "center", alignItems: "center" }
+  const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white", borderRadius: "12px", display: "flex", justifyContent: "center", alignItems: "center" }
 
   useEffect(() => {
     dom.body.style.margin = "0px"
     const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
     view.innerHTML = html
-    if (!param) {
-      Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
-      resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
+
+    if (!dom.getElementById("compyDesign")) {
+      const styleElem = document.createElement("style")
+      styleElem.id = "compyDesign"
+      styleElem.innerText = style
+      dom.head.append(styleElem)
     }
 
-    const styleElem = document.createElement("style")
-    styleElem.id = "compyDesign"
-    dom.head.append(styleElem)
-    if (style) styleElem.innerText = style
+    if (!param) {
+      Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+      resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param])
 

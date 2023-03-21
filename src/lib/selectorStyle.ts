@@ -18,7 +18,7 @@ export const selectorStyler = (className: string, styleSheets: CSSStyleSheet) =>
   return { set, get }
 }
 
-export const createSelectorStyle = (className: string, styleSheets: CSSStyleSheet, style = "") => {
+const createSelectorStyle = (className: string, styleSheets: CSSStyleSheet, style = "") => {
   const rule = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className)
   if (rule) return rule;
   const styleElem = styleSheets.ownerNode

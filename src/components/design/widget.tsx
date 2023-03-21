@@ -7,7 +7,6 @@ import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
-import { createSelectorStyle } from '../../lib/selectorStyle';
 
 interface ICompProps {
   name: string;
@@ -30,7 +29,8 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     if (!newComp) return;
     const compId = getCompUID(6, selectComp.ownerDocument)
     newComp.className = name + " " + compId
-    createSelectorStyle('.' + compId, selectComp.ownerDocument.styleSheets[0], style)
+    const styleNode = selectComp.ownerDocument.styleSheets[0].ownerNode
+    if (styleNode) styleNode.textContent += style
     selectComp.append(newComp)
     if (typeof router.query.id === "string") saveHTML(router.query.id)
   }
