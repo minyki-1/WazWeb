@@ -12,14 +12,14 @@ const temp: IDesgin[] = [
     id: "0",
     title: "test1",
     owner: "0",
-    html: `<style>.app{width:100%;height:100%;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}</style><div class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></div>`,
+    html: `<style id="compyDesign">.app{width:100%;height:100%;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}</style><div class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></div>`,
     updatedAt: "1"
   },
   {
     id: "1",
     title: "test2",
     owner: "0",
-    html: `<style>.app{width:100%;height:100%;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}</style><div class="App app"><h1 class="test Qsgold">test2</h1></div>`,
+    html: `<style id="compyDesign">.app{width:100%;height:100%;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}</style><div class="App app"><h1 class="test Qsgold">test2</h1></div>`,
     updatedAt: "2"
   },
 ]

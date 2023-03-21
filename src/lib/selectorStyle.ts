@@ -1,35 +1,27 @@
 type TCssRule = CSSRule & { selectorText: string, style: CSSStyleDeclaration }
 
 export const selectorStyler = (selectorName: string, styleSheets: CSSStyleSheet) => {
-  let selector: TCssRule | undefined = undefined;
-  Object.keys(styleSheets.cssRules)
-    .forEach((e) => {
-      const rules = styleSheets.cssRules[e as any] as TCssRule
-      if (rules.selectorText === selectorName) selector = rules
-    })
+  const selector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName) as TCssRule | undefined
+  const newStyle = selector ? selector : createSelectorStyle(selectorName, styleSheets) as TCssRule | undefined
 
   function set(styleName: string, style: string) {
-    if (!selector) return;
-    selector.style[styleName as any] = style
-    return selector.style[styleName as any]
+    if (!newStyle) return;
+    newStyle.style[styleName as any] = style
+    return newStyle.style[styleName as any]
   }
 
   function get(styleName: string) {
-    if (!selector) return;
-    return selector.style[styleName as any]
+    if (!newStyle) return;
+    return newStyle.style[styleName as any]
   }
 
-  if (selector) return { set, get }
-  else return null
+  return { set, get }
 }
 
-export const createSelectorStyle = (selectorName: string, styleSheets: CSSStyleSheet) => {
+const createSelectorStyle = (selectorName: string, styleSheets: CSSStyleSheet) => {
+  const rule = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName)
+  if (rule) return rule;
   const styleElem = styleSheets.ownerNode
-  let isOverlap = false
-  Object.keys(styleSheets.cssRules)
-    .forEach((e) => {
-      const rules = styleSheets.cssRules[e as any] as TCssRule
-      if (rules.selectorText === selectorName) isOverlap = true
-    })
-  if (styleElem && !isOverlap) styleElem.textContent += selectorName + "{}"
+  if (styleElem) styleElem.textContent += selectorName + "{}"
+  return Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName);
 }
