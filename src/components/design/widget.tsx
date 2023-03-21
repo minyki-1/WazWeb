@@ -6,36 +6,41 @@ import { useStore } from '../../zustand/store';
 import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
+import { useRouter } from 'next/router';
+import { createSelectorStyle } from '../../lib/selectorStyle';
 
 interface ICompProps {
   name: string;
   descript: string;
   html: string;
+  style: string;
   id: number;
 }
 
-export default function Widget({ name, descript, html, id }: ICompProps) {
+export default function Widget({ name, descript, html, style, id }: ICompProps) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
-
+  const router = useRouter();
   const addComp = () => {
     if (!selectComp) return;
     const parentComp = document.createElement("div")
     parentComp.innerHTML = html.trim()
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
-    newComp.className = name + " " + getCompUID(6)
+    const compId = getCompUID(6, selectComp.ownerDocument)
+    newComp.className = name + " " + compId
+    createSelectorStyle('.' + compId, selectComp.ownerDocument.styleSheets[0], style)
     selectComp.append(newComp)
-    if (typeof id === "string") saveHTML(id)
+    if (typeof router.query.id === "string") saveHTML(router.query.id)
   }
 
   useEffect(() => {
     const iframeView = document.getElementById("iframe" + id) as HTMLIFrameElement | null;
     const iframeDom = iframeView?.contentWindow?.document
     if (!iframeDom || iframeDom.body.childNodes.length > 0) return;
-    createNewView(html, iframeDom)
-  }, [html, id])
+    createNewView(html, style, iframeDom)
+  }, [html, id, router, style])
 
   return (
     <Container>

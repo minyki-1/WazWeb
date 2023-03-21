@@ -55,9 +55,9 @@ export default function CompyView() {
     //   view.innerHTML = temp
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
-    const iframeView = document.getElementsByClassName(IframeView.styledComponentId)[0] as HTMLIFrameElement | null
-    const iframeDom = iframeView?.contentWindow?.document
-    if (history && iframeDom) createNewView(history[0], iframeDom, param)
+    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+    const iframeDom = iView?.contentWindow?.document
+    if (history && iframeDom) createNewView(history[0].html, history[0].style, iframeDom, param)
 
   }, [param])
 
@@ -69,7 +69,7 @@ export default function CompyView() {
         onClick={HandleViewBgClick}
       // onWheel={handleWheel}
       >
-        <IframeView />
+        <IframeView id="mainIframeView" />
       </ViewBg>
     </Container >
   )
@@ -84,6 +84,7 @@ const IframeView = styled.iframe`
   width:360px;
   height:720px;
   z-index: 2;
+  background-color:white;
 `
 const ViewBg = styled.div`
   display:flex;

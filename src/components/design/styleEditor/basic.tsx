@@ -4,18 +4,21 @@ import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
 import SVG_eye from "../../../svg/eye.svg"
 import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
+import { useStyler } from '../../../lib/useStyler'
 
 export default function Basic() {
   const [bgColor, setBgColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [borderColor, setBorderColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [shadowColor, setShadowColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [bgColorDisable, setBgColorDisable] = useState(false)
-  const [borderSize, setBorderSize] = useState("0px")
   const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
   const [radius, setRadius] = useState("0px")
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
-  const [borderStyle, setBorderStyle] = useState("solid")
-  
+
+  const borderSize = useStyler("borderSize", "None")
+  const borderStyle = useStyler("borderStyle", "None")
+  const borderRadius = useStyler("borderRadius", "None")
+
   const shadowInputProps = (value: "x" | "y" | "blur") => ({
     onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
     value: shadow[value],
@@ -39,8 +42,8 @@ export default function Basic() {
       <SizeGroup2>
         <BorderWrapper>
           <h4 title="border">Border</h4>
-          <input value={borderSize} onChange={e => setBorderSize(e.target.value)} type={"text"} />
-          <select onChange={e => setBorderStyle(e.target.value)} value={borderStyle}>
+          <input {...borderSize.input} type='text' />
+          <select {...borderStyle.select}>
             <option value="solid">Solid</option>
             <option value="none">None</option>
             <option value="dotted">Dotted</option>
@@ -56,8 +59,8 @@ export default function Basic() {
         </span>
       </SizeGroup2>
       <SizeGroup3>
-        <h4>Radius</h4>
-        <input value={radius} onChange={e => setRadius(e.target.value)} type="text" />
+        <h4>Corner</h4>
+        <input {...borderRadius.input} type="text" />
       </SizeGroup3>
       <SizeGroup4>
         <ShadowWrapper>

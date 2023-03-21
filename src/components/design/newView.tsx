@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
 import { resizeHTML } from "../../lib/resize";
 
-export default function NewView({ html, dom, param }: { html: string, dom: Document, param?: string | string[] }) {
+export default function NewView({ html, style, dom, param }: { html: string, style: string, dom: Document, param?: string | string[] }) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
@@ -48,26 +48,29 @@ export default function NewView({ html, dom, param }: { html: string, dom: Docum
     }
   }
 
-  const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }
+  const mainStyle: { [key: string]: string } = { minWidth: "100vw", minHeight: "100vh", backgroundColor: "white", display: "flex", justifyContent: "center", alignItems: "center" }
 
   useEffect(() => {
     dom.body.style.margin = "0px"
-    const view = dom.body.childNodes[0].childNodes[0] as HTMLElement | null
+    const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
-    Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     view.innerHTML = html
-
-    if (!param) resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
-
-    if (param) {
-      // console.log(dom.)
+    if (!param) {
+      Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+      resizeHTML(view.childNodes[0] as HTMLElement, view, -20)
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    const styleElem = document.createElement("style")
+    styleElem.id = "compyDesign"
+    dom.head.append(styleElem)
+    if (style) styleElem.innerText = style
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param])
 
-  if (!param) return (<div />)
+  if (!param) return (<div id="newView" />)
   return (
     <div
+      id="newView"
       tabIndex={0}
       onKeyDown={keyDownFunc(param)}
       onClick={handleClick}

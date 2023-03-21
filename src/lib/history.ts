@@ -5,11 +5,11 @@ interface IHistValue {
   id: string;
 }
 
-type TStorage = [string[] | null, (value: string[]) => void]
+type TStorage = [{ html: string, style: string }[] | null, (value: { html: string, style: string }[]) => void]
 
 const storageManager = (name: string, id: string, storage: Storage): TStorage => {
-  const storageValue: string[] | null = JSON.parse(storage.getItem(name + id) || JSON.stringify(null))
-  const setStorage = (value: string[]) => storage.setItem(name + id, JSON.stringify(value))
+  const storageValue: { html: string, style: string }[] | null = JSON.parse(storage.getItem(name + id) || JSON.stringify(null))
+  const setStorage = (value: { html: string, style: string }[]) => storage.setItem(name + id, JSON.stringify(value))
   return [storageValue, setStorage]
 }
 
@@ -24,7 +24,7 @@ export const undoHistory = (
   const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || hist.length < 2) return;
   changeComp.firstChild?.remove()
-  changeComp.innerHTML = hist[1]
+  changeComp.innerHTML = hist[1].html
   if (!undo) setUndo([hist[0]])
   else setUndo([hist[0], ...undo])
   hist.shift()
@@ -42,23 +42,23 @@ export const redoHistory = (
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || !undo || undo.length < 1) return;
-  changeComp.firstChild?.remove()
-  changeComp.innerHTML = undo[0]
+  changeComp.childNodes.forEach(child => child.remove())
+  changeComp.innerHTML = undo[0].html
   setHist([undo[0], ...hist])
   undo.shift()
   setUndo(undo)
 }
 
 export const saveHistory = (
-  { html,
+  { value,
     id,
     storage = sessionStorage,
     histName = "hist_",
-  }: IHistValue & { html: string }) => {
+  }: IHistValue & { value: { html: string, style: string } }) => {
 
   const [hist, setHist] = storageManager(histName, id, storage)
-  if (hist && html !== hist[0]) setHist([html, ...hist]);
-  else if (!hist) setHist([html]);
+  if (hist && value.html !== hist[0].html) setHist([value, ...hist]);
+  else if (!hist) setHist([value]);
 }
 
 export const getHistory = (
@@ -69,3 +69,6 @@ export const getHistory = (
   const [hist] = storageManager(histName, id, storage)
   return hist
 }
+/* 
+
+*/

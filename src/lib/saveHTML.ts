@@ -1,17 +1,19 @@
 import { IDesgin } from "../types/design";
 import { saveHistory } from "./history";
 
-export const saveHTML = (param: string) => {
-  const view = document.getElementById("view")
-  if (!view) return;
-  const html = view.innerHTML
+export const saveHTML = (id: string) => {
+  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const iframeDom = view?.contentWindow?.document
+  if (!view || !iframeDom) return;
+  const html = iframeDom.getElementById("newView")?.innerHTML
     .replace(/ contenteditable="\S*"/g, '')
     .replace(/ style="\S*"/g, "")
-
+  const style = iframeDom.getElementById("compyDesign")?.innerText
+  if (!html || !style) return;
+  saveHistory({ value: { html, style }, id })
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
-  if (!designList) return saveHistory({ html, id: param })
-  designList.forEach((data, key) => {
-    if (data.id === param) designList[key] = { ...data, html };
+  if (designList) designList.forEach((data, key) => {
+    if (data.id === id) designList[key] = { ...data, html };
   })
   sessionStorage.setItem("designList", JSON.stringify(designList))
 }

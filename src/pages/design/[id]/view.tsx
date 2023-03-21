@@ -5,6 +5,7 @@ import { getHistory } from "../../../lib/history";
 
 export default function View() {
   const [html, setHtml] = useState("")
+  const [style, setStyle] = useState("")
   const param = useRouter().query.id;
   const [doc, setDoc] = useState<Document>()
   useEffect(() => {
@@ -23,11 +24,14 @@ export default function View() {
     //   view.innerHTML = temp
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
-    if (history) setHtml(history[0])
+    if (history) {
+      setHtml(history[0].html)
+      setStyle(history[0].style)
+    }
     setDoc(document)
   }, [param])
 
   return (
-    <>{doc ? <NewView html={html} dom={document} /> : null}</>
+    <>{doc ? <NewView html={html} style={style} dom={document} /> : null}</>
   )
 }

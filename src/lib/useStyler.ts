@@ -28,7 +28,7 @@ export interface IStylerReturns {
 
 export type TUseStyler = (name: any, resetText?: string) => IStylerReturns
 
-export const useStyler: TUseStyler = (name, resetText = "0px") => {
+export const useStyler: TUseStyler = (name, resetText = "None") => {
   const { selectComp } = useStore();
   const [value, setValue] = useState(resetText)
 

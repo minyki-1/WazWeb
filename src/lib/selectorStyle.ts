@@ -1,8 +1,8 @@
 type TCssRule = CSSRule & { selectorText: string, style: CSSStyleDeclaration }
 
-export const selectorStyler = (selectorName: string, styleSheets: CSSStyleSheet) => {
-  const selector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName) as TCssRule | undefined
-  const newStyle = selector ? selector : createSelectorStyle(selectorName, styleSheets) as TCssRule | undefined
+export const selectorStyler = (className: string, styleSheets: CSSStyleSheet) => {
+  const selector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
+  const newStyle = selector ? selector : createSelectorStyle(className, styleSheets) as TCssRule | undefined
 
   function set(styleName: string, style: string) {
     if (!newStyle) return;
@@ -18,10 +18,10 @@ export const selectorStyler = (selectorName: string, styleSheets: CSSStyleSheet)
   return { set, get }
 }
 
-const createSelectorStyle = (selectorName: string, styleSheets: CSSStyleSheet) => {
-  const rule = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName)
+export const createSelectorStyle = (className: string, styleSheets: CSSStyleSheet, style = "") => {
+  const rule = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className)
   if (rule) return rule;
   const styleElem = styleSheets.ownerNode
-  if (styleElem) styleElem.textContent += selectorName + "{}"
-  return Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === selectorName);
+  if (styleElem) styleElem.textContent += className + `{${style}}`
+  return Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className);
 }

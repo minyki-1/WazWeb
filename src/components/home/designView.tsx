@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { resizeHTML } from '../../lib/resize'
 import { createNewView } from '../../lib/createNewView'
 
-export default function Design({ id, html }: { id: string, html: string }) {
+export default function DesignView({ id, html, style }: { id: string, html: string, style: string }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
 
   useEffect(() => {
@@ -14,10 +14,10 @@ export default function Design({ id, html }: { id: string, html: string }) {
     const view = document.getElementById("view" + id) as HTMLIFrameElement | null
     const viewBg = document.getElementById("bg" + id)
     const iframeDom = view?.contentWindow?.document
-    if (iframeDom) createNewView(html, iframeDom)
+    if (iframeDom) createNewView(html, style, iframeDom)
 
     if (view && viewBg) resizeHTML(view, viewBg, -40)
-  }, [html, id])
+  }, [html, id, style])
 
   return (
     <Container>
