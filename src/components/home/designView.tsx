@@ -13,8 +13,8 @@ export default function DesignView({ id, html, style }: { id: string, html: stri
 
     const view = document.getElementById("view" + id) as HTMLIFrameElement | null
     const viewBg = document.getElementById("bg" + id)
-    const iframeDom = view?.contentWindow?.document
-    if (iframeDom) createNewView(html, style, iframeDom)
+    const dom = view?.contentWindow?.document
+    if (dom) createNewView({ html, style, dom })
 
     if (view && viewBg) resizeHTML(view, viewBg, -40)
   }, [html, id, style])

@@ -56,8 +56,10 @@ export default function CompyView() {
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
     const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-    const iframeDom = iView?.contentWindow?.document
-    if (history && iframeDom) createNewView(history[0].html, history[0].style, iframeDom, param)
+    const dom = iView?.contentWindow?.document
+    if (!history || !dom) return
+    const { html, style } = history[0]
+    createNewView({ html, style, dom, param })
 
   }, [param])
 

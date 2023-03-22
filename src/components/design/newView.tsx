@@ -3,8 +3,9 @@ import { useStore } from "../../zustand/store";
 import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
 import { resizeHTML } from "../../lib/resize";
+import { INewView } from "../../lib/createNewView";
 
-export default function NewView({ html, style, dom, param }: { html: string, style: string, dom: Document, param?: string | string[] }) {
+export default function NewView({ html, style, dom, param, resize }: INewView) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
@@ -63,10 +64,8 @@ export default function NewView({ html, style, dom, param }: { html: string, sty
       dom.head.append(styleElem)
     }
 
-    if (!param) {
-      Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
-      resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
-    }
+    if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+    if (resize) resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param])
 

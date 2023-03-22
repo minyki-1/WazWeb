@@ -1,8 +1,8 @@
 export interface IColor {
-  a: number;
-  b: number;
-  g: number;
   r: number;
+  g: number;
+  b: number;
+  a: number;
 }
 
 export interface IDesgin {

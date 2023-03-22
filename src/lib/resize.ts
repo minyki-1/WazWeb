@@ -1,4 +1,4 @@
-export const resizeHTML = (changedComp: HTMLElement | null, matchComp: HTMLElement | null, offset: number) => {
+export const resizeHTML = (changedComp: HTMLElement | null | undefined, matchComp: HTMLElement | null | undefined, offset: number) => {
   if (!changedComp || !matchComp) return;
   const changedCompWidth = changedComp.offsetWidth
   const changedCompHeight = changedComp.offsetHeight

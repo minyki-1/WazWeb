@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "../zustand/store";
 import { Dispatch, SetStateAction } from "react";
 import { selectorStyler } from "./selectorStyle";
+import { IColor } from "../types/design";
 
 export interface IStylerReturns {
   value: string;
@@ -24,6 +25,10 @@ export interface IStylerReturns {
     }) => void;
     value: string;
   };
+  // colorPick: {
+  //   color: string;
+  //   setColor: (color: IColor) => void;
+  // }
 }
 
 export type TUseStyler = (name: any, resetText?: string) => IStylerReturns
@@ -44,7 +49,7 @@ export const useStyler: TUseStyler = (name, resetText = "None") => {
     const style = selectorStyler('.' + classList[1], styleSheets).get(name)
     return style ? style : resetText
   }
-
+  // <img refer/>
   const changeStyle = (style?: string) => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
@@ -69,6 +74,36 @@ export const useStyler: TUseStyler = (name, resetText = "None") => {
         setValue(target.value)
         changeStyle(target.value)
       }, value
+    }
+  }
+}
+
+const useStylerColor = (name: any, resetText: IColor = { r: 0, g: 0, b: 0, a: 0 }) => {
+  const { selectComp } = useStore();
+  const [value, setValue] = useState<IColor>(resetText)
+
+  const getStyle = () => {
+    if (!selectComp) return resetText;
+    const { classList, ownerDocument } = selectComp
+    const styleSheets = ownerDocument.styleSheets[0]
+    const style = selectorStyler('.' + classList[1], styleSheets).get(name)
+    return style ? style : resetText
+  }
+
+  useEffect(() => {
+    console.log()
+
+    getStyle()
+
+  }, [])
+
+  return {
+    color: value,
+    setColor: (color: IColor) => {
+      if (!selectComp) return;
+      const { r, g, b, a } = color
+      selectComp.style[name] = `rgba(${r},${g},${b},${a})`
+      setValue(color)
     }
   }
 }

@@ -2,22 +2,28 @@ import { useState } from 'react'
 import styled from "styled-components"
 import { IColor } from "../../../types/design"
 import ColorPicker from '../../common/colorPicker'
-import SVG_eye from "../../../svg/eye.svg"
-import SVG_eye_crossed from "../../../svg/eye_crossed.svg"
 import { useStyler } from '../../../lib/useStyler'
+import { useStore } from '../../../zustand/store'
 
 export default function Basic() {
   const [bgColor, setBgColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [borderColor, setBorderColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
   const [shadowColor, setShadowColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
-  const [bgColorDisable, setBgColorDisable] = useState(false)
-  const eyeBtnProps = { onClick: () => setBgColorDisable(!bgColorDisable), fill: "#363636", width: 20, height: 20, style: { padding: 4, cursor: "pointer" } }
-  const [radius, setRadius] = useState("0px")
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
+  const { selectComp } = useStore()
 
   const borderSize = useStyler("borderSize", "None")
   const borderStyle = useStyler("borderStyle", "None")
   const borderRadius = useStyler("borderRadius", "None")
+
+  // const bgColor = useStyler("background-color", "None")
+
+  const changeBgColor = (color: IColor) => {
+    if (!selectComp) return;
+    const { r, g, b, a } = color
+    selectComp.style.backgroundColor = `rgba(${r},${g},${b},${a})`
+    setBgColor(color)
+  }
 
   const shadowInputProps = (value: "x" | "y" | "blur") => ({
     onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
@@ -28,15 +34,10 @@ export default function Basic() {
   return (
     <Container>
       <Topic>Basic</Topic>
-      <SizeGroup1 disable={String(bgColorDisable)}>
+      <SizeGroup1>
         <h4 title="background-color">Bg Color</h4>
         <span>
-          <ColorPicker color={bgColor} setColor={setBgColor} disable={bgColorDisable} />
-          {
-            bgColorDisable ?
-              <SVG_eye_crossed {...eyeBtnProps} />
-              : <SVG_eye {...eyeBtnProps} />
-          }
+          <ColorPicker styleName="background-color" color={bgColor} setColor={changeBgColor} />
         </span>
       </SizeGroup1>
       <SizeGroup2>
@@ -55,7 +56,7 @@ export default function Basic() {
           </select>
         </BorderWrapper>
         <span>
-          <ColorPicker color={borderColor} setColor={setBorderColor} disable={false} />
+          <ColorPicker styleName="border-color" color={borderColor} setColor={setBorderColor} />
         </span>
       </SizeGroup2>
       <SizeGroup3>
@@ -79,7 +80,7 @@ export default function Basic() {
           </div>
         </ShadowWrapper>
         <span>
-          <ColorPicker color={shadowColor} setColor={setShadowColor} disable={false} />
+          {/* <ColorPicker color={shadowColor} setColor={setShadowColor} /> */}
         </span>
       </SizeGroup4>
     </Container>

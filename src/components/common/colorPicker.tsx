@@ -2,23 +2,27 @@ import { useState, MouseEvent, Dispatch, SetStateAction, SyntheticEvent, useEffe
 import styled from "styled-components"
 import { ChromePicker } from 'react-color'
 import { IColor } from "../../types/design"
-import { rgbToHex, hexToRgb } from "../../lib/colorChange"
+import { rgbToHex, hexToRgb, rgbToRgbStr } from "../../lib/colorChange"
+import { useStyler } from '../../lib/useStyler'
 
 interface IProps {
-  color: IColor;
-  setColor: Dispatch<SetStateAction<IColor>>;
-  disable: boolean;
+  color: string;
+  setColor: Dispatch<SetStateAction<string>>;
+  styleName?: string;
 }
 
-export default function ColorPicker({ color, setColor, disable }: IProps) {
+export default function ColorPicker({ color, setColor }: IProps) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
-  const [opacity, setOpacity] = useState(String(color.a * 100))
+  const [opacity, setOpacity] = useState("1")
   const [colorInput, setColorInput] = useState<string>(rgbToHex(color))
+
+  // const colorStyler = useStyler(styleName, "None")
 
   useEffect(() => {
     setColorInput(rgbToHex(color))
-    setOpacity(String(color.a * 100))
+    const rgb = hexToRgb(color)
+    if (rgb) setOpacity(String(rgb.a * 100))
   }, [color])
 
   function handleColorClick(e: MouseEvent) {
@@ -35,7 +39,7 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
   }
 
   function handleColorChange({ rgb }: { rgb: IColor }) {
-    setColor(rgb);
+    setColor(rgbToRgbStr(rgb));
     setColorInput(rgbToHex(rgb));
   }
 
@@ -67,16 +71,14 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
           <ColorPickerBg onClick={() => setIsPickerShow(false)} />
         </>
       }
-      <SizeGroup1 disable={String(disable)}>
+      <SizeGroup1>
         <button
-          disabled={disable}
           title="background-color"
           onClick={handleColorClick}
           style={{ backgroundColor: rgbToHex(color), opacity: color.a }}
         />
         <input
           style={{ width: 65, marginRight: 4 }}
-          disabled={disable}
           type="text"
           value={colorInput}
           onChange={e => setColorInput(e.target.value)}
@@ -87,10 +89,9 @@ export default function ColorPicker({ color, setColor, disable }: IProps) {
           onBlur={handleOpacity}
           onKeyDown={e => { if (e.code === "Enter") handleOpacity(e) }}
           onChange={e => setOpacity(e.target.value)}
-          disabled={disable}
           type="text"
           value={opacity.indexOf("%") > -1 ? opacity : opacity + "%"}
-          style={{ width: 45, opacity: `${disable === true ? 0.5 : 1}` }}
+          style={{ width: 45 }}
         />
       </SizeGroup1>
     </>
@@ -102,7 +103,6 @@ const SizeGroup1 = styled.div<{ disable: string }>`
   align-items: center;
   width:150px;
   input{
-    opacity: ${({ disable }: { disable: string }) => disable === "true" ? 0.5 : 1};
     margin-left: 6px;
     height:100%;
   }
@@ -119,6 +119,9 @@ const ColorPickerWrapper = styled.div<{ top: string }>`
   right:315px;
   top:${({ top }: { top: string }) => top + "px"};
   z-index: 2;
+  *{
+    user-select:none;
+  }
 `
 const ColorPickerBg = styled.div`
   position: fixed;
