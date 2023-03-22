@@ -4,7 +4,6 @@ export const resizeHTML = (changedComp: HTMLElement | null, matchComp: HTMLEleme
   const changedCompHeight = changedComp.offsetHeight
   const matchCompWidth = matchComp.offsetWidth + offset
   const matchCompHeight = matchComp.offsetHeight + offset
-  console.log(changedCompWidth, matchCompWidth)
   let resizeValue = 1;
   if (changedCompWidth / 4 >= changedCompHeight / 3 && changedCompWidth > matchCompWidth) {
     resizeValue = matchCompWidth / changedCompWidth

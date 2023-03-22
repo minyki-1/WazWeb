@@ -21,27 +21,30 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
   const router = useRouter();
+
   const addComp = () => {
     if (!selectComp) return;
     const parentComp = document.createElement("div")
     parentComp.innerHTML = html.trim()
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
-    changeClass(newComp)
+    const newStyle = changeClassStyle(newComp, style)
     const styleNode = selectComp.ownerDocument.styleSheets[0].ownerNode
-    if (styleNode) styleNode.textContent += style
     selectComp.append(newComp)
+    if (styleNode && newStyle) styleNode.textContent += newStyle
     if (typeof router.query.id === "string") saveHTML(router.query.id)
   }
-  
-  const changeClass = (comp:HTMLElement | null) => {
+
+  const changeClassStyle = (comp: HTMLElement | null, style: string | undefined) => {
+    if (!selectComp || !comp) return;
     const compId = getCompUID(6, selectComp.ownerDocument)
-    comp.className = comp.classList[1] + compId
-    Object.values(comp.children).forEach((child)=>{
-      
-      changeClass(child as HTMLElement | null)
+    let newStyle = style?.replace(comp.classList[1], compId)
+    comp.className = comp.classList[0] + " " + compId
+    Object.values(comp.children).forEach((child) => {
+      newStyle = changeClassStyle(child as HTMLElement | null, newStyle)
     })
-  }  
+    return newStyle
+  }
 
   useEffect(() => {
     const iframeView = document.getElementById("iframe" + id) as HTMLIFrameElement | null;
