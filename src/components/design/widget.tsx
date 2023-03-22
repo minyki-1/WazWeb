@@ -27,13 +27,21 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     parentComp.innerHTML = html.trim()
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
-    const compId = getCompUID(6, selectComp.ownerDocument)
-    newComp.className = name + " " + compId
+    changeClass(newComp)
     const styleNode = selectComp.ownerDocument.styleSheets[0].ownerNode
     if (styleNode) styleNode.textContent += style
     selectComp.append(newComp)
     if (typeof router.query.id === "string") saveHTML(router.query.id)
   }
+  
+  const changeClass = (comp:HTMLElement | null) => {
+    const compId = getCompUID(6, selectComp.ownerDocument)
+    comp.className = comp.classList[1] + compId
+    Object.values(comp.children).forEach((child)=>{
+      
+      changeClass(child as HTMLElement | null)
+    })
+  }  
 
   useEffect(() => {
     const iframeView = document.getElementById("iframe" + id) as HTMLIFrameElement | null;
