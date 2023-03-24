@@ -19,7 +19,6 @@ export function rgbToHex(color: IColor | string) {
     const { r, g, b } = color
     return ("#" + colorToHex(r) + colorToHex(g) + colorToHex(b)).toUpperCase();
   }
-
   return "#FFFFFF"
 }
 
