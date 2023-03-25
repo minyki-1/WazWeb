@@ -43,7 +43,7 @@ export default function RightSideBar() {
   return (
     <Container id="rightSideBar">
       {
-        selectComp === undefined
+        selectComp === undefined || selectComp.id === "viewBg"
           ? <Background />
           : compData[compKey].map((Editor, key) => (<Editor key={key} selectComp={selectComp} />))
       }

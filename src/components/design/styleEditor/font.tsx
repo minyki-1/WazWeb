@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { IColor } from '../../../types/design'
 import ColorPicker from '../../common/colorPicker'
+import { useStyler } from '../../../lib/useStyler'
 
 const fontFamily = [
   `Default Style`,
@@ -19,7 +20,7 @@ const fontFamily = [
 ]
 
 export default function Font() {
-  const [color, setColor] = useState<IColor>({ r: 0, g: 0, b: 0, a: 1 })
+  const color = useStyler("color")
   const [size, setSize] = useState("0px")
   const [weight, setWeight] = useState("normal")
   const [align, setAlign] = useState("start")
@@ -68,7 +69,7 @@ export default function Font() {
       </SizeGroup1>
       <SizeGroup2>
         <h4>Color</h4>
-        <ColorPicker color={color} setColor={setColor} disable={false} />
+        <ColorPicker styler={color} />
       </SizeGroup2>
       <SizeGroup3>
         <h4 title="text-decoration">Decoration</h4>

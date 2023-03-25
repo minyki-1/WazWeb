@@ -19,7 +19,7 @@ export default function CompyView() {
     }
   }
   const HandleViewBgClick = ({ target }: { target: HTMLElement }) => {
-    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0]
+    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0] as HTMLElement | null
     //* viewBg !== target : target이 viewBg일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
     if (viewBg !== target) return;
     resetSelectComp();

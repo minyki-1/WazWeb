@@ -7,26 +7,29 @@ function colorToHex(color: number) {
 
 export function rgbToHex(color: IColor | string) {
   if (typeof color === "string") {
-    const regex = /^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/;
-    const matches = color.match(regex);
-    if (matches) {
-      const r = parseInt(matches[1], 10).toString(16).padStart(2, '0');
-      const g = parseInt(matches[2], 10).toString(16).padStart(2, '0');
-      const b = parseInt(matches[3], 10).toString(16).padStart(2, '0');
-      return `#${r}${g}${b}`.toUpperCase();
+    if (!/^rgba?\([\d\s,]+\)$/.test(color)) {
+      return "#000000";
     }
+
+    let hex = "#";
+    color
+      .replace(/[^\d,]/g, "")
+      .split(",")
+      .slice(0, 3)
+      .forEach((c) => {
+        hex += ("0" + parseInt(c).toString(16)).slice(-2);
+      });
+    return hex.toUpperCase();
   } else {
     const { r, g, b } = color
     return ("#" + colorToHex(r) + colorToHex(g) + colorToHex(b)).toUpperCase();
   }
-  return "#FFFFFF"
 }
 
 export function rgbToRgbStr(color: IColor) {
   const { r, g, b, a } = color
   return `rgba(${r}, ${g}, ${b}, ${a})`;
 }
-
 
 export function hexToRgb(hex: string) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -37,4 +40,20 @@ export function hexToRgb(hex: string) {
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16)
   } : null;
+}
+
+export function rgbStrToRgb(colorString: string) {
+  let match = colorString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/i);
+  if (!match) {
+    return null;
+  }
+  let rgba: { r: number, g: number, b: number, a?: number } = {
+    r: parseInt(match[1]),
+    g: parseInt(match[2]),
+    b: parseInt(match[3])
+  };
+  if (match[4]) {
+    rgba.a = parseFloat(match[4]);
+  }
+  return rgba;
 }

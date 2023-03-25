@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
 import SVG_expand from "../../../svg/expand.svg"
-import { IStylerReturns } from "../../../lib/useStyler"
+import { IStylerReturn } from "../../../lib/useStyler"
 
 export default function Size() {
   const width = useStyler("width")
@@ -31,7 +31,7 @@ function ExpandSize({ text, value }: { text: string, value: string }) {
   const [expand, setExpand] = useState(false)
   const total = useStyler(value)
 
-  const part: { [key: string]: IStylerReturns } = {
+  const part: { [key: string]: IStylerReturn } = {
     top: useStyler(value + "Top"),
     right: useStyler(value + "Right"),
     bottom: useStyler(value + "Bottom"),
