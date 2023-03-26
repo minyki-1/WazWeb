@@ -40,7 +40,7 @@ export default function Background() {
       <Topic>Background</Topic>
       <SizeGroup1>
         <h4 title="color">Color</h4>
-        <ColorPicker color={bgColor} setColor={setBgColor} disable={false} />
+        {/* <ColorPicker color={bgColor} setColor={setBgColor} disable={false} /> */}
       </SizeGroup1>
     </Container>
   )

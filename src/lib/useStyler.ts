@@ -52,6 +52,7 @@ export const useStyler: TUseStyler = (name, resetText = "None") => {
     const selectorStyle = selectorStyler('.' + classList[1], styleSheets)
     const before = selectorStyle.get(name)
     selectorStyle.set(name, style ? style : value)
+    if (style) setValue(style)
     if (before === selectorStyle.get(name)) setValue(before ? before : resetText);
   }
 

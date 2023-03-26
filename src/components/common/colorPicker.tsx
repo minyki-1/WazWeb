@@ -51,7 +51,7 @@ export default function ColorPicker({ styler }: { styler: IStylerReturn }) {
     console.log(rgb, rgb1, colorValue)
     if (rgb && rgb1) {
       const opacity = rgbStrToRgb(styler.value)?.a
-      styler.setValue(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }));
+      // styler.setValue(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }));
       styler.changeStyle(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }))
       setColorInput(colorValue);
     }

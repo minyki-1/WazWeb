@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from "styled-components"
 import ColorPicker from '../../common/colorPicker'
 import { useStyler } from '../../../lib/useStyler'
@@ -10,6 +10,10 @@ export default function Basic() {
   const borderSize = useStyler("borderSize", "None")
   const borderStyle = useStyler("borderStyle", "None")
   const borderRadius = useStyler("borderRadius", "None")
+
+  useEffect(() => {
+    console.log(bgColor.value)
+  }, [bgColor.value])
 
   const shadowInputProps = (value: "x" | "y" | "blur") => ({
     onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
