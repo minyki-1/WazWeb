@@ -6,7 +6,7 @@ import { selectorStyler } from "./selectorStyle";
 export interface IStylerColor {
   value: string;
   changeStyle: (style?: string) => void;
-  setValue: Dispatch<SetStateAction<string>>;
+  getStyle: () => string;
 }
 
 export interface IStylerReturn {
@@ -46,30 +46,44 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   }, [name, resetText, selectComp])
 
   const createSelectorStyler = () => {
-    const classGetComp = document.querySelector('.' + className)
-    const component = !selectComp && classGetComp ? classGetComp : selectComp
-    if (!component) return
-    const { classList, ownerDocument } = component
+    if (!selectComp) return;
+    const { classList, ownerDocument } = selectComp
     const styleSheets = ownerDocument.styleSheets
-    const styleSheet = styleSheets[styleSheets.length - 1]
-    const selectorStyle = selectorStyler('.' + classList[classList.length - 1], styleSheet)
-    return selectorStyle
+    const styleSheet = Object.values(styleSheets).find((e) => (e.ownerNode as HTMLElement).id === "compyDesign")
+    if (styleSheet) {
+      return selectorStyler('.' + classList[classList.length - 1], styleSheet)
+    }
   }
 
   const getStyle = () => {
-    const selectorStyle = createSelectorStyler()
-    if (!selectorStyle) return resetText;
-    const style = selectorStyle.get(name)
-    return style ? style : resetText
+    if (!selectComp && className) {
+      const elem = document.querySelector('.' + className) as HTMLElement | null
+      const style = elem?.style[name]
+      return style ? style : resetText
+    } else {
+      const selectorStyle = createSelectorStyler()
+      if (!selectorStyle) return resetText;
+      const style = selectorStyle.get(name)
+      return style ? style : resetText
+    }
   }
 
   const changeStyle = (style?: string) => {
-    const selectorStyle = createSelectorStyler()
-    if (!selectorStyle) return;
-    const before = selectorStyle.get(name)
-    selectorStyle.set(name, style ? style : value)
-    if (style) setValue(style)
-    if (before === selectorStyle.get(name)) setValue(before ? before : resetText);
+    if (!selectComp && className) {
+      const comp = document.querySelector('.' + className) as HTMLElement | null
+      if (!comp) return;
+      const before = comp.style[name as any]
+      comp.style[name as any] = style ? style : value
+      setValue(style ? style : value)
+      if (before === comp.style[name as any]) setValue(before ? before : resetText);
+    } else {
+      const selectorStyle = createSelectorStyler()
+      if (!selectorStyle) return;
+      const before = selectorStyle.get(name)
+      selectorStyle.set(name, style ? style : value)
+      setValue(style ? style : value)
+      if (before === selectorStyle.get(name)) setValue(before ? before : resetText);
+    }
   }
 
   const onChange = ({ target }: { target: HTMLInputElement }) => setValue(target.value)
@@ -90,7 +104,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     color: {
       value,
       changeStyle,
-      setValue
+      getStyle
     }
   }
 }

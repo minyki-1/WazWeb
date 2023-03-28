@@ -68,6 +68,7 @@ export default function CompyView() {
       <ViewBg
         className="Background viewBg"
         onClick={HandleViewBgClick}
+        style={{ backgroundColor: "#C7C7C7" }}
       // onWheel={handleWheel}
       >
         <IframeView id="mainIframeView" />

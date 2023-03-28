@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 import { normalize } from './normalize';
 import { reset } from './reset';
+
 export const GlobalStyle = createGlobalStyle`
   ${normalize}
   ${reset}
@@ -17,9 +18,6 @@ export const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
     cursor: pointer;
-  }
-  .viewBg {
-    background-color: #C7C7C7;
   }
   h1,h2,h3,h4,h5 { color: #363636; }
   h1 { font-size: 19px; }

@@ -1,10 +1,5 @@
-import { useEffect, useState } from 'react'
 import styled from "styled-components"
-import { IColor } from "../../../types/design"
-import { useStore } from '../../../zustand/store'
 import ColorPicker from '../../common/colorPicker'
-import { hexToRgb, rgbToHex } from "../../../lib/colorChange"
-import { useRouter } from 'next/router'
 import { useStyler } from '../../../lib/useStyler'
 
 export default function Background() {
