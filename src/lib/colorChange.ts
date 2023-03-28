@@ -1,3 +1,4 @@
+import { namedColor } from "../components/design/widgetStyle";
 import { IColor } from "../types/design";
 
 function colorToHex(color: number) {
@@ -5,10 +6,11 @@ function colorToHex(color: number) {
   return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
 }
 
-export function rgbToHex(color: IColor | string) {
+export function rgbToHex(color: IColor | string | null | undefined) {
   if (typeof color === "string") {
+    if (color in namedColor) return namedColor[color]
     if (!/^rgba?\([\d\s,]+\)$/.test(color)) {
-      return "#000000";
+      return "None";
     }
 
     let hex = "#";
@@ -20,10 +22,11 @@ export function rgbToHex(color: IColor | string) {
         hex += ("0" + parseInt(c).toString(16)).slice(-2);
       });
     return hex.toUpperCase();
-  } else {
+  } else if (color) {
     const { r, g, b } = color
     return ("#" + colorToHex(r) + colorToHex(g) + colorToHex(b)).toUpperCase();
   }
+  return "None"
 }
 
 export function rgbToRgbStr(color: IColor) {
@@ -42,10 +45,11 @@ export function hexToRgb(hex: string) {
   } : null;
 }
 
-export function rgbStrToRgb(colorString: string) {
-  let match = colorString.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/i);
+export function rgbStrToRgb(colorString: string | undefined): IColor | null {
+  let match = colorString?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/i);
   if (!match) {
-    return null;
+    if (colorString && colorString in namedColor) return hexToRgb(namedColor[colorString])
+    else return null;
   }
   let rgba: { r: number, g: number, b: number, a?: number } = {
     r: parseInt(match[1]),

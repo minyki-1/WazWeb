@@ -3,24 +3,10 @@ import styled from 'styled-components'
 import { IColor } from '../../../types/design'
 import ColorPicker from '../../common/colorPicker'
 import { useStyler } from '../../../lib/useStyler'
-
-const fontFamily = [
-  `Default Style`,
-  `serif`,
-  `cursive`,
-  `fantasy`,
-  `monospace`,
-  `sans-serif`,
-  `Arial, Helvetica, sans-serif`,
-  `'Times New Roman', Times, serif`,
-  `'Courier New', Courier, monospace`,
-  `Verdana, Geneva, Tahoma, sans-serif`,
-  `Georgia, 'Times New Roman', Times, serif`,
-  `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`,
-]
+import { fontFamily } from '../widgetStyle'
 
 export default function Font() {
-  const color = useStyler("color")
+  const colorStyler = useStyler("color")
   const [size, setSize] = useState("0px")
   const [weight, setWeight] = useState("normal")
   const [align, setAlign] = useState("start")
@@ -69,7 +55,7 @@ export default function Font() {
       </SizeGroup1>
       <SizeGroup2>
         <h4>Color</h4>
-        <ColorPicker styler={color} />
+        <ColorPicker {...colorStyler.color} />
       </SizeGroup2>
       <SizeGroup3>
         <h4 title="text-decoration">Decoration</h4>

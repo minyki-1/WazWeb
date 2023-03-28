@@ -30,7 +30,8 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
     const newStyle = changeClassStyle(newComp, style)
-    const styleNode = selectComp.ownerDocument.styleSheets[0].ownerNode
+    const styleSheet = selectComp.ownerDocument.styleSheets
+    const styleNode = styleSheet[styleSheet.length - 1].ownerNode
     selectComp.append(newComp)
     if (styleNode && newStyle) styleNode.textContent += newStyle
     if (typeof router.query.id === "string") saveHTML(router.query.id)
@@ -39,8 +40,9 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
   const changeClassStyle = (comp: HTMLElement | null, style: string | undefined) => {
     if (!selectComp || !comp) return;
     const compId = getCompUID(6, selectComp.ownerDocument)
-    let newStyle = style?.replace(comp.classList[1], compId)
-    comp.className = comp.classList[0] + " " + compId
+    const { classList } = comp
+    let newStyle = style?.replace(classList[classList.length - 1], compId)
+    comp.className = classList[classList.length - 2] + " " + compId
     Object.values(comp.children).forEach((child) => {
       newStyle = changeClassStyle(child as HTMLElement | null, newStyle)
     })

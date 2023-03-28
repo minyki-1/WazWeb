@@ -1,6 +1,9 @@
 type TCssRule = CSSRule & { selectorText: string, style: CSSStyleDeclaration }
-
-export const selectorStyler = (className: string, styleSheets: CSSStyleSheet) => {
+export type TSelectorStylerReturn = {
+  set: (styleName: string, style: string) => string | undefined;
+  get: (styleName: string) => string | undefined;
+}
+export const selectorStyler = (className: string, styleSheets: CSSStyleSheet): TSelectorStylerReturn => {
   const selector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
   const newStyle = selector ? selector : createSelectorStyle(className, styleSheets) as TCssRule | undefined
 

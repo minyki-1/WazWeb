@@ -27,7 +27,7 @@ export default function Basic() {
       <SizeGroup1>
         <h4 title="background-color">Bg Color</h4>
         <span>
-          <ColorPicker styler={bgColor} />
+          <ColorPicker {...bgColor.color} />
         </span>
       </SizeGroup1>
       <SizeGroup2>
@@ -46,7 +46,7 @@ export default function Basic() {
           </select>
         </BorderWrapper>
         <span>
-          <ColorPicker styler={borderColor} />
+          {/* <ColorPicker styler={borderColor} /> */}
         </span>
       </SizeGroup2>
       <SizeGroup3>

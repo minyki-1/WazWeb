@@ -3,6 +3,12 @@ import { useStore } from "../zustand/store";
 import { Dispatch, SetStateAction } from "react";
 import { selectorStyler } from "./selectorStyle";
 
+export interface IStylerColor {
+  value: string;
+  changeStyle: (style?: string) => void;
+  setValue: Dispatch<SetStateAction<string>>;
+}
+
 export interface IStylerReturn {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
@@ -24,32 +30,42 @@ export interface IStylerReturn {
     }) => void;
     value: string;
   };
+  color: IStylerColor;
 }
 
-export type TUseStyler = (name: any, resetText?: string) => IStylerReturn
+export type TUseStyler = (name: any, resetText?: string, className?: string) => IStylerReturn
 
-export const useStyler: TUseStyler = (name, resetText = "None") => {
-  const { selectComp } = useStore();
+export const useStyler: TUseStyler = (name, resetText = "None", className) => {
+  const { selectComp } = useStore()
   const [value, setValue] = useState(resetText)
 
   useEffect(() => {
-    setValue(getStyle())
+    const style = getStyle()
+    setValue(style ? style : resetText)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, resetText, selectComp])
 
+  const createSelectorStyler = () => {
+    const classGetComp = document.querySelector('.' + className)
+    const component = !selectComp && classGetComp ? classGetComp : selectComp
+    if (!component) return
+    const { classList, ownerDocument } = component
+    const styleSheets = ownerDocument.styleSheets
+    const styleSheet = styleSheets[styleSheets.length - 1]
+    const selectorStyle = selectorStyler('.' + classList[classList.length - 1], styleSheet)
+    return selectorStyle
+  }
+
   const getStyle = () => {
-    if (!selectComp) return resetText;
-    const { classList, ownerDocument } = selectComp
-    const styleSheets = ownerDocument.styleSheets[0]
-    const style = selectorStyler('.' + classList[1], styleSheets).get(name)
+    const selectorStyle = createSelectorStyler()
+    if (!selectorStyle) return resetText;
+    const style = selectorStyle.get(name)
     return style ? style : resetText
   }
 
   const changeStyle = (style?: string) => {
-    if (!selectComp) return;
-    const { classList, ownerDocument } = selectComp
-    const styleSheets = ownerDocument.styleSheets[0]
-    const selectorStyle = selectorStyler('.' + classList[1], styleSheets)
+    const selectorStyle = createSelectorStyler()
+    if (!selectorStyle) return;
     const before = selectorStyle.get(name)
     selectorStyle.set(name, style ? style : value)
     if (style) setValue(style)
@@ -70,6 +86,11 @@ export const useStyler: TUseStyler = (name, resetText = "None") => {
         setValue(target.value)
         changeStyle(target.value)
       }, value
+    },
+    color: {
+      value,
+      changeStyle,
+      setValue
     }
   }
 }

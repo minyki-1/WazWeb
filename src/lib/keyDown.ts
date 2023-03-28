@@ -12,7 +12,7 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = (e) => {
     const { key, ctrlKey, shiftKey } = e;
-    const selectIsNotView = selectComp && selectComp.classList[1] !== "app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
+    const selectIsNotView = selectComp && selectComp.classList[selectComp.classList.length - 1] !== "app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
 
     if (selectIsNotView && key === 'Delete') selectComp.remove();
     if (!ctrlKey) return; //* 이 밑의 기능은 전부 ctrl을 누르고 있을때만 실행

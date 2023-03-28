@@ -1,16 +1,15 @@
-import { useState, MouseEvent, SyntheticEvent } from 'react'
+import { useState, MouseEvent, SyntheticEvent, useEffect } from 'react'
 import styled from "styled-components"
 import { ChromePicker } from 'react-color'
 import { IColor } from "../../types/design"
 import { rgbToHex, hexToRgb, rgbToRgbStr, rgbStrToRgb } from "../../lib/colorChange"
-import { IStylerReturn } from '../../lib/useStyler'
+import { IStylerColor } from '../../lib/useStyler'
 
-export default function ColorPicker({ styler }: { styler: IStylerReturn }) {
+export default function ColorPicker({ value, changeStyle, setValue }: IStylerColor) {
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
-  const [colorInput, setColorInput] = useState(rgbToHex(styler.value))
-  const rgb = rgbStrToRgb(styler.value)
-  const [opacity, setOpacity] = useState(rgb && rgb.a ? String(rgb.a * 100) : "100")
+  const defaultRgb = rgbStrToRgb(value)
+  const [opacity, setOpacity] = useState(defaultRgb?.a ? String(defaultRgb.a * 100) : "100")
 
   function handleColorClick(e: MouseEvent) {
     // * ChromePicker(color selector) height = 241.75px
@@ -26,44 +25,42 @@ export default function ColorPicker({ styler }: { styler: IStylerReturn }) {
   }
 
   function handleColorChange({ rgb }: { rgb: IColor }) {
-    styler.setValue(rgbToRgbStr(rgb));
-    setColorInput(rgbToHex(rgb));
-    setOpacity(String(rgb.a * 100))
-    styler.changeStyle(rgbToRgbStr(rgb))
+    if (rgb.a) setOpacity(String(rgb.a * 100))
+    changeStyle(rgbToRgbStr(rgb))
   }
 
   function handleOpacity(e: SyntheticEvent) {
     let opacityValue = (e.target as HTMLInputElement).value
-    const rgb = rgbStrToRgb(styler.value)
+    const rgb = rgbStrToRgb(value)
     if (opacityValue.indexOf('%') > -1) opacityValue = opacityValue.split('%')[0];
     if (!isNaN(Number(opacityValue)) && rgb) {
-      styler.setValue(rgbToRgbStr({ ...rgb, a: Number(opacityValue) / 100 }));
-      styler.changeStyle(rgbToRgbStr({ ...rgb, a: Number(opacityValue) / 100 }))
+      changeStyle(rgbToRgbStr({ ...rgb, a: Number(opacityValue) / 100 }))
     }
-    else if (rgb && rgb.a) setOpacity(String(Math.floor(rgb.a * 100)));
+    else if (rgb?.a) setOpacity(String(Math.floor(rgb.a * 100)));
   }
 
   function handlecolor(e: SyntheticEvent) {
     let colorValue = (e.target as HTMLInputElement).value
     if (colorValue.indexOf("#") < 0) colorValue = "#" + colorValue;
     const rgb = hexToRgb(colorValue)
-    const rgb1 = hexToRgb(colorValue)
-    console.log(rgb, rgb1, colorValue)
-    if (rgb && rgb1) {
-      const opacity = rgbStrToRgb(styler.value)?.a
-      // styler.setValue(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }));
-      styler.changeStyle(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }))
-      setColorInput(colorValue);
+    if (rgb) {
+      const opacity = rgbStrToRgb(value)?.a
+      changeStyle(rgbToRgbStr({ ...rgb, a: opacity ? opacity : 1 }))
     }
-    else setColorInput(rgbToHex(styler.value))
+    else setValue(rgbToHex(value))
   }
+
+  useEffect(() => {
+    const defaultRgb = rgbStrToRgb(value)
+    setOpacity(defaultRgb?.a ? String(defaultRgb.a * 100) : "100")
+  }, [value])
 
   return (
     <>
       {isPickerShow &&
         <>
           <ColorPickerWrapper id="colorPicker" top={String(top)}>
-            <ChromePicker color={styler.value} onChange={handleColorChange} />
+            <ChromePicker color={value} onChange={handleColorChange} />
           </ColorPickerWrapper>
           <ColorPickerBg onClick={() => setIsPickerShow(false)} />
         </>
@@ -72,17 +69,16 @@ export default function ColorPicker({ styler }: { styler: IStylerReturn }) {
         <button
           title="background-color"
           onClick={handleColorClick}
-          style={{ backgroundColor: rgbToHex(styler.value), opacity }}
+          style={{ backgroundColor: value === "None" ? "#000" : value }}
         />
-        {colorInput &&
-          <input
-            style={{ width: 65, marginRight: 4 }}
-            type="text"
-            value={colorInput}
-            onChange={e => setColorInput(e.target.value)}
-            onBlur={handlecolor}
-            onKeyDown={e => { if (e.code === "Enter") handlecolor(e) }}
-          />}
+        <input
+          style={{ width: 65, marginRight: 4 }}
+          type="text"
+          value={rgbToHex(rgbStrToRgb(value))}
+          onChange={e => setValue(e.target.value)}
+          onBlur={handlecolor}
+          onKeyDown={e => { if (e.code === "Enter") handlecolor(e) }}
+        />
         <input
           onBlur={handleOpacity}
           onKeyDown={e => { if (e.code === "Enter") handleOpacity(e) }}
