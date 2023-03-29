@@ -4,18 +4,18 @@ export type TSelectorStylerReturn = {
   get: (styleName: string) => string | undefined;
 }
 export const selectorStyler = (className: string, styleSheets: CSSStyleSheet): TSelectorStylerReturn => {
-  const selector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
-  const newStyle = selector ? selector : createSelectorStyle(className, styleSheets) as TCssRule | undefined
+  const findSelector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
+  const newStyle = createSelectorStyle(className, styleSheets) as TCssRule | undefined
+  const selector = findSelector ?? newStyle
 
   function set(styleName: string, style: string) {
-    if (!newStyle) return;
-    newStyle.style[styleName as any] = style
-    return newStyle.style[styleName as any]
+    if (!selector) return;
+    selector.style[styleName as any] = style
+    return selector.style[styleName as any]
   }
 
   function get(styleName: string) {
-    if (!newStyle) return;
-    return newStyle.style[styleName as any]
+    if (selector) return selector.style[styleName as any]
   }
 
   return { set, get }

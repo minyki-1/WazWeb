@@ -10,7 +10,7 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
   const [isPickerShow, setIsPickerShow] = useState(false)
   const [top, setTop] = useState<number>()
   const defaultRgb = rgbStrToRgb(value)
-  const [opacity, setOpacity] = useState(defaultRgb?.a ? defaultRgb.a : 1)
+  const [opacity, setOpacity] = useState(defaultRgb?.a ?? 1)
   const [inputValue, setInputValue] = useState(rgbToHex(rgbStrToRgb(value)))
 
   function handleColorClick(e: MouseEvent) {
@@ -18,7 +18,7 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
     const colorPicker = document.getElementById("colorPicker")
     const colorPickerHeight = colorPicker?.offsetHeight || 250
     const rightSideBar = document.getElementById("rightSideBar")
-    const scrollTop = rightSideBar?.scrollTop ? rightSideBar?.scrollTop : 0
+    const scrollTop = rightSideBar?.scrollTop ?? 0
     const targetTop = (e.target as HTMLElement).offsetTop - 100 - scrollTop;
     if (targetTop + colorPickerHeight > window.innerHeight) setTop(window.innerHeight - colorPickerHeight - 5)
     else if (targetTop < 50) setTop(52)
@@ -49,8 +49,8 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
 
   useEffect(() => {
     const defaultRgb = rgbStrToRgb(value)
-    setOpacity(defaultRgb?.a ? defaultRgb.a : 1)
-    setInputValue(rgbToHex(rgbStrToRgb(value)))
+    setOpacity(defaultRgb?.a ?? 1)
+    setInputValue(value in namedColor ? namedColor[value] : rgbToHex(rgbStrToRgb(value)))
   }, [value])
 
   return (
@@ -58,7 +58,7 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
       {isPickerShow &&
         <>
           <ColorPickerWrapper id="colorPicker" top={String(top)}>
-            <ChromePicker color={inputValue} onChange={handleColorChange} />
+            <ChromePicker color={value} onChange={handleColorChange} />
           </ColorPickerWrapper>
           <ColorPickerBg onClick={() => setIsPickerShow(false)} />
         </>

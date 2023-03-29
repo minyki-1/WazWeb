@@ -59,12 +59,12 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     if (!selectComp && className) {
       const elem = document.querySelector('.' + className) as HTMLElement | null
       const style = elem?.style[name]
-      return style ? style : resetText
+      return style ?? resetText
     } else {
       const selectorStyle = createSelectorStyler()
       if (!selectorStyle) return resetText;
       const style = selectorStyle.get(name)
-      return style ? style : resetText
+      return style ?? resetText
     }
   }
 
@@ -74,14 +74,14 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       if (!comp) return;
       const before = comp.style[name as any]
       comp.style[name as any] = style ? style : value
-      setValue(style ? style : value)
+      setValue(style ?? value)
       if (before === comp.style[name as any]) setValue(before ? before : resetText);
     } else {
       const selectorStyle = createSelectorStyler()
       if (!selectorStyle) return;
       const before = selectorStyle.get(name)
-      selectorStyle.set(name, style ? style : value)
-      setValue(style ? style : value)
+      selectorStyle.set(name, style ?? value)
+      setValue(style ?? value)
       if (before === selectorStyle.get(name)) setValue(before ? before : resetText);
     }
   }
