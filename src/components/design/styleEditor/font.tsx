@@ -12,7 +12,7 @@ export default function Font() {
   const align = useStyler("textAlign")
   const style = useStyler("fontStyle")
   const decoration = useStyler("decoration")
-  const fontFamily = useStyler("fontFamily")
+  const family = useStyler("fontFamily")
   const overflow = useStyler("textOverflow")
   const whiteSpace = useStyler("whiteSpace")
   const listStyle = useStyler("listStyle")
@@ -66,7 +66,7 @@ export default function Font() {
       </SizeGroup3>
       <SizeGroup3>
         <h4 title="font-family">Family</h4>
-        <select {...fontFamily.select}>
+        <select {...family.select}>
           {
             fontFamily.map((value, index) => (
               <option key={index} value={value}>{value}</option>

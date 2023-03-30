@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styled from "styled-components"
 import ColorPicker from '../../common/colorPicker'
 import { useStyler } from '../../../lib/useStyler'
 
 export default function Basic() {
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
-  const bgColor = useStyler("background-color")
-  const borderColor = useStyler("border-color")
+  const bgColor = useStyler("backgroundColor")
+  const borderColor = useStyler("borderColor")
   const borderSize = useStyler("borderSize", "None")
   const borderStyle = useStyler("borderStyle", "None")
   const borderRadius = useStyler("borderRadius", "None")
 
   const shadowInputProps = (value: "x" | "y" | "blur") => ({
-    onChange: (({ target }: { target: HTMLInputElement }) => setShadow({ ...shadow, [value]: target.value })),
+    onChange: (({ target }: { target: HTMLInputElement }) => {
+      setShadow({ ...shadow, [value]: target.value })
+
+    }),
     value: shadow[value],
     type: "text"
   })
@@ -42,14 +45,14 @@ export default function Basic() {
           </select>
         </BorderWrapper>
         <span>
-          {/* <ColorPicker styler={borderColor} /> */}
+          <ColorPicker {...borderColor.color} />
         </span>
       </SizeGroup2>
       <SizeGroup3>
         <h4>Corner</h4>
         <input {...borderRadius.input} type="text" />
       </SizeGroup3>
-      <SizeGroup4>
+      {/* <SizeGroup4>
         <ShadowWrapper>
           <h4 title="box-shadow">Shadow</h4>
           <div>
@@ -66,9 +69,9 @@ export default function Basic() {
           </div>
         </ShadowWrapper>
         <span>
-          {/* <ColorPicker styleName="border-color" /> */}
+          <ColorPicker styleName="border-color" />
         </span>
-      </SizeGroup4>
+      </SizeGroup4> */}
     </Container>
   )
 }

@@ -50,7 +50,7 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
   useEffect(() => {
     const defaultRgb = rgbStrToRgb(value)
     setOpacity(defaultRgb?.a ?? 1)
-    setInputValue(value in namedColor ? namedColor[value] : rgbToHex(rgbStrToRgb(value)))
+    setInputValue(value in namedColor ? namedColor[value].toUpperCase() : rgbToHex(rgbStrToRgb(value)))
   }, [value])
 
   return (
