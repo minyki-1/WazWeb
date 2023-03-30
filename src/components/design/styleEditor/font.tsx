@@ -7,15 +7,15 @@ import { fontFamily } from '../widgetStyle'
 
 export default function Font() {
   const colorStyler = useStyler("color")
-  const [size, setSize] = useState("0px")
-  const [weight, setWeight] = useState("normal")
-  const [align, setAlign] = useState("start")
-  const [style, setStyle] = useState("normal")
-  const [decoration, setDecoration] = useState("none")
-  const [family, setFamily] = useState("Default Style")
-  const [overflow, setOverflow] = useState("clip")
-  const [space, setSpace] = useState("normal")
-  const [listStyle, setListStyle] = useState("none")
+  const size = useStyler("fontSize")
+  const weight = useStyler("fontWeight")
+  const align = useStyler("textAlign")
+  const style = useStyler("fontStyle")
+  const decoration = useStyler("decoration")
+  const fontFamily = useStyler("fontFamily")
+  const overflow = useStyler("textOverflow")
+  const whiteSpace = useStyler("whiteSpace")
+  const listStyle = useStyler("listStyle")
 
   return (
     <Container>
@@ -23,11 +23,11 @@ export default function Font() {
       <SizeGroup1>
         <div>
           <h4 title="font-size">Size</h4>
-          <input value={size} type="text" onChange={e => setSize(e.target.value)} />
+          <input {...size.input} />
         </div>
         <div>
           <h4 title="font-weight">Weight</h4>
-          <select value={weight} onChange={e => setWeight(e.target.value)}>
+          <select {...weight.select}>
             <option value="normal">Normal</option>
             <option value="200">Thin</option>
             <option value="400">Light</option>
@@ -38,7 +38,7 @@ export default function Font() {
       <SizeGroup1>
         <div>
           <h4 title="text-align">Align</h4>
-          <select value={align} onChange={e => setAlign(e.target.value)}>
+          <select {...align.select}>
             <option value="start">Start</option>
             <option value="end">End</option>
             <option value="center">Center</option>
@@ -47,7 +47,7 @@ export default function Font() {
         </div>
         <div>
           <h4 title="font-style">Style</h4>
-          <select value={style} onChange={e => setStyle(e.target.value)}>
+          <select {...style.select}>
             <option value="normal">Normal</option>
             <option value="italic">Italic</option>
           </select>
@@ -59,14 +59,14 @@ export default function Font() {
       </SizeGroup2>
       <SizeGroup3>
         <h4 title="text-decoration">Decoration</h4>
-        <select value={decoration} onChange={e => setDecoration(e.target.value)}>
+        <select {...decoration.select}>
           <option value="none">None</option>
           <option value="underline">Underline</option>
         </select>
       </SizeGroup3>
       <SizeGroup3>
         <h4 title="font-family">Family</h4>
-        <select value={family} onChange={e => setFamily(e.target.value)}>
+        <select {...fontFamily.select}>
           {
             fontFamily.map((value, index) => (
               <option key={index} value={value}>{value}</option>
@@ -77,14 +77,14 @@ export default function Font() {
       <SizeGroup1>
         <div>
           <h4 title="text-overflow">Overflow</h4>
-          <select value={overflow} onChange={e => setOverflow(e.target.value)}>
+          <select {...overflow.select}>
             <option value="clip">Clip</option>
             <option value="ellipsis">Ellipsis</option>
           </select>
         </div>
         <div>
           <h4 title="white-space">Space</h4>
-          <select value={space} onChange={e => setSpace(e.target.value)}>
+          <select {...whiteSpace.select}>
             <option value="normal">Normal</option>
             <option value="italic">Italic</option>
           </select>
@@ -92,7 +92,7 @@ export default function Font() {
       </SizeGroup1>
       <SizeGroup3>
         <h4 title="list-style">List Style</h4>
-        <select value={listStyle} onChange={e => setListStyle(e.target.value)}>
+        <select {...listStyle.select}>
           <option value="none">None</option>
           <option value="square">Square</option>
           <option value="inside">Inside</option>
