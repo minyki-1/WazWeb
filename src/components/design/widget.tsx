@@ -8,6 +8,8 @@ import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
 import { resizeHTML } from '../../lib/resize';
+import ReactDOM from 'react-dom';
+import NewView from './newView';
 
 interface ICompProps {
   name: string;
@@ -22,6 +24,8 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
   const router = useRouter();
+  const [newIframe, setNewIframe] = useState<HTMLIFrameElement>()
+  const [portalDiv, setPortalDiv] = useState<HTMLElement>()
 
   const addComp = () => {
     if (!selectComp) return;
@@ -46,20 +50,53 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     Object.values(comp.children).forEach((child) => {
       newStyle = changeClassStyle(child as HTMLElement | null, newStyle)
     })
-    return newStyle
+    return newStyle;
+  }
+
+  async function asdasda() {
+    if (!document.getElementById("widget" + id)) {
+      const view = document.getElementById("infoBar" + id) as HTMLElement | null;
+      const newIframe = document.createElement("iframe")
+      newIframe.id = "widget" + id
+      view?.before(newIframe)
+      const iframe = document.getElementById("widget" + id) as HTMLIFrameElement | null;
+      const dom = iframe?.contentWindow?.document
+      // while (1) {
+      const timer = setInterval(() => {
+        if (dom) createNewView({ html, style, dom, resize: true })
+        console.log(dom?.body.firstChild)
+        if (dom?.body.firstChild) {
+          clearInterval(timer)
+        }
+      }, 50)
+    };
   }
 
   useEffect(() => {
-    const iframeView = document.getElementById("iframe" + id) as HTMLIFrameElement | null;
-    const dom = iframeView?.contentWindow?.document
-    if (!dom || dom.body.childNodes.length > 0) return;
-    createNewView({ html, style, dom, resize: true })
-  }, [html, id, router, style])
+    document.getElementById("widget" + id)?.remove()
+    const iframe = document.createElement("iframe")
+    iframe.id = "widget" + id
+    const infoBar = document.getElementById("infoBar" + id)
+    infoBar?.before(iframe)
+    setNewIframe(iframe)
+  }, [id])
+
+  useEffect(() => {
+    const dom = newIframe?.contentWindow?.document
+    if (!dom) return;
+    const div = dom.createElement("div")
+    dom.body.appendChild(div)
+    setPortalDiv(div)
+  }, [id, newIframe])
 
   return (
     <Container>
-      <WidgetView id={"iframe" + id} />
-      <InfoBar>
+      <iframe id={"widget" + id} />
+      {portalDiv && ReactDOM.createPortal(
+        <NewView html={html} style={style} dom={portalDiv.ownerDocument} resize={true} />,
+        portalDiv
+      )}
+      <InfoBar id={"infoBar" + id}>
         <h2>{name}</h2>
         <div>
           <SVG_plus onClick={addComp} {...svgProps} />
@@ -87,17 +124,17 @@ const Container = styled.section`
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.25);
   outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-`
-const WidgetView = styled.iframe`
-  background-color: #f2f2f2;
-  width:100%;
-  aspect-ratio: 3 / 2;
-  overflow: hidden;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px 4px 0px 0px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  iframe{
+    background-color: #f2f2f2;
+    width:100%;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px 4px 0px 0px;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  }
 `
 const InfoBar = styled.div`
   display:flex;

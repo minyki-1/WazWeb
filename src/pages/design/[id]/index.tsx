@@ -9,7 +9,7 @@ export default function Design() {
   const param = useRouter().query.id
 
   return (
-    <Container tabIndex="0" onKeyDown={keyDownFunc(param)} >
+    <Container tabIndex="0" {...keyDownFunc(param)} >
       <Header />
       <Main>
         <LeftSideBar />

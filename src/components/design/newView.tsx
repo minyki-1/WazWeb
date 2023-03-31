@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { keyDownFunc } from "../../lib/keyDown"
 import { resizeHTML } from "../../lib/resize";
 import { INewView } from "../../lib/createNewView";
+import { saveHTML } from "../../lib/saveHTML";
 
 export default function NewView({ html, style, dom, param, resize }: INewView) {
   const { selectComp, setSelectComp } = useStore();
@@ -11,11 +12,14 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
 
   const resetSelectComp = () => {
-    if (selectComp) { //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
-      if (canEditTag.includes(selectComp.tagName)) selectComp.contentEditable = "false"; //* 글수정 상태에서 바꿀때 그걸 false해줌
-      selectComp.style.boxShadow = "";
-      selectComp.style.cursor = ""
-    }
+    if (!selectComp || typeof param !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+    selectComp.childNodes.forEach(e => {
+      if (e.nodeType !== 3) return;
+      selectComp.contentEditable = "false"
+      saveHTML(param);
+    })
+    selectComp.style.boxShadow = "";
+    selectComp.style.cursor = ""
   }
   const handleMouseOver: MouseEventHandler<HTMLDivElement> = (e) => {
     const target = e.target as HTMLElement | null;
@@ -49,9 +53,9 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     }
   }
 
-  const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white", borderRadius: "12px", display: "flex", justifyContent: "center", alignItems: "center" }
 
   useEffect(() => {
+    const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white", borderRadius: "12px", display: "flex", justifyContent: "center", alignItems: "center" }
     dom.body.style.margin = "0px"
     const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
@@ -66,15 +70,14 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
 
     if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     if (resize) resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [param])
+  }, [dom, html, param, resize, style])
 
   if (!param) return (<div id="newView" />)
   return (
     <div
       id="newView"
       tabIndex={0}
-      onKeyDown={keyDownFunc(param)}
+      {...keyDownFunc(param)}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}

@@ -6,14 +6,14 @@ export const saveHTML = (id: string) => {
   const iframeDom = view?.contentWindow?.document
   if (!view || !iframeDom) return;
   const html = iframeDom.getElementById("newView")?.innerHTML
-    .replace(/ contenteditable="\S*"/g, '')
-    .replace(/ style="\S*"/g, "")
+    .replace(/ contenteditable="[^"]*"/g, '')
+    .replace(/ style="[^"]*"/g, '');
   const style = iframeDom.getElementById("compyDesign")?.innerText
   if (!html || !style) return;
   saveHistory({ value: { html, style }, id })
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
   if (designList) designList.forEach((data, key) => {
-    if (data.id === id) designList[key] = { ...data, html };
+    if (data.id === id) designList[key] = { ...data, html, style };
   })
   sessionStorage.setItem("designList", JSON.stringify(designList))
 }

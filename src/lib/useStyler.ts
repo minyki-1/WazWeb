@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useStore } from "../zustand/store";
 import { Dispatch, SetStateAction } from "react";
 import { selectorStyler } from "./selectorStyle";
+import { useRouter } from "next/router";
+import { saveHTML } from "./saveHTML";
 
 export interface IStylerColor {
   value: string;
@@ -38,6 +40,7 @@ export type TUseStyler = (name: any, resetText?: string, className?: string) => 
 export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   const { selectComp } = useStore()
   const [value, setValue] = useState(resetText)
+  const router = useRouter()
 
   useEffect(() => {
     setValue(getStyle())
@@ -59,7 +62,6 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     if (!selectComp && className) {
       const elem = document.querySelector('.' + className) as HTMLElement | null
       style = elem?.style[name]
-      console.log(withoutCalc(style ? style : resetText))
     } else {
       const selectorStyle = createSelectorStyler()
       if (!selectorStyle) return resetText;
@@ -101,6 +103,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     }
     if (before === after) setValue(withoutCalc(before ? before : resetText))
     else setValue(withoutCalc(after ? after : resetText))
+
+    if (typeof router.query.id === "string") saveHTML(router.query.id)
   }
 
   const onChange = ({ target }: { target: HTMLInputElement }) => setValue(target.value)
