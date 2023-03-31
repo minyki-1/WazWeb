@@ -19,7 +19,7 @@ export default function RightSideBar() {
         <SVG_world {...iconProps("world")} />
         <SVG_comps {...iconProps("comps")} />
       </Nav>
-      {select === "cube" ? <WidgetList /> : null}
+      <WidgetList show={select === "cube"} />
     </Container>
   )
 }

@@ -52,51 +52,17 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     })
     return newStyle;
   }
-
-  async function asdasda() {
-    if (!document.getElementById("widget" + id)) {
-      const view = document.getElementById("infoBar" + id) as HTMLElement | null;
-      const newIframe = document.createElement("iframe")
-      newIframe.id = "widget" + id
-      view?.before(newIframe)
-      const iframe = document.getElementById("widget" + id) as HTMLIFrameElement | null;
-      const dom = iframe?.contentWindow?.document
-      // while (1) {
-      const timer = setInterval(() => {
-        if (dom) createNewView({ html, style, dom, resize: true })
-        console.log(dom?.body.firstChild)
-        if (dom?.body.firstChild) {
-          clearInterval(timer)
-        }
-      }, 50)
-    };
-  }
-
+  
   useEffect(() => {
-    document.getElementById("widget" + id)?.remove()
-    const iframe = document.createElement("iframe")
-    iframe.id = "widget" + id
-    const infoBar = document.getElementById("infoBar" + id)
-    infoBar?.before(iframe)
-    setNewIframe(iframe)
-  }, [id])
-
-  useEffect(() => {
-    const dom = newIframe?.contentWindow?.document
-    if (!dom) return;
-    const div = dom.createElement("div")
-    dom.body.appendChild(div)
-    setPortalDiv(div)
-  }, [id, newIframe])
+    const iView = document.getElementById("widget" + id) as HTMLIFrameElement | null
+    const dom = iView?.contentWindow?.document
+    if (dom) createNewView({ html, style, dom, resize: true })
+  }, [html, id, style])
 
   return (
     <Container>
       <iframe id={"widget" + id} />
-      {portalDiv && ReactDOM.createPortal(
-        <NewView html={html} style={style} dom={portalDiv.ownerDocument} resize={true} />,
-        portalDiv
-      )}
-      <InfoBar id={"infoBar" + id}>
+      <InfoBar>
         <h2>{name}</h2>
         <div>
           <SVG_plus onClick={addComp} {...svgProps} />

@@ -40,14 +40,14 @@ const defaultComp: { name: string, descript: string, html: string, style: string
   }
 ]
 
-export default function WidgetList() {
+export default function WidgetList({ show }: { show: boolean }) {
   return (
-    <>
+    <div style={{ display: show ? "block" : "none" }}>
       {
         defaultComp.map((data, key) => (
           <Widget key={key} {...data} id={key} />
         ))
       }
-    </>
+    </div>
   )
 }
