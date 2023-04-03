@@ -6,7 +6,7 @@ const defaultComp: { name: string, descript: string, html: string, style: string
     name: "Box",
     descript: "Basic box component. Default size is 50px x 50px.",
     html: `<div class="Box basicC"/>`,
-    style: `.basicC{width:50px;height:50px;background:gray;}`
+    style: `.basicC{width:50px;height:50px;background-color:gray;}`
   },
   {
     name: "Text",

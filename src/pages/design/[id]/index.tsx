@@ -5,9 +5,14 @@ import CompyView from '../../../components/design/designView'
 import LeftSideBar from '../../../components/design/leftSideBar'
 import { useRouter } from 'next/router'
 import { keyDownFunc } from '../../../lib/keyDown'
+import { useEffect } from 'react'
+import { useStore } from '../../../zustand/store'
 export default function Design() {
   const param = useRouter().query.id
-
+  const { setSelectComp } = useStore();
+  useEffect(() => {
+    setSelectComp(undefined);
+  }, [setSelectComp])
   return (
     <Container tabIndex="0" {...keyDownFunc(param)} >
       <Header />

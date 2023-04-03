@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../zustand/store";
 import { Dispatch, SetStateAction } from "react";
-import { selectorStyler } from "./selectorStyle";
+import { classStyler } from "./classStyler";
 import { useRouter } from "next/router";
 import { saveHTML } from "./saveHTML";
 
@@ -47,34 +47,28 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, resetText, selectComp])
 
-  const createSelectorStyler = () => {
+  const createClassStyler = () => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
-    const styleSheets = ownerDocument.styleSheets
-    const styleSheet = Object.values(styleSheets).find((e) => (e.ownerNode as HTMLElement).id === "compyDesign")
-    if (styleSheet) {
-      return selectorStyler('.' + classList[classList.length - 1], styleSheet)
-    }
+    const styleComp = ownerDocument.getElementById("compyDesign")
+    if (styleComp) return classStyler(classList[classList.length - 1], name, styleComp)
   }
 
   const getStyle = () => {
-    let style: string | undefined;
+    let style: string | undefined | null;
     if (!selectComp && className) {
       const elem = document.querySelector('.' + className) as HTMLElement | null
       style = elem?.style[name]
     } else {
-      const selectorStyle = createSelectorStyler()
-      if (!selectorStyle) return resetText;
-      style = selectorStyle.get(name)
+      const selectorStyle = createClassStyler()
+      style = selectorStyle?.get()
     }
     return withoutCalc(style ? style : resetText)
   }
 
   const styleToCalc = (style: string) => {
     const operRegex = /[*/+-]/;
-    if (operRegex.test(style)) {
-      return "calc(" + style + ")"
-    }
+    if (operRegex.test(style)) return "calc(" + style + ")"
     return style
   }
 
@@ -83,8 +77,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   }
 
   const changeStyle = (style?: string) => {
-    let before: string | undefined;
-    let after: string | undefined;
+    let before: string | undefined | null;
+    let after: string | undefined | null;
     let styleText: string;
     if (!selectComp && className) {
       const comp = document.querySelector('.' + className) as HTMLElement | null
@@ -94,12 +88,11 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       comp.style[name as any] = styleText
       after = comp.style[name as any]
     } else {
-      const selectorStyle = createSelectorStyler()
+      const selectorStyle = createClassStyler()
       if (!selectorStyle) return;
       styleText = styleToCalc(style ? style : value)
-      before = selectorStyle.get(name)
-      selectorStyle.set(name, styleText)
-      after = selectorStyle.get(name)
+      before = selectorStyle.get()
+      after = selectorStyle.set(styleText)
     }
     if (before === after) setValue(withoutCalc(before ? before : resetText))
     else setValue(withoutCalc(after ? after : resetText))

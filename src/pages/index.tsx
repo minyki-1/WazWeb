@@ -6,6 +6,7 @@ import DesignView from '../components/home/designView';
 import { IDesgin } from '../types/design';
 import { saveHistory } from '../lib/history';
 import { refreshExpired, setRefresh } from '../lib/refresh';
+import { useStore } from '../zustand/store';
 
 const temp: IDesgin[] = [
   {
@@ -28,8 +29,10 @@ const temp: IDesgin[] = [
 
 export default function Home() {
   const [list, setList] = useState<IDesgin[]>()
+  const { setSelectComp } = useStore();
 
   useEffect(() => {
+    setSelectComp(undefined);
     const designListStorage = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
     if (designListStorage && !refreshExpired({ id: "design" })) { //* 새롭게 받아올 필요없이 기존값을 보내줌
       setList(designListStorage)
@@ -40,7 +43,7 @@ export default function Home() {
       temp.forEach(({ html, style, id }) => saveHistory({ id, value: { html, style } }))
       setList(temp)
     }
-  }, [])
+  }, [setSelectComp])
 
   return (
     <Container>

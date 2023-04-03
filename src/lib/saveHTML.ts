@@ -8,12 +8,12 @@ export const saveHTML = (id: string) => {
   const html = iframeDom.getElementById("newView")?.innerHTML
     .replace(/ contenteditable="[^"]*"/g, '')
     .replace(/ style="[^"]*"/g, '');
-  const style = iframeDom.getElementById("compyDesign")?.innerText
+  const style = iframeDom.getElementById("compyDesign")?.innerHTML
   if (!html || !style) return;
   saveHistory({ value: { html, style }, id })
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
   if (designList) designList.forEach((data, key) => {
-    if (data.id === id) designList[key] = { ...data, html, style };
+    if (data.id === id && style) designList[key] = { ...data, html, style };
   })
   sessionStorage.setItem("designList", JSON.stringify(designList))
 }

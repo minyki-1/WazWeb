@@ -67,7 +67,7 @@ export default function ColorPicker({ value, changeStyle, getStyle }: IStylerCol
         <button
           title="background-color"
           onClick={handleColorClick}
-          style={{ backgroundColor: inputValue, opacity }}
+          style={{ backgroundColor: inputValue === "None" ? "#000" : inputValue, opacity }}
         />
         <input
           style={{ width: 65, marginRight: 4 }}

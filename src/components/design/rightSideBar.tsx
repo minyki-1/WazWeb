@@ -6,7 +6,7 @@ import SVG_comps from "../../svg/comps.svg"
 import { useState } from 'react'
 
 export default function RightSideBar() {
-  const [select, setSelect] = useState("cube")
+  const [select, setSelect] = useState("design")
   const textProps = (name: string) => ({
     onClick: () => setSelect(name),
     style: { backgroundColor: select === name ? "#282828" : null }

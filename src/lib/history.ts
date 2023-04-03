@@ -57,7 +57,7 @@ export const saveHistory = (
   }: IHistValue & { value: { html: string, style: string } }) => {
 
   const [hist, setHist] = storageManager(histName, id, storage)
-  if (hist && value.html !== hist[0].html) setHist([value, ...hist]);
+  if (hist && (value.html !== hist[0].html || value.style !== hist[0].style)) setHist([value, ...hist]);
   else if (!hist) setHist([value]);
 }
 
@@ -69,6 +69,3 @@ export const getHistory = (
   const [hist] = storageManager(histName, id, storage)
   return hist
 }
-/* 
-
-*/

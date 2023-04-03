@@ -30,8 +30,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
       selectComp.contentEditable = "false"
       saveHTML(param);
     })
-    selectComp.style.boxShadow = "";
-    selectComp.style.cursor = ""
   }
 
   const redoEvent = () => {
