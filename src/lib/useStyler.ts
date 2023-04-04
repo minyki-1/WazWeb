@@ -50,8 +50,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   const createClassStyler = () => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
-    ownerDocument
-    return classStyler('.' + classList[classList.length - 1], name, ownerDocument.styleSheets[0])
+    return classStyler(classList[1], name, ownerDocument.styleSheets[0])
   }
 
   const getStyle = () => {

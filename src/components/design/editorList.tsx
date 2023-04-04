@@ -3,7 +3,7 @@ import Size from './styleEditor/size'
 import Basic from './styleEditor/basic'
 import Font from './styleEditor/font'
 import Background from './styleEditor/background'
-import Property from "./styleEditor/propertyList"
+import PropertyList from "./styleEditor/propertyList"
 import { useStore } from '../../zustand/store'
 
 const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
@@ -44,14 +44,14 @@ export default function EditorList({ show }: { show: boolean }) {
     <div style={{ display: show ? "block" : "none" }}>
       {
         selectComp && selectComp.id !== "viewBg" ?
-          <Property selectComp={selectComp} /> : null
+          <PropertyList /> : null
       }
       {
         selectComp === undefined || selectComp.id === "viewBg"
           ? <Background />
           : compData[compKey].map((Editor, key) => (
             <>
-              <Editor key={key} selectComp={selectComp} />
+              <Editor key={key} />
             </>
           ))
       }

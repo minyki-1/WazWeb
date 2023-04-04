@@ -2,9 +2,10 @@ type TCssRule = CSSRule & { selectorText: string, style: CSSStyleDeclaration }
 export type TSelectorStylerReturn = {
   set: (style: string) => string | undefined;
   get: () => string | undefined;
+  selector: TCssRule | undefined;
 }
 export const classStyler = (className: string, styleName: string, styleSheets: CSSStyleSheet): TSelectorStylerReturn => {
-  const findSelector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
+  const findSelector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === '.' + className) as TCssRule | undefined
   const selector = findSelector ?? createSelectorStyle(className, styleSheets) as TCssRule | undefined
 
   let styleProp = styleName;
@@ -13,10 +14,9 @@ export const classStyler = (className: string, styleName: string, styleSheets: C
   }
 
   function set(style: string) {
-
     if (!selector) return;
     selector.style[styleProp as any] = style
-    const regex = new RegExp(`\\${className}\\s*\\{[^}]*\\}`, 'gi');
+    const regex = new RegExp(`\\.${className}\\s*\\{[^}]*\\}`, 'gi');
     const styleText = styleSheets.ownerNode?.textContent;
     if (styleText && findSelector) styleSheets.ownerNode.textContent = styleText.replace(regex, findSelector.cssText);
     return selector.style[styleProp as any]
@@ -26,11 +26,11 @@ export const classStyler = (className: string, styleName: string, styleSheets: C
     if (selector) return selector.style[styleProp as any]
   }
 
-  return { set, get }
+  return { set, get, selector }
 }
 
 const createSelectorStyle = (className: string, styleSheets: CSSStyleSheet, style = "") => {
   const styleElem = styleSheets.ownerNode
-  if (styleElem) styleElem.textContent += className + `{${style}}`
-  return Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className);
+  if (styleElem) styleElem.textContent += '.' + className + `{${style}}`
+  return Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === '.' + className);
 }

@@ -1,15 +1,17 @@
-import { MouseEventHandler, useState } from "react";
+import { KeyboardEventHandler, MouseEventHandler, useState } from "react";
 import { useStore } from "../../zustand/store";
 import { useEffect } from "react";
-import { keyDownFunc } from "../../lib/keyDown"
 import { resizeHTML } from "../../lib/resize";
 import { INewView } from "../../lib/createNewView";
 import { saveHTML } from "../../lib/saveHTML";
+import { redoHistory, undoHistory } from "../../lib/history";
 
 export default function NewView({ html, style, dom, param, resize }: INewView) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
+  const [copyComp, setCopyComp] = useState<HTMLElement>();
+  const changeComp = selectComp?.ownerDocument.getElementById("newView")
 
   const resetSelectComp = () => {
     if (!selectComp || typeof param !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -53,6 +55,55 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     }
   }
 
+  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = (e) => {
+    const { key, ctrlKey, shiftKey } = e;
+    const selectIsNotView = selectComp && selectComp.classList[1] !== "app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
+
+    if (selectIsNotView && key === 'Delete') deleteEvent();
+    if (!ctrlKey || typeof param !== "string") return; //* 이 밑의 기능은 전부 ctrl을 누르고 있을때만 실행
+    if (shiftKey && key === 'Z') redoEvent(param);
+    else if (key === 'z') undoEvent(param);
+    else if (selectIsNotView && key === 'c') copyEvent(param);
+    else if (key === 'v') pasteEvent(param);
+  }
+
+  const deleteEvent = () => {
+    const doc = selectComp?.ownerDocument
+    const styleComp = doc?.getElementById("compyDesign")
+    if (!selectComp || !styleComp || !doc) return;
+    const id = selectComp.classList[1]
+    selectComp.remove()
+    if (doc.getElementsByClassName(id).length !== 0) return;
+    const removeRegex = new RegExp(`\\.${id}\\s*{[^}]*}|\\s*\\.${id}\\s*{[^}]*}`, "g");
+    const removeStyle = styleComp.textContent?.replace(removeRegex, "")
+    if (!removeStyle) return;
+    styleComp.textContent = removeStyle
+  }
+
+  const redoEvent = (param: string) => {
+    if (!changeComp) return
+    redoHistory(({ id: param, changeComp }));
+    saveHTML(param)
+  }
+
+  const undoEvent = (param: string) => {
+    if (!changeComp) return
+    undoHistory({ id: param, changeComp });
+    saveHTML(param)
+  }
+
+  const copyEvent = (param: string) => {
+    setCopyComp(selectComp);
+    saveHTML(param)
+  }
+
+  const pasteEvent = (param: string) => {
+    if (!copyComp || !selectComp) return;
+    const newComp = copyComp.cloneNode(true) as HTMLElement
+    selectComp.append(newComp)
+    saveHTML(param)
+  }
+
 
   useEffect(() => {
     const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white", borderRadius: "12px", display: "flex", justifyContent: "center", alignItems: "center" }
@@ -81,7 +132,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     <div
       id="newView"
       tabIndex={0}
-      {...keyDownFunc(param)}
+      onKeyDown={handleKeyDown}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}

@@ -1,19 +1,35 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components"
+import { useStore } from "../../../zustand/store";
 
 
 
-export default function Property({ attName, selectComp }: { attName: string, selectComp: HTMLElement }) {
-  const [value, setValue] = useState(selectComp.getAttribute(attName))
+export default function Property({ attName }: { attName: string }) {
+  const { selectComp } = useStore();
+  const [value, setValue] = useState(selectComp?.getAttribute(attName))
   return (
     <SizeGroup3>
       <h4>{attName === "placeholder" ? "Hint" : attName}</h4>
-      <input
-        onChange={(e) => {
-          selectComp.setAttribute(attName, e.target.value)
-          e.target.value = selectComp.getAttribute(attName) || ""
-        }}
-      />
+      {
+        selectComp &&
+        <input
+          value={(value && value === "") ? value : "None"}
+          onChange={(e) => {
+            setValue(e.target.value)
+          }}
+          onBlur={() => {
+            if (!value) return;
+            selectComp.setAttribute(attName, value)
+            setValue(selectComp.getAttribute(attName) || "")
+          }}
+          onKeyDown={(e) => {
+            if (e.code === "Enter" && value) {
+              selectComp.setAttribute(attName, value)
+              setValue(selectComp.getAttribute(attName) || "")
+            }
+          }}
+        />
+      }
     </SizeGroup3>
   )
 }

@@ -4,17 +4,21 @@ import RightSideBar from '../../../components/design/rightSideBar'
 import CompyView from '../../../components/design/designView'
 import LeftSideBar from '../../../components/design/leftSideBar'
 import { useRouter } from 'next/router'
-import { keyDownFunc } from '../../../lib/keyDown'
-import { useEffect } from 'react'
 import { useStore } from '../../../zustand/store'
+import { saveHTML } from '../../../lib/saveHTML'
 export default function Design() {
+  const { selectComp } = useStore();
   const param = useRouter().query.id
-  const { setSelectComp } = useStore();
-  useEffect(() => {
-    setSelectComp(undefined);
-  }, [setSelectComp])
+  const handleClick = () => {
+    if (typeof param !== "string" || !selectComp) return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+    selectComp.childNodes.forEach(e => {
+      if (e.nodeType !== 3) return;
+      selectComp.contentEditable = "false"
+      saveHTML(param);
+    })
+  }
   return (
-    <Container tabIndex="0" {...keyDownFunc(param)} >
+    <Container onClick={handleClick}>
       <Header />
       <Main>
         <LeftSideBar />

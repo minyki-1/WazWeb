@@ -1,5 +1,9 @@
 import { useEffect } from "react";
 import styled from "styled-components"
+import Property from "./property";
+import { useStore } from "../../../zustand/store";
+import { getCompUID } from "../../../lib/randomString";
+import { classStyler } from "../../../lib/classStyler";
 
 const attributes: { [key: string]: string[] } = {
   input: ["type", "placeholder"],
@@ -7,35 +11,52 @@ const attributes: { [key: string]: string[] } = {
   a: ["href", "target"],
 }
 
-export default function Property({ selectComp }: { selectComp: HTMLElement }) {
-  const tagName = selectComp.tagName.toLocaleLowerCase();
+export default function PropertyList() {
+  const { selectComp } = useStore();
+  const tagName = selectComp?.tagName.toLocaleLowerCase();
+  const handleClickIdChange = () => {
+    if (!selectComp) return;
+    const uid = getCompUID(6, selectComp.ownerDocument)
+    const styleComp = selectComp.ownerDocument.getElementById("compyDesign")
+    const styleSheet = selectComp.ownerDocument.styleSheets[0]
+    const beforeId = selectComp.classList[1]
+    const { selector } = classStyler(beforeId, "width", styleSheet)
+    const styleText = selector?.cssText?.replace(new RegExp(beforeId, 'g'), uid)
+    selectComp.className = selectComp.classList[0] + " " + uid
+    if (!styleComp || !styleText) return
+    styleComp.textContent += styleText
+    const removeRegex = new RegExp(`\\.${beforeId}\\s*{[^}]*}|\\s*\\.${beforeId}\\s*{[^}]*}`, "g");
+    const removeBeforeStyle = styleComp.textContent?.replace(removeRegex, "")
+    if (removeBeforeStyle) styleComp.textContent = removeBeforeStyle
+  }
   return (
     <Container>
-      <Topic>Property</Topic>
-      <SizeGroup3>
-        <h4>Tag</h4>
-        <input value={tagName} />
-      </SizeGroup3>
-      <SizeGroup3>
-        <h4>Name</h4>
-        <input value={selectComp.classList[selectComp.classList.length - 2]} />
-      </SizeGroup3>
-      <SizeGroup3>
-        <h4>ID</h4>
-        <h3>{selectComp.classList[selectComp.classList.length - 1]}</h3>
-      </SizeGroup3>
       {
-        tagName in attributes ? attributes[tagName].map((value, key) => (
-          <SizeGroup3 key={key}>
-            <h4>{value === "placeholder" ? "Hint" : value}</h4>
-            <input
-              onChange={(e) => {
-                selectComp.setAttribute(value, e.target.value)
-                e.target.value = selectComp.getAttribute(value) || "" 
-              }}
-            />
+        selectComp &&
+        <>
+          <Topic>Property</Topic>
+          <SizeGroup3>
+            <h4>Tag</h4>
+            <input value={tagName} />
           </SizeGroup3>
-        )) : null
+          <SizeGroup3>
+            <h4>Name</h4>
+            <input value={selectComp?.classList[0]} />
+          </SizeGroup3>
+          <SizeGroup3>
+            <h4>ID</h4>
+            <h3>{selectComp?.classList[1]}</h3>
+            <button
+              onClick={handleClickIdChange}
+              title="ID change assigns a new random ID to separate styles"
+            >ID Change</button>
+          </SizeGroup3>
+          {
+            (tagName && tagName in attributes) ? attributes[tagName].map((value, key) => (
+              <Property attName={value} key={key} />
+            )) : null
+          }
+        </>
       }
     </Container>
   )
@@ -64,9 +85,18 @@ const SizeGroup3 = styled.div < { state: string } > `
     margin-right: 8px;
     padding: 4px;
   }
+  h3{
+    flex:1;
+  }
   input{
     flex-grow:1;
     opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
   }
-  
+  button{
+    border:1.5px solid #858585;
+    cursor:pointer;
+    font-size:13px;
+    padding:4px 8px;
+    border-radius:4px;
+  }
 `

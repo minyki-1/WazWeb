@@ -8,7 +8,7 @@ const font = Inter({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    const styleSheet = document.styleSheets[document.styleSheets.length - 1]
+    const styleSheet = document.styleSheets[0]
     if (styleSheet && styleSheet.ownerNode) (styleSheet.ownerNode as HTMLElement).id = "compyDesign"
   }, [])
   return (
