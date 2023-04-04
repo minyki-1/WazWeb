@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components"
 import Property from "./property";
 import { useStore } from "../../../zustand/store";
@@ -13,22 +13,26 @@ const attributes: { [key: string]: string[] } = {
 
 export default function PropertyList() {
   const { selectComp } = useStore();
+  const [id, setId] = useState(selectComp?.classList[1]);
   const tagName = selectComp?.tagName.toLocaleLowerCase();
   const handleClickIdChange = () => {
-    if (!selectComp) return;
+    if (!selectComp || !id) return;
     const uid = getCompUID(6, selectComp.ownerDocument)
     const styleComp = selectComp.ownerDocument.getElementById("compyDesign")
     const styleSheet = selectComp.ownerDocument.styleSheets[0]
-    const beforeId = selectComp.classList[1]
-    const { selector } = classStyler(beforeId, "width", styleSheet)
-    const styleText = selector?.cssText?.replace(new RegExp(beforeId, 'g'), uid)
+    const { selector } = classStyler(id, "width", styleSheet)
+    const styleText = selector?.cssText?.replace(new RegExp(id, 'g'), uid)
     selectComp.className = selectComp.classList[0] + " " + uid
     if (!styleComp || !styleText) return
     styleComp.textContent += styleText
-    const removeRegex = new RegExp(`\\.${beforeId}\\s*{[^}]*}|\\s*\\.${beforeId}\\s*{[^}]*}`, "g");
+    const removeRegex = new RegExp(`\\.${id}\\s*{[^}]*}|\\s*\\.${id}\\s*{[^}]*}`, "g");
     const removeBeforeStyle = styleComp.textContent?.replace(removeRegex, "")
     if (removeBeforeStyle) styleComp.textContent = removeBeforeStyle
+    setId(uid)
   }
+  useEffect(() => {
+    setId(selectComp?.classList[1])
+  }, [selectComp])
   return (
     <Container>
       {
@@ -45,7 +49,7 @@ export default function PropertyList() {
           </SizeGroup3>
           <SizeGroup3>
             <h4>ID</h4>
-            <h3>{selectComp?.classList[1]}</h3>
+            <h3>{id}</h3>
             <button
               onClick={handleClickIdChange}
               title="ID change assigns a new random ID to separate styles"
