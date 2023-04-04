@@ -85,6 +85,7 @@ const IframeView = styled.iframe`
   height:720px;
   z-index: 2;
   background-color:white;
+  border-radius:12px;
 `
 const ViewBg = styled.div`
   display:flex;

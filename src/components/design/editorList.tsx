@@ -1,15 +1,15 @@
-import styled from 'styled-components'
 import Arrange from './styleEditor/arrange'
 import Size from './styleEditor/size'
 import Basic from './styleEditor/basic'
 import Font from './styleEditor/font'
 import Background from './styleEditor/background'
+import Property from "./styleEditor/propertyList"
 import { useStore } from '../../zustand/store'
 
 const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
   div: [Size, Basic, Arrange],
   span: [Size, Basic, Arrange],
-  input: [Size, Basic, Arrange, Font],
+  input: [Size, Basic, Font, Arrange],
   img: [Size, Basic],
   a: [Size, Basic, Font],
   h1: [Size, Basic, Font],
@@ -43,9 +43,17 @@ export default function EditorList({ show }: { show: boolean }) {
   return (
     <div style={{ display: show ? "block" : "none" }}>
       {
+        selectComp && selectComp.id !== "viewBg" ?
+          <Property selectComp={selectComp} /> : null
+      }
+      {
         selectComp === undefined || selectComp.id === "viewBg"
           ? <Background />
-          : compData[compKey].map((Editor, key) => (<Editor key={key} selectComp={selectComp} />))
+          : compData[compKey].map((Editor, key) => (
+            <>
+              <Editor key={key} selectComp={selectComp} />
+            </>
+          ))
       }
     </div>
   )

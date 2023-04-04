@@ -1,11 +1,12 @@
 import styled from 'styled-components'
 import { useStyler } from '../../../lib/useStyler'
+import { useEffect } from 'react'
 
 export default function Arrange() {
-  const display = useStyler("display", "None")
-  const justifyContent = useStyler("justifyContent", "flex-start")
-  const alignItems = useStyler("alignItems", "flex-start")
-  const flexDirection = useStyler("flexDirection", "row")
+  const display = useStyler("display", "block")
+  const justifyContent = useStyler("justifyContent")
+  const alignItems = useStyler("alignItems")
+  const flexDirection = useStyler("flexDirection")
   const position = useStyler("position", "static")
   const offsetTop = useStyler("top", "")
   const offsetRight = useStyler("right", "")
@@ -18,7 +19,7 @@ export default function Arrange() {
       <SizeGroup1>
         <h4 title="display">Display</h4>
         <select {...display.select}>
-          <option title="block" value="block">None</option>
+          <option title="block" value="block">Block</option>
           <option title="flex" value="flex">Flex Box</option>
           <option title="inline" value="inline">Auto Size</option>
           <option title="none" value="none">Hidden</option>
@@ -30,6 +31,7 @@ export default function Arrange() {
             <SizeGroup1>
               <h4 title='justify-content'>Row</h4>
               <select {...justifyContent.select}>
+                <option title="None" value="None">None</option>
                 <option title="flex-start" value="flex-start">Left</option>
                 <option title="flex-end" value="flex-end">Right</option>
                 <option title="center" value="center">Center</option>
@@ -41,6 +43,7 @@ export default function Arrange() {
             <SizeGroup1>
               <h4 title='align-items'>Colum</h4>
               <select {...alignItems.select}>
+                <option title="None" value="None">None</option>
                 <option title="flex-start" value="flex-start">Top</option>
                 <option title="flex-end" value="flex-end">Bottom</option>
                 <option title="center" value="center">Center</option>
@@ -49,6 +52,7 @@ export default function Arrange() {
             <SizeGroup1>
               <h4 title="flex-direction">Direction</h4>
               <select {...flexDirection.select}>
+                <option title="None" value="None">None</option>
                 <option title="row" value="row">Row</option>
                 <option title="column" value="column">Column</option>
                 <option title="row-reverse" value="row-reverse">Row Reverse</option>

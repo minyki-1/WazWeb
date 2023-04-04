@@ -50,8 +50,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   const createClassStyler = () => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
-    // const styleComp = ownerDocument.getElementById("compyDesign")
-    return classStyler('.' + classList[classList.length - 1], ownerDocument.styleSheets[0])
+    ownerDocument
+    return classStyler('.' + classList[classList.length - 1], name, ownerDocument.styleSheets[0])
   }
 
   const getStyle = () => {
@@ -61,7 +61,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       style = elem?.style[name]
     } else {
       const selectorStyle = createClassStyler()
-      style = selectorStyle?.get(name)
+      style = selectorStyle?.get()
     }
     return withoutCalc(style ? style : resetText)
   }
@@ -90,8 +90,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       const selectorStyle = createClassStyler()
       if (!selectorStyle) return;
       styleText = styleToCalc(style ? style : value)
-      before = selectorStyle.get(name)
-      after = selectorStyle.set(name, styleText)
+      before = selectorStyle.get()
+      after = selectorStyle.set(styleText)
     }
     if (before === after) setValue(withoutCalc(before ? before : resetText))
     else setValue(withoutCalc(after ? after : resetText))

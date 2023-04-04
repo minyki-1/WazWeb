@@ -1,13 +1,12 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
-import NewView from "../../../components/design/newView"
+import styled from "styled-components"
 import { getHistory } from "../../../lib/history";
+import { createNewView } from "../../../lib/createNewView"
 
-export default function View() {
-  const [html, setHtml] = useState("")
-  const [style, setStyle] = useState("")
+export default function CompyView() {
   const param = useRouter().query.id;
-  const [doc, setDoc] = useState<Document>()
+
   useEffect(() => {
     // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
     // const id = "0"
@@ -24,14 +23,22 @@ export default function View() {
     //   view.innerHTML = temp
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
-    if (history) {
-      setHtml(history[0].html)
-      setStyle(history[0].style)
-    }
-    setDoc(document)
+    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+    const dom = iView?.contentWindow?.document
+    if (!history || !dom) return
+    const { html, style } = history[0]
+    createNewView({ html, style, dom })
+
   }, [param])
 
   return (
-    <>{doc ? <NewView html={html} style={style} dom={document} /> : null}</>
+    <IframeView id="mainIframeView" />
   )
 }
+
+const IframeView = styled.iframe`
+  min-width:100vw;
+  min-height:100vh;
+  z-index: 2;
+  background-color:white;
+`

@@ -1,17 +1,19 @@
 type TCssRule = CSSRule & { selectorText: string, style: CSSStyleDeclaration }
 export type TSelectorStylerReturn = {
-  set: (styleName: string, style: string) => string | undefined;
-  get: (styleName: string) => string | undefined;
+  set: (style: string) => string | undefined;
+  get: () => string | undefined;
 }
-export const classStyler = (className: string, styleSheets: CSSStyleSheet): TSelectorStylerReturn => {
+export const classStyler = (className: string, styleName: string, styleSheets: CSSStyleSheet): TSelectorStylerReturn => {
   const findSelector = Object.values(styleSheets.cssRules).find(key => (key as TCssRule).selectorText === className) as TCssRule | undefined
   const selector = findSelector ?? createSelectorStyle(className, styleSheets) as TCssRule | undefined
 
-  function set(styleName: string, style: string) {
-    let styleProp = styleName;
-    if (!styleName.includes('-')) {
-      styleProp = styleName.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
-    }
+  let styleProp = styleName;
+  if (!styleName.includes('-')) {
+    styleProp = styleName.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
+  }
+
+  function set(style: string) {
+
     if (!selector) return;
     selector.style[styleProp as any] = style
     const regex = new RegExp(`\\${className}\\s*\\{[^}]*\\}`, 'gi');
@@ -20,11 +22,7 @@ export const classStyler = (className: string, styleSheets: CSSStyleSheet): TSel
     return selector.style[styleProp as any]
   }
 
-  function get(styleName: string) {
-    let styleProp = styleName;
-    if (!styleName.includes('-')) {
-      styleProp = styleName.replace(/[A-Z]/g, (match) => `-${match.toLowerCase()}`);
-    }
+  function get() {
     if (selector) return selector.style[styleProp as any]
   }
 

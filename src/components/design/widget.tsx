@@ -24,8 +24,6 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
   const router = useRouter();
-  const [newIframe, setNewIframe] = useState<HTMLIFrameElement>()
-  const [portalDiv, setPortalDiv] = useState<HTMLElement>()
 
   const addComp = () => {
     if (!selectComp) return;
@@ -45,14 +43,14 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
     if (!selectComp || !comp) return;
     const compId = getCompUID(6, selectComp.ownerDocument)
     const { classList } = comp
-    let newStyle = style?.replace(classList[classList.length - 1], compId)
+    let newStyle = style?.replace(new RegExp(classList[classList.length - 1], 'g'), compId)
     comp.className = classList[classList.length - 2] + " " + compId
     Object.values(comp.children).forEach((child) => {
       newStyle = changeClassStyle(child as HTMLElement | null, newStyle)
     })
     return newStyle;
   }
-  
+
   useEffect(() => {
     const iView = document.getElementById("widget" + id) as HTMLIFrameElement | null
     const dom = iView?.contentWindow?.document

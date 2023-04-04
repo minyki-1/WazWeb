@@ -7,7 +7,7 @@ export default function Basic() {
   const [shadow, setShadow] = useState({ x: "0", y: "0", blur: "0" })
   const bgColor = useStyler("backgroundColor")
   const borderColor = useStyler("borderColor")
-  const borderSize = useStyler("borderSize", "None")
+  const borderWidth = useStyler("borderWidth", "None")
   const borderStyle = useStyler("borderStyle", "None")
   const borderRadius = useStyler("borderRadius", "None")
 
@@ -32,10 +32,10 @@ export default function Basic() {
       <SizeGroup2>
         <BorderWrapper>
           <h4 title="border">Border</h4>
-          <input {...borderSize.input} type='text' />
+          <input {...borderWidth.input} type='text' />
           <select {...borderStyle.select}>
+            <option value="None">None</option>
             <option value="solid">Solid</option>
-            <option value="none">None</option>
             <option value="dotted">Dotted</option>
             <option value="inset">Inset</option>
             <option value="dashed">Dashed</option>
