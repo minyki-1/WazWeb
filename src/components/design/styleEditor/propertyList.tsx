@@ -25,9 +25,6 @@ export default function PropertyList() {
     selectComp.className = selectComp.classList[0] + " " + uid
     if (!styleComp || !styleText) return
     styleComp.textContent += styleText
-    const removeRegex = new RegExp(`\\.${id}\\s*{[^}]*}|\\s*\\.${id}\\s*{[^}]*}`, "g");
-    const removeBeforeStyle = styleComp.textContent?.replace(removeRegex, "")
-    if (removeBeforeStyle) styleComp.textContent = removeBeforeStyle
     setId(uid)
   }
   useEffect(() => {
