@@ -49,12 +49,5 @@ export default function WidgetList({ show }: { show: boolean }) {
         ))
       }
     </div>
-    // <div className='app'></div>
   )
 }
-
-// html,css,js
-
-// 2
-// 프론트 React,next
-// 백엔드 springboot, express, django, fiber, gin

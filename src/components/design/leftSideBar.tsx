@@ -1,52 +1,48 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import WidgetList from './widgetList'
-import SVG_world from "../../svg/world.svg"
-import SVG_cube from "../../svg/cube.svg"
-import SVG_comps from "../../svg/comps.svg"
 
 export default function RightSideBar() {
-  const [select, setSelect] = useState("cube")
-  const iconProps = (name: string) => ({
-    fill: "white", width: 24, height: 24,
+  const [select, setSelect] = useState("Basic")
+  const textProps = (name: string) => ({
     onClick: () => setSelect(name),
-    style: { padding: 14, cursor: "pointer", backgroundColor: select === name ? "#282828" : null }
+    style: { opacity: select === name ? "1" : "0.6" }
   })
   return (
     <Container>
       <Nav>
-        <SVG_cube {...iconProps("cube")} />
-        <SVG_world {...iconProps("world")} />
-        <SVG_comps {...iconProps("comps")} />
+        <PageName {...textProps("Basic")}>Basic</PageName>
+        <PageName {...textProps("My Widget")}>Widget</PageName>
+        <PageName {...textProps("World")}>World</PageName>
       </Nav>
-      <WidgetList show={select === "cube"} />
+      <WidgetList show={select === "Basic"} />
     </Container>
   )
 }
 
 const Container = styled.section`
-  width:300px;
+  width:310px;
   z-index: 2;
   overflow-y: scroll;
   display:flex;
   flex-direction: column;
-  box-shadow: -2px 0px 10px rgba(0,0,0,0.25);
   background-color: white;
-  display:flex;
-  flex-direction: column;
-  margin-top: 52px;
+  margin-top: 40px;
 `
 const Nav = styled.div`
   display:flex;
-  padding:0px 12px;
-  background-color: #363636;
+  align-items:center;
+  padding:0px 18px;
+  height:44px;
+  border-bottom: 1.5px solid rgba(0,0,0,0.1);
   position: fixed;
-  width:calc(300px - 24px);
+  width:calc(310px - 36px);
   z-index: 2;
-  margin-top: -52px;
-  svg{
-    &:hover{
-      background-color: #282828;
-    }
-  }
+  background-color: white;
+  margin-top: -40px;
+`
+const PageName = styled.h4`
+  cursor:pointer;
+  margin-right:16px;
+  font-weight: bold;
 `
