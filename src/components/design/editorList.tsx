@@ -9,7 +9,7 @@ import { useStore } from '../../zustand/store'
 const compData: { [key: string]: ((props: any) => JSX.Element)[] } = {
   div: [Size, Basic, Arrange],
   span: [Size, Basic, Arrange],
-  input: [Size, Basic, Font, Arrange],
+  input: [Size, Basic, Font],
   img: [Size, Basic],
   a: [Size, Basic, Font],
   h1: [Size, Basic, Font],

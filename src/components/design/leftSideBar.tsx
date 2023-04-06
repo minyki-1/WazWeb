@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import styled from 'styled-components'
 import WidgetList from './widgetList'
+import Layer from './layer'
 
-export default function RightSideBar() {
+export default function LeftSideBar() {
   const [select, setSelect] = useState("Basic")
   const textProps = (name: string) => ({
     onClick: () => setSelect(name),
@@ -12,10 +13,11 @@ export default function RightSideBar() {
     <Container>
       <Nav>
         <PageName {...textProps("Basic")}>Basic</PageName>
-        <PageName {...textProps("My Widget")}>Widget</PageName>
-        <PageName {...textProps("World")}>World</PageName>
+        <PageName {...textProps("Widget")}>Widget</PageName>
+        <PageName {...textProps("Layer")}>Layer</PageName>
       </Nav>
       <WidgetList show={select === "Basic"} />
+      <Layer show={select === "Layer"} />
     </Container>
   )
 }
