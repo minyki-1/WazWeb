@@ -50,9 +50,7 @@ export default function EditorList({ show }: { show: boolean }) {
         selectComp === undefined || selectComp.id === "viewBg"
           ? <Background />
           : compData[compKey].map((Editor, key) => (
-            <>
-              <Editor key={key} />
-            </>
+            <Editor key={key} />
           ))
       }
     </div>

@@ -14,7 +14,8 @@ const attributes: { [key: string]: string[] } = {
 export default function PropertyList() {
   const { selectComp } = useStore();
   const [id, setId] = useState(selectComp?.classList[1]);
-  const tagName = selectComp?.tagName.toLocaleLowerCase();
+  const [tagName, setTagName] = useState(selectComp?.tagName.toLocaleLowerCase());
+  const [compName, setCompName] = useState(selectComp?.classList[0])
   const handleClickIdChange = () => {
     if (!selectComp || !id) return;
     const uid = getCompUID(6, selectComp.ownerDocument)
@@ -29,6 +30,8 @@ export default function PropertyList() {
   }
   useEffect(() => {
     setId(selectComp?.classList[1])
+    setTagName(selectComp?.tagName.toLocaleLowerCase())
+    setCompName(selectComp?.classList[0])
   }, [selectComp])
   return (
     <Container>
@@ -38,11 +41,11 @@ export default function PropertyList() {
           <Topic>Property</Topic>
           <SizeGroup3>
             <h4>Tag</h4>
-            <input value={tagName} />
+            <input value={tagName} onChange={(e) => { }} />
           </SizeGroup3>
           <SizeGroup3>
             <h4>Name</h4>
-            <input value={selectComp?.classList[0]} />
+            <input value={compName} onChange={(e) => { }} />
           </SizeGroup3>
           <SizeGroup3>
             <h4>ID</h4>
@@ -99,5 +102,8 @@ const SizeGroup3 = styled.div < { state: string } > `
     font-size:13px;
     padding:4px 8px;
     border-radius:4px;
+  }
+  &:hover{
+    box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.05);
   }
 `

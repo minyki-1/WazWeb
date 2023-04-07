@@ -28,7 +28,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     //* view는 이벤트 적용용이라 제외, selectComp가 mouseoverComp가 되어선 안되기 때문에 제외함
     if (!target || target.id === "newView" || target === selectComp) return;
     if (mouseoverComp) mouseoverComp.style.boxShadow = ""; //* 기존 mouseOverComp의 boxShadow을 초기화해줌
-    target.style.boxShadow = "inset 0px 0px 0px 2.8px #6A9BF5";
+    target.style.boxShadow = "inset 0px 0px 0px 2.8px #6cabf3";
     setMouseoverComp(target)
   }
 
@@ -41,7 +41,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     if (mouseoverComp) mouseoverComp.style.boxShadow = ""
     setSelectComp(target)
     setMouseoverComp(undefined)
-    target.style.boxShadow = "inset 0px 0px 0px 2.8px #2B70F0"
+    target.style.boxShadow = "inset 0px 0px 0px 2.8px #2887f4"
   }
   const handleMouseOut = () => {
     if (mouseoverComp) mouseoverComp.style.boxShadow = "";
@@ -114,7 +114,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
     view.innerHTML = html
-
+    // setSelectComp(view)
     if (!dom.getElementById("compyDesign")) {
       const styleElem = document.createElement("style")
       styleElem.id = "compyDesign"
@@ -124,7 +124,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
 
     if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     if (resize) resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
-  }, [dom, html, param, resize, style])
+  }, [dom, html, param, resize, setSelectComp, style])
 
   if (!param) return (
     <div id="newView"

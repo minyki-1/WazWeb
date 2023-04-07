@@ -7,10 +7,6 @@ import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
-import { resizeHTML } from '../../lib/resize';
-import ReactDOM from 'react-dom';
-import NewView from './newView';
-
 interface ICompProps {
   name: string;
   descript: string;
