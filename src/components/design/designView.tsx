@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
 import { createNewView } from "../../lib/createNewView"
+import { fitHTML, smallerHTML } from "../../lib/resize";
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
@@ -37,6 +38,11 @@ export default function CompyView() {
     }
   }
 
+  const handleResize = () => {
+    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+    fitHTML(iView, iView?.parentElement?.parentElement, -80)
+  }
+
   useEffect(() => {
     // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
     // const id = "0"
@@ -57,7 +63,13 @@ export default function CompyView() {
     const dom = iView?.contentWindow?.document
     if (!history || !dom) return
     const { html, style } = history[0]
+    fitHTML(iView, iView?.parentElement?.parentElement, -80)
     createNewView({ html, style, dom, param })
+    window.addEventListener('resize', handleResize)
+    return () => {
+      createNewView({ html, style, dom, param })
+      window.removeEventListener('resize', handleResize)
+    }
 
   }, [param])
 
@@ -91,9 +103,11 @@ const ViewBg = styled.div`
   display:flex;
   align-items: center;
   justify-content: center;
-  min-width:100%;
-  min-height:100%;
-  width:460px;
-  height:820px;
+  width:100%;
+  height:100%;
+  /* min-width:100%; */
+  /* min-height:100%; */
+  /* width:460px; */
+  /* height:820px; */
   z-index: 2;
 `

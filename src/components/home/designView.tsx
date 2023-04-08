@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { resizeHTML } from '../../lib/resize'
+import { smallerHTML } from '../../lib/resize'
 import { createNewView } from '../../lib/createNewView'
 
 export default function DesignView({ id, html, style }: { id: string, html: string, style: string }) {
@@ -16,7 +16,7 @@ export default function DesignView({ id, html, style }: { id: string, html: stri
     const dom = view?.contentWindow?.document
     if (dom) createNewView({ html, style, dom })
 
-    if (view && viewBg) resizeHTML(view, viewBg, -40)
+    if (view && viewBg) smallerHTML(view, viewBg, -40)
   }, [html, id, style])
 
   return (

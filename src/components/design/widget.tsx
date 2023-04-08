@@ -7,6 +7,7 @@ import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
+import { smallerHTML } from '../../lib/resize';
 interface ICompProps {
   name: string;
   descript: string;
@@ -50,7 +51,9 @@ export default function Widget({ name, descript, html, style, id }: ICompProps) 
   useEffect(() => {
     const iView = document.getElementById("widget" + id) as HTMLIFrameElement | null
     const dom = iView?.contentWindow?.document
-    if (dom) createNewView({ html, style, dom, resize: true })
+    if (!dom) return
+    createNewView({ html, style, dom, resize: true })
+    return () => { createNewView({ html, style, dom, resize: true }) }
   }, [html, id, style])
 
   return (

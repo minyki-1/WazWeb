@@ -1,7 +1,7 @@
 import { KeyboardEventHandler, MouseEventHandler, useState } from "react";
 import { useStore } from "../../zustand/store";
 import { useEffect } from "react";
-import { resizeHTML } from "../../lib/resize";
+import { smallerHTML } from "../../lib/resize";
 import { INewView } from "../../lib/createNewView";
 import { saveHTML } from "../../lib/saveHTML";
 import { redoHistory, undoHistory } from "../../lib/history";
@@ -123,7 +123,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     }
 
     if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
-    if (resize) resizeHTML(view.childNodes[0] as HTMLElement | null, view, -25)
+    if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -25)
   }, [dom, html, param, resize, setSelectComp, style])
 
   if (!param) return (
