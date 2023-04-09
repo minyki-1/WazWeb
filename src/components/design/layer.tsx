@@ -36,7 +36,11 @@ export default function Layer({ show }: { show: boolean }) {
           const comp = viewDom.querySelector('.' + data.id) as HTMLElement | null
           if (!comp) return;
           return (
-            <LayerComp onClick={() => { setSelectComp(comp) }} key={key} tap={String(data.tap)}>
+            <LayerComp
+              onClick={() => { setSelectComp(comp) }}
+              key={key} tap={String(data.tap)}
+              style={{ backgroundColor: selectComp === comp ? "rgba(0,0,0,0.1)" : "" }}
+            >
               <button>{comp.classList[0]}</button>
             </LayerComp>
           )

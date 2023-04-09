@@ -27,6 +27,9 @@ const Container = styled.section`
   flex-direction: column;
   background-color: white;
   margin-top: 40px;
+  @media screen and (max-width: 990px) {
+    display: none;
+  }
 `
 const Nav = styled.div`
   display:flex;

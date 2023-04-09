@@ -107,7 +107,5 @@ const ViewBg = styled.div`
   height:100%;
   /* min-width:100%; */
   /* min-height:100%; */
-  /* width:460px; */
-  /* height:820px; */
   z-index: 2;
 `
