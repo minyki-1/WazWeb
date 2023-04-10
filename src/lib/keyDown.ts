@@ -12,7 +12,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
   const changeComp = selectComp?.ownerDocument.getElementById("newView")
 
   const clickAnyWhere = () => {
-    console.log(document?.activeElement?.tagName)
     if (typeof param !== "string" || !selectComp) return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
     selectComp.childNodes.forEach(e => {
       if (e.nodeType !== 3) return;
@@ -22,7 +21,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
   }
 
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = (e) => {
-    console.log(document?.activeElement?.tagName)
     const { key, ctrlKey, shiftKey } = e;
     const selectIsNotView = selectComp && selectComp.classList[1] !== "app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
 

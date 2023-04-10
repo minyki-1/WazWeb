@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import styled from "styled-components"
 import Property from "./property";
 import { useStore } from "../../../zustand/store";
@@ -11,8 +11,15 @@ const attributes: { [key: string]: string[] } = {
   a: ["href", "target"],
 }
 
+const relatedTags = [
+  ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li"],
+  ["div", "span", "table", "tr", "td", "th"],
+  ["form", "input", "textarea", "button", "select", "option"],
+  ["header", "nav", "main", "article", "aside", "section", "footer"]
+]
+
 export default function PropertyList() {
-  const { selectComp } = useStore();
+  const { selectComp, setSelectComp } = useStore();
   const [id, setId] = useState(selectComp?.classList[1]);
   const [tagName, setTagName] = useState(selectComp?.tagName.toLocaleLowerCase());
   const [compName, setCompName] = useState(selectComp?.classList[0])
@@ -28,24 +35,44 @@ export default function PropertyList() {
     styleComp.textContent += styleText
     setId(uid)
   }
+  const handleChangeTag = ({ target }: { target: HTMLSelectElement }) => {
+    if (!selectComp) return;
+    const newElem = selectComp.ownerDocument.createElement(target.value);
+    newElem.innerHTML = selectComp.innerHTML;
+    newElem.className = selectComp.className;
+    selectComp.parentNode?.replaceChild(newElem, selectComp);
+    setSelectComp(newElem);
+    setTagName(target.value)
+  }
   useEffect(() => {
     setId(selectComp?.classList[1])
-    setTagName(selectComp?.tagName.toLocaleLowerCase())
+    setTagName(selectComp?.tagName.toLowerCase())
     setCompName(selectComp?.classList[0])
   }, [selectComp])
   return (
     <Container>
       {
-        selectComp &&
+        selectComp && tagName &&
         <>
           <Topic>Property</Topic>
           <SizeGroup3>
             <h4>Tag</h4>
-            <input value={tagName} onChange={(e) => { }} />
+            <select value={tagName} onChange={handleChangeTag} >
+              {
+                relatedTags.find(tag => tag.includes(tagName.toLowerCase()))?.map((value, key) => (
+                  <option value={value} key={key}>{value}</option>
+                ))
+              }
+            </select>
           </SizeGroup3>
           <SizeGroup3>
             <h4>Name</h4>
-            <input value={compName} onChange={(e) => { }} />
+            <input value={compName}
+              onChange={(e) => {
+                if (e.target.value.length < 1 || !isNaN(Number(e.target.value))) return;
+                setCompName(e.target.value)
+                selectComp.className = e.target.value + " " + selectComp.classList[1]
+              }} />
           </SizeGroup3>
           <SizeGroup3>
             <h4>ID</h4>
@@ -93,6 +120,10 @@ const SizeGroup3 = styled.div < { state: string } > `
     flex:1;
   }
   input{
+    flex-grow:1;
+    opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
+  }
+  select{
     flex-grow:1;
     opacity:${({ state }: { state: string }) => state === "true" ? 0.5 : 1};
   }
