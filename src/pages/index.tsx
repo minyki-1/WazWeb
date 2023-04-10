@@ -74,6 +74,7 @@ const Main = styled.div`
 const DesignWrap = styled.div`
   width:calc(100% - 240px);
   height:100%;
+  overflow:auto;
   max-height:calc(100vh - 48px);
   display:flex;
   flex-wrap: wrap;

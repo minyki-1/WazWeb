@@ -1,22 +1,33 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { smallerHTML } from '../../lib/resize'
+import { fitHTML } from '../../lib/resize'
 import { createNewView } from '../../lib/createNewView'
 
 export default function DesignView({ id, html, style }: { id: string, html: string, style: string }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
+
+  const handleResize = () => {
+    const view = document.getElementById("view" + id) as HTMLIFrameElement | null
+    const viewBg = document.getElementById("bg" + id)
+    fitHTML(view, viewBg, -30)
+  }
 
   useEffect(() => {
     const sColor = localStorage.getItem(id + "_background")
     if (sColor) setBgColor(sColor)
 
     const view = document.getElementById("view" + id) as HTMLIFrameElement | null
-    const viewBg = document.getElementById("bg" + id)
     const dom = view?.contentWindow?.document
-    if (dom) createNewView({ html, style, dom })
-
-    if (view && viewBg) smallerHTML(view, viewBg, -40)
+    if (!dom) return;
+    createNewView({ html, style, dom })
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => {
+      createNewView({ html, style, dom })
+      window.removeEventListener('resize', handleResize)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, id, style])
 
   return (
@@ -37,6 +48,9 @@ const Container = styled.div`
   margin-top: 28px;
   outline: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
+  @media screen and (max-width: 1000px) {
+    width:calc(100% - 48px);
+  }
 `
 const ViewBg = styled.div`
   width:100%;

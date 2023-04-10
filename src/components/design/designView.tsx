@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
 import { createNewView } from "../../lib/createNewView"
-import { fitHTML, smallerHTML } from "../../lib/resize";
+import { fitHTML } from "../../lib/resize";
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();

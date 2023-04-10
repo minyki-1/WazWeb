@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useStore } from '../../zustand/store';
+import { saveHTML } from '../../lib/saveHTML';
+import { useRouter } from 'next/router';
 
 type TLayer = {
   tap: number;
@@ -11,6 +13,8 @@ export default function Layer({ show }: { show: boolean }) {
   const { selectComp, setSelectComp } = useStore()
   const [layer, setLayer] = useState<TLayer>()
   const [viewDom, setViewDom] = useState<Document | undefined>()
+  const param = useRouter().query.id
+
   function searchLayer(elem: HTMLElement | undefined, list: TLayer = [], tap = 0) {
     if (!elem) return;
     list.push({ tap, id: elem.classList[1] })
@@ -29,6 +33,25 @@ export default function Layer({ show }: { show: boolean }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show])
 
+  const resetSelectComp = () => {
+    if (!selectComp || typeof param !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+    selectComp.childNodes.forEach(e => {
+      if (e.nodeType !== 3) return;
+      selectComp.contentEditable = "false"
+      saveHTML(param);
+    })
+    selectComp.style.boxShadow = "";
+    selectComp.style.cursor = ""
+  }
+
+  const changeSelect = (target: HTMLElement | null) => {
+    //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
+    if (!target || target.id === "newView" || target === selectComp) return;
+    resetSelectComp();
+    setSelectComp(target)
+    target.style.boxShadow = "inset 0px 0px 0px 2.8px #2887f4"
+  }
+
   return (
     <Container style={{ display: show ? "block" : "none" }}>
       {
@@ -37,9 +60,9 @@ export default function Layer({ show }: { show: boolean }) {
           if (!comp) return;
           return (
             <LayerComp
-              onClick={() => { setSelectComp(comp) }}
+              onClick={() => { changeSelect(comp) }}
               key={key} tap={String(data.tap)}
-              style={{ backgroundColor: selectComp === comp ? "rgba(0,0,0,0.1)" : "" }}
+              style={{ backgroundColor: selectComp === comp ? "#c0d7f2" : "" }}
             >
               <button>{comp.classList[0]}</button>
             </LayerComp>
@@ -63,6 +86,6 @@ const LayerComp = styled.div< { tap: string } >`
   }
 
   &:hover{
-    box-shadow:inset 0px 0px 0px 2px rgba(0,0,0,0.1);
+    box-shadow:inset 0px 0px 0px 2px #6cabf3;
   }
 `
