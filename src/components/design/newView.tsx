@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import { smallerHTML } from "../../lib/resize";
 import { INewView } from "../../lib/createNewView";
 import { saveHTML } from "../../lib/saveHTML";
-import { redoHistory, undoHistory } from "../../lib/history";
 import { keyDownFunc } from "../../lib/keyDown";
 
 export default function NewView({ html, style, dom, param, resize }: INewView) {
@@ -32,7 +31,8 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
   }
 
   const handleClick: MouseEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    document.body.blur();
     const target = e.target as HTMLElement | null
     //* target === selectComp : target이 selectComp일 경우 굳이 다시 바꿀 필요가 없어서 제외
     if (!target || target.id === "newView" || target === selectComp) return;
@@ -60,10 +60,9 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
     view.innerHTML = html
-    // setSelectComp(view)
-    if (!dom.getElementById("compyDesign")) {
+    if (!dom.getElementById("WazWeb")) {
       const styleElem = document.createElement("style")
-      styleElem.id = "compyDesign"
+      styleElem.id = "WazWeb"
       styleElem.textContent = style
       dom.head.append(styleElem)
     }

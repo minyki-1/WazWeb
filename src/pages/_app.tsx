@@ -9,7 +9,7 @@ const font = Inter({ subsets: ['latin'] });
 export default function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const styleSheet = document.styleSheets[0]
-    if (styleSheet && styleSheet.ownerNode) (styleSheet.ownerNode as HTMLElement).id = "compyDesign"
+    if (styleSheet && styleSheet.ownerNode) (styleSheet.ownerNode as HTMLElement).id = "WazWeb"
   }, [])
   return (
     <>

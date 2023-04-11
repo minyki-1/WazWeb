@@ -38,7 +38,7 @@ const temp2: IDesgin[] = [
   }
 ]
 
-export default function Home() {
+export default function Widget() {
   const [list, setList] = useState<IDesgin[]>()
   const { setSelectComp } = useStore();
 
@@ -50,9 +50,9 @@ export default function Home() {
     } else { //* 새롭게 리프레시 값을 만들어 주고 값도 새로 받아와야함
       sessionStorage.clear()
       setRefresh({ id: "design" })
-      sessionStorage.setItem("designList", JSON.stringify(temp1))
-      temp1.forEach(({ html, style, id }) => saveHistory({ id, value: { html, style } }))
-      setList(temp1)
+      sessionStorage.setItem("designList", JSON.stringify(temp2))
+      temp2.forEach(({ html, style, id }) => saveHistory({ id, value: { html, style } }))
+      setList(temp2)
     }
   }, [setSelectComp])
 

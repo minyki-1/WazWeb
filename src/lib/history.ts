@@ -41,9 +41,11 @@ export const redoHistory = (
 
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
-  if (!changeComp || !hist || !undo || undo.length < 1) return;
+  const WazWeb = changeComp?.ownerDocument.getElementById('WazWeb')
+  if (!changeComp || !hist || !undo || undo.length < 1 || !WazWeb) return;
   changeComp.childNodes.forEach(child => child.remove())
   changeComp.innerHTML = undo[0].html
+  WazWeb.textContent = undo[0].style
   setHist([undo[0], ...hist])
   undo.shift()
   setUndo(undo)

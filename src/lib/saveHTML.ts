@@ -8,7 +8,7 @@ export const saveHTML = (id: string) => {
   const html = iframeDom.getElementById("newView")?.innerHTML
     .replace(/ contenteditable="[^"]*"/g, '')
     .replace(/ style="[^"]*"/g, '');
-  const style = iframeDom.getElementById("compyDesign")?.innerHTML
+  const style = iframeDom.getElementById("WazWeb")?.innerHTML
   if (!html || !style) return;
   saveHistory({ value: { html, style }, id })
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))

@@ -36,7 +36,7 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
 
   const deleteEvent = (param: string) => {
     const doc = selectComp?.ownerDocument
-    const styleComp = doc?.getElementById("compyDesign")
+    const styleComp = doc?.getElementById("WazWeb")
     if (!selectComp || !styleComp || !doc) return;
     const id = selectComp.classList[1]
     selectComp.remove()
@@ -63,7 +63,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
 
   const copyEvent = (param: string) => {
     setCopyComp(selectComp);
-    saveHTML(param)
   }
 
   const pasteEvent = (param: string) => {

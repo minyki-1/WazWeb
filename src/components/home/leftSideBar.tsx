@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import SVG_project from "../../svg/project.svg"
-import SVG_community from "../../svg/community.svg"
+import SVG_cube from "../../svg/cube.svg"
 import SVG_plus_thin from "../../svg/plus_thin.svg"
+import SVG_puzzle from "../../svg/puzzle.svg"
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 
@@ -11,19 +11,19 @@ export default function LeftSideBar() {
     <Container>
       <Link href={"/"}>
         <NavBtn pathname={String(pathname === "/")}>
-          <SVG_project width={18} height={18} fill="#363636" />
-          <h2>My Porject</h2>
+          <SVG_cube width={18} height={18} fill="#363636" />
+          <h2>Project</h2>
         </NavBtn>
       </Link>
-      <Link href={"/community"}>
-        <NavBtn pathname={String(pathname === "/community")}>
-          <SVG_community />
-          <h2>Community</h2>
+      <Link href={"/widget"}>
+        <NavBtn pathname={String(pathname === "/widget")}>
+          <SVG_puzzle width={18} height={18} fill="#363636" />
+          <h2>Widget</h2>
         </NavBtn>
       </Link>
       <Team>
         <TeamTitle>
-          <h2>Teams</h2>
+          <h2>Team</h2>
           <TeamAddBtn>
             <SVG_plus_thin width={10} height={10} fill={"#363636"} />
             <h5>New Team</h5>

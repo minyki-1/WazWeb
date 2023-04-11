@@ -11,12 +11,14 @@ const attributes: { [key: string]: string[] } = {
   a: ["href", "target"],
 }
 
-const relatedTags = [
-  ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li"],
-  ["div", "span", "table", "tr", "td", "th"],
-  ["form", "input", "textarea", "button", "select", "option"],
-  ["header", "nav", "main", "article", "aside", "section", "footer"]
-]
+const relatedTags = {
+  text: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li", "option"],
+  box: ["div", "span", "table"],
+  image: ["img"],
+  button: ["button", "form"],
+  control: ["input", "textarea", "select"],
+  semantic: ["header", "nav", "main", "article", "aside", "section", "footer"]
+}
 
 export default function PropertyList() {
   const { selectComp, setSelectComp } = useStore();
@@ -26,7 +28,7 @@ export default function PropertyList() {
   const handleClickIdChange = () => {
     if (!selectComp || !id) return;
     const uid = getCompUID(6, selectComp.ownerDocument)
-    const styleComp = selectComp.ownerDocument.getElementById("compyDesign")
+    const styleComp = selectComp.ownerDocument.getElementById("WazWeb")
     const styleSheet = selectComp.ownerDocument.styleSheets[0]
     const { selector } = classStyler(id, "width", styleSheet)
     const styleText = selector?.cssText?.replace(new RegExp(id, 'g'), uid)
@@ -59,7 +61,7 @@ export default function PropertyList() {
             <h4>Tag</h4>
             <select value={tagName} onChange={handleChangeTag} >
               {
-                relatedTags.find(tag => tag.includes(tagName.toLowerCase()))?.map((value, key) => (
+                Object.values(relatedTags).find(tag => tag.includes(tagName.toLowerCase()))?.map((value, key) => (
                   <option value={value} key={key}>{value}</option>
                 ))
               }
