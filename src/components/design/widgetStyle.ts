@@ -168,7 +168,7 @@ export const defaultComp: { name: string, descript: string, html: string, style:
     name: "Box",
     descript: "Basic box component. Default size is 50px x 50px.",
     html: `<div class="Box basicC"/>`,
-    style: `.basicC{width:50px;height:50px;border:2px solid #858585;border-radius:5px;}`
+    style: `.basicC{width:50px;height:50px;background-color: #858585;border-radius:5px;}`
   },
   {
     name: "Text",

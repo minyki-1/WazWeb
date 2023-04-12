@@ -8,32 +8,13 @@ import { saveHistory } from '../lib/history';
 import { refreshExpired, setRefresh } from '../lib/refresh';
 import { useStore } from '../zustand/store';
 
-const temp1: IDesgin[] = [
-  {
-    id: "0",
-    title: "test1",
-    owner: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}`,
-    updatedAt: "1"
-  },
-  {
-    id: "1",
-    title: "test2",
-    owner: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}`,
-    updatedAt: "2"
-  },
-]
-
 const temp2: IDesgin[] = [
   {
     id: "3",
     title: "widget1",
     owner: "0",
     html: `<header class="Header lsasw_"><h1 class="title scsaqe">Header</h1></header>`,
-    style: `.lsasw_{width:100vw;height:50px;border-bottom:2px solid gray;align-items:center;justify-content:center;}.scsaqe{font-size:18px;}`,
+    style: `.lsasw_{background-color:green;width:100vw;height:100vh;border-bottom:2px solid gray;align-items:center;justify-content:center;}.scsaqe{font-size:18px;}`,
     updatedAt: "1"
   }
 ]
@@ -64,7 +45,7 @@ export default function Widget() {
         <DesignWrap>
           {
             list?.map((value, key) => (
-              <DesignView key={key} {...value} />
+              <DesignView width={"100%"} height={"100%"} key={key} {...value} />
             ))
           }
         </DesignWrap>

@@ -1,16 +1,16 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { fitHTML } from '../../lib/resize'
+import { fitHTML, smallerHTML } from '../../lib/resize'
 import { createNewView } from '../../lib/createNewView'
 
-export default function DesignView({ id, html, style }: { id: string, html: string, style: string }) {
+export default function DesignView({ id, html, style, width, height }: { id: string, html: string, style: string, width: string, height: string }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
 
   const handleResize = () => {
     const view = document.getElementById("view" + id) as HTMLIFrameElement | null
     const viewBg = document.getElementById("bg" + id)
-    fitHTML(view, viewBg, -30)
+    smallerHTML(view, viewBg, -30)
   }
 
   useEffect(() => {
@@ -20,12 +20,11 @@ export default function DesignView({ id, html, style }: { id: string, html: stri
     const view = document.getElementById("view" + id) as HTMLIFrameElement | null
     const dom = view?.contentWindow?.document
     if (!dom) return;
-    createNewView({ html, style, dom })
+    createNewView({ html, style, dom, reset: true, normalize: true })
     handleResize()
-    window.addEventListener('resize', handleResize)
+    // window.addEventListener('resize', handleResize)
     return () => {
-      createNewView({ html, style, dom })
-      window.removeEventListener('resize', handleResize)
+      // window.removeEventListener('resize', handleResize)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, id, style])
@@ -34,7 +33,7 @@ export default function DesignView({ id, html, style }: { id: string, html: stri
     <Container>
       <Link href={`/design/${id}`}>
         <ViewBg style={{ backgroundColor: bgColor }} id={`bg${id}`}>
-          <View id={`view${id}`} />
+          <View width={width} height={height} id={`view${id}`} />
         </ViewBg>
         <DesignInfo>Desgin Name</DesignInfo>
       </Link>
@@ -61,10 +60,9 @@ const ViewBg = styled.div`
   justify-content: center;
   overflow: hidden;
 `
-const View = styled.iframe`
-  width:360px;
-  height:720px;
-  border-radius:12px;
+const View = styled.iframe< { width: string, height: string } >`
+  width:${({ width }: { width: string }) => (width)};
+  height:${({ height }: { height: string }) => (height)};
 `
 const DesignInfo = styled.h2`
   width:calc(100% - 28px);

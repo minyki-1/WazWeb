@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     cursor: pointer;
   }
-  h1,h2,h3,h4,h5 { color: #363636; }
+  h1,h2,h3,h4,h5 { color: #363636; font-weight:normal; }
   h1 { font-size: 19px; }
   h2 { font-size: 16px; }
   h3 { font-size: 14px; }

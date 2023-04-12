@@ -64,7 +64,7 @@ export default function Home() {
         <DesignWrap>
           {
             list?.map((value, key) => (
-              <DesignView key={key} {...value} />
+              <DesignView width='360px' height='720px' key={key} {...value} />
             ))
           }
         </DesignWrap>

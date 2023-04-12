@@ -55,7 +55,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
   }
 
   useEffect(() => {
-    const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white", borderRadius: "12px", display: "flex", justifyContent: "center", alignItems: "center" }
+    const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white" }
     dom.body.style.margin = "0px"
     const view = dom.getElementById("newView") as HTMLElement | null
     if (!view) return;
@@ -67,7 +67,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
       dom.head.append(styleElem)
     }
 
-    if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+    // if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -25)
   }, [dom, html, param, resize, setSelectComp, style])
 

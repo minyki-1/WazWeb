@@ -64,10 +64,10 @@ export default function CompyView() {
     if (!history || !dom) return
     const { html, style } = history[0]
     fitHTML(iView, iView?.parentElement?.parentElement, -80)
-    createNewView({ html, style, dom, param })
+    createNewView({ html, style, dom, param, reset: true, normalize: true })
     window.addEventListener('resize', handleResize)
     return () => {
-      createNewView({ html, style, dom, param })
+      createNewView({ html, style, dom, param, reset: true, normalize: true })
       window.removeEventListener('resize', handleResize)
     }
 
