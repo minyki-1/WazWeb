@@ -62,7 +62,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       const selectorStyle = createClassStyler()
       style = selectorStyle?.get()
     }
-    return withoutCalc(style ? style : resetText)
+    return withoutCalc(style || resetText)
   }
 
   const styleToCalc = (style: string) => {
@@ -82,18 +82,18 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       const comp = document.querySelector('.' + className) as HTMLElement | null
       if (!comp) return;
       before = comp.style[name as any]
-      styleText = styleToCalc(style ? style : value)
+      styleText = styleToCalc(style || value)
       comp.style[name as any] = styleText
       after = comp.style[name as any]
     } else {
       const selectorStyle = createClassStyler()
       if (!selectorStyle) return;
-      styleText = styleToCalc(style ? style : value)
+      styleText = styleToCalc(style || value)
       before = selectorStyle.get()
       after = selectorStyle.set(styleText)
     }
-    if (before === after) setValue(withoutCalc(before ? before : resetText))
-    else setValue(withoutCalc(after ? after : resetText))
+    if (before === after) setValue(withoutCalc(before || resetText))
+    else setValue(withoutCalc(after || resetText))
 
     if (typeof router.query.id === "string") saveHTML(router.query.id)
   }

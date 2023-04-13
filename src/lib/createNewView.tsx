@@ -1,15 +1,35 @@
+import React from "react";
+import ReactDOM from "react-dom/client";
 import { MouseEventHandler, useState } from "react";
-import { useStore } from "../../zustand/store";
+import { useStore } from "../zustand/store";
 import { useEffect } from "react";
-import { smallerHTML } from "../../lib/resize";
-import { saveHTML } from "../../lib/saveHTML";
-import { keyDownFunc } from "../../lib/keyDown";
+import { smallerHTML } from "./resize";
+import { saveHTML } from "./saveHTML";
+import { keyDownFunc } from "./keyDown";
+import { normalize as normalizeCss } from "../css/normalize"
+import { reset as resetCss } from "../css/reset"
 
-export default function NewView({ html, style, doc, id, resize }: { html: string, style: string, doc: Document, id?: string | string[], resize?: boolean }) {
+export async function createNewView({ html, style, viewId, id, resize, type }: { html: string, style: string, viewId: string, id?: string, resize?: boolean, type: "design" | "widget" }) {
+  const iView = document.getElementById(viewId) as HTMLIFrameElement | null
+  const doc = iView?.contentWindow?.document
+  if (!doc || doc.body.firstChild) return;
+  const main = doc.createElement("div")
+  doc.body.appendChild(main)
+  const root = ReactDOM.createRoot(main);
+  root.render(
+    React.createElement(
+      NewView,
+      { html, style, id, doc, resize, type },
+      null
+    )
+  );
+  return main
+}
+
+function NewView({ html, style, doc, id, resize, type }: { html: string, style: string, doc: Document, id?: string | string[], resize?: boolean, type: "design" | "widget" }): JSX.Element {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
-
   const resetSelectComp = () => {
     if (!selectComp || typeof id !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
     selectComp.childNodes.forEach(e => {
@@ -53,10 +73,8 @@ export default function NewView({ html, style, doc, id, resize }: { html: string
     }
   }
 
-  useEffect(() => {
-    const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white" }
+  function setupDesign() {
     const view = doc.getElementById("newView")
-
     if (!view) return;
     view.innerHTML = html
     if (!doc.getElementById("WazWeb")) {
@@ -65,14 +83,32 @@ export default function NewView({ html, style, doc, id, resize }: { html: string
       styleElem.textContent = style
       doc.head.append(styleElem)
     }
-
-    // if (!id) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -25)
+  }
+
+  function setupDefaultStyle() {
+    const normalizeStyle = doc.createElement('style')
+    normalizeStyle.textContent = normalizeCss
+    doc.head.appendChild(normalizeStyle)
+    const resetStyle = doc.createElement('style')
+    resetStyle.textContent = resetCss
+    doc.head.appendChild(resetStyle)
+
+    const view = doc.getElementById("newView")
+    if (!view) return;
+    const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }
+    if (type === "widget") Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+  }
+
+  useEffect(() => {
+    setupDesign()
+    setupDefaultStyle()
   }, [html, id, doc, resize, setSelectComp, style])
 
-  if (!id) return (
+  if (type === "widget") return (
     <div id="newView"
-      onClick={(e) => { e.preventDefault() }}
+      onClick={(e) => { e.preventDefault() }
+      }
     />
   )
   return (

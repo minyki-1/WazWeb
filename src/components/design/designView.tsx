@@ -1,11 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react"
 import styled from "styled-components"
-import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
-import { createNewView } from "../../lib/createNewView"
 import { fitHTML } from "../../lib/resize";
-import NewView from "./newView";
+import { setupView } from "../../lib/setup";
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
@@ -39,26 +37,12 @@ export default function CompyView() {
     }
   }
 
-  const handleResize = () => {
-    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-    fitHTML(iView, iView?.parentElement?.parentElement, -80)
-  }
-
   useEffect(() => {
-    if (typeof param !== "string") return;
-    const history = getHistory({ id: param })
-    // if (!history || refreshExpired({ id: "design" })) {
-    // sessionStorage.clear()
-    // setRefresh({ id: "design" })
-    // saveHistory({ id: temp, value: temp })
-    // } else if (history) {}
-    const iView = document.getElementById("miv") as HTMLIFrameElement | null
-    if (!history) return
-    fitHTML(iView, iView?.parentElement?.parentElement, -80)
-
-    createNewView({ ...history[0], id: param, viewId: "miv" })
-    window.addEventListener('resize', handleResize)
-    return () => { window.removeEventListener('resize', handleResize) }
+    if (typeof param === "string")
+      return setupView(param, "mainIframeView", () => {
+        const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+        fitHTML(iView, iView?.parentElement?.parentElement, -80)
+      })
   }, [param])
 
   return (
@@ -69,7 +53,7 @@ export default function CompyView() {
         style={{ backgroundColor: "#C7C7C7" }}
       // onWheel={handleWheel}
       >
-        <IframeView id="miv" />
+        <IframeView id="mainIframeView" />
       </ViewBg>
     </Container>
   )

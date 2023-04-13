@@ -4,28 +4,8 @@ import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
 import DesignView from '../components/home/designView';
 import { IDesgin } from '../types/design';
-import { saveHistory } from '../lib/history';
-import { refreshExpired, setRefresh } from '../lib/refresh';
 import { useStore } from '../zustand/store';
-
-const temp1: IDesgin[] = [
-  {
-    id: "0",
-    title: "test1",
-    owner: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}`,
-    updatedAt: "1"
-  },
-  {
-    id: "1",
-    title: "test2",
-    owner: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}`,
-    updatedAt: "2"
-  },
-]
+import { setupValue } from '../lib/setup';
 
 export default function Home() {
   const [list, setList] = useState<IDesgin[]>()
@@ -33,16 +13,7 @@ export default function Home() {
 
   useEffect(() => {
     setSelectComp(undefined);
-    const designListStorage = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
-    if (designListStorage && !refreshExpired({ id: "design" })) { //* 새롭게 받아올 필요없이 기존값을 보내줌
-      setList(designListStorage)
-    } else { //* 새롭게 리프레시 값을 만들어 주고 값도 새로 받아와야함
-      sessionStorage.clear()
-      setRefresh({ id: "design" })
-      sessionStorage.setItem("designList", JSON.stringify(temp1))
-      temp1.forEach(({ html, style, id }) => saveHistory({ id, value: { html, style } }))
-      setList(temp1)
-    }
+    setList(setupValue("design"))
   }, [setSelectComp])
 
   return (
@@ -53,7 +24,7 @@ export default function Home() {
         <DesignWrap>
           {
             list?.map((value, key) => (
-              <DesignView width='360px' height='720px' key={key} {...value} />
+              <DesignView type={"design"} width='360px' height='720px' key={key} {...value} />
             ))
           }
         </DesignWrap>
