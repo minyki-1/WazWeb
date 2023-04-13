@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { fitHTML, smallerHTML } from '../../lib/resize'
 import { createNewView } from '../../lib/createNewView'
+import NewView from '../design/newView'
 
 export default function DesignView({ id, html, style, width, height }: { id: string, html: string, style: string, width: string, height: string }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
 
   const handleResize = () => {
-    const view = document.getElementById("view" + id) as HTMLIFrameElement | null
+    const view = document.getElementById(`view${id}`) as HTMLIFrameElement | null
     const viewBg = document.getElementById("bg" + id)
     smallerHTML(view, viewBg, -30)
   }
@@ -16,16 +17,11 @@ export default function DesignView({ id, html, style, width, height }: { id: str
   useEffect(() => {
     const sColor = localStorage.getItem(id + "_background")
     if (sColor) setBgColor(sColor)
-
-    const view = document.getElementById("view" + id) as HTMLIFrameElement | null
-    const dom = view?.contentWindow?.document
-    if (!dom) return;
-    createNewView({ html, style, dom, reset: true, normalize: true })
+    // reset={true} normalize={true}
+    createNewView({ html, style, viewId: `view${id}` })
     handleResize()
-    // window.addEventListener('resize', handleResize)
-    return () => {
-      // window.removeEventListener('resize', handleResize)
-    }
+    window.addEventListener('resize', handleResize)
+    return () => { window.removeEventListener('resize', handleResize) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, id, style])
 

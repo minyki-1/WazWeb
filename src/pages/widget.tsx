@@ -25,13 +25,13 @@ export default function Widget() {
 
   useEffect(() => {
     setSelectComp(undefined);
-    const designListStorage = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))
-    if (designListStorage && !refreshExpired({ id: "design" })) { //* 새롭게 받아올 필요없이 기존값을 보내줌
-      setList(designListStorage)
+    const widgetListStorage = JSON.parse(sessionStorage.getItem("widgetList") || JSON.stringify(null))
+    if (widgetListStorage && !refreshExpired({ id: "widget" })) { //* 새롭게 받아올 필요없이 기존값을 보내줌
+      setList(widgetListStorage)
     } else { //* 새롭게 리프레시 값을 만들어 주고 값도 새로 받아와야함
       sessionStorage.clear()
-      setRefresh({ id: "design" })
-      sessionStorage.setItem("designList", JSON.stringify(temp2))
+      setRefresh({ id: "widget" })
+      sessionStorage.setItem("widgetList", JSON.stringify(temp2))
       temp2.forEach(({ html, style, id }) => saveHistory({ id, value: { html, style } }))
       setList(temp2)
     }

@@ -1,19 +1,14 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import styled from "styled-components"
 import { getHistory } from "../../../lib/history";
 import { createNewView } from "../../../lib/createNewView"
+import NewView from "../../../components/design/newView";
 
 export default function CompyView() {
   const param = useRouter().query.id;
 
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
-    // const id = "0"
-    // if (!user.id || id !== user.id) {
-    //   console.log("옳바른 사용자가 아닙니다.")
-    //   return
-    // }
     if (typeof param !== "string") return;
     const history = getHistory({ id: param })
     // if (!history || refreshExpired({ id: "design" })) {
@@ -23,16 +18,12 @@ export default function CompyView() {
     //   view.innerHTML = temp
     //   saveHistory({ id: temp, value: temp })
     // } else if (history) view.innerHTML = history[0];
-    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-    const dom = iView?.contentWindow?.document
-    if (!history || !dom) return
-    const { html, style } = history[0]
-    createNewView({ html, style, dom })
+    if (history) createNewView({ ...history[0], id: param, viewId: "mfv" })
 
   }, [param])
 
   return (
-    <IframeView id="mainIframeView" />
+    <IframeView id="mfv" />
   )
 }
 

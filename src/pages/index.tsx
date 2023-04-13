@@ -27,17 +27,6 @@ const temp1: IDesgin[] = [
   },
 ]
 
-const temp2: IDesgin[] = [
-  {
-    id: "3",
-    title: "widget1",
-    owner: "0",
-    html: `<header class="Header lsasw_"><h1 class="title scsaqe">Header</h1></header>`,
-    style: `.lsasw_{width:100vw;height:50px;border-bottom:2px solid gray;align-items:center;justify-content:center;}.scsaqe{font-size:18px;}`,
-    updatedAt: "1"
-  }
-]
-
 export default function Home() {
   const [list, setList] = useState<IDesgin[]>()
   const { setSelectComp } = useStore();

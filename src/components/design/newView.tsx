@@ -1,22 +1,21 @@
-import { KeyboardEventHandler, MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useStore } from "../../zustand/store";
 import { useEffect } from "react";
 import { smallerHTML } from "../../lib/resize";
-import { INewView } from "../../lib/createNewView";
 import { saveHTML } from "../../lib/saveHTML";
 import { keyDownFunc } from "../../lib/keyDown";
 
-export default function NewView({ html, style, dom, param, resize }: INewView) {
+export default function NewView({ html, style, doc, id, resize }: { html: string, style: string, doc: Document, id?: string | string[], resize?: boolean }) {
   const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
 
   const resetSelectComp = () => {
-    if (!selectComp || typeof param !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
+    if (!selectComp || typeof id !== "string") return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
     selectComp.childNodes.forEach(e => {
       if (e.nodeType !== 3) return;
       selectComp.contentEditable = "false"
-      saveHTML(param);
+      saveHTML(id);
     })
     selectComp.style.boxShadow = "";
     selectComp.style.cursor = ""
@@ -56,22 +55,22 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
 
   useEffect(() => {
     const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", backgroundColor: "white" }
-    dom.body.style.margin = "0px"
-    const view = dom.getElementById("newView") as HTMLElement | null
+    const view = doc.getElementById("newView")
+
     if (!view) return;
     view.innerHTML = html
-    if (!dom.getElementById("WazWeb")) {
-      const styleElem = document.createElement("style")
+    if (!doc.getElementById("WazWeb")) {
+      const styleElem = doc.createElement("style")
       styleElem.id = "WazWeb"
       styleElem.textContent = style
-      dom.head.append(styleElem)
+      doc.head.append(styleElem)
     }
 
-    // if (!param) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
+    // if (!id) Object.keys(mainStyle).forEach((key) => view.style[key as any] = mainStyle[key])
     if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -25)
-  }, [dom, html, param, resize, setSelectComp, style])
+  }, [html, id, doc, resize, setSelectComp, style])
 
-  if (!param) return (
+  if (!id) return (
     <div id="newView"
       onClick={(e) => { e.preventDefault() }}
     />
@@ -80,7 +79,7 @@ export default function NewView({ html, style, dom, param, resize }: INewView) {
     <div
       id="newView"
       tabIndex={0}
-      {...keyDownFunc(param)}
+      {...keyDownFunc(id)}
       onClick={handleClick}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}

@@ -5,6 +5,7 @@ import { getHistory } from "../../lib/history";
 import { useStore } from "../../zustand/store";
 import { createNewView } from "../../lib/createNewView"
 import { fitHTML } from "../../lib/resize";
+import NewView from "./newView";
 
 export default function CompyView() {
   const { selectComp, setSelectComp } = useStore();
@@ -18,7 +19,7 @@ export default function CompyView() {
     selectComp.style.cursor = ""
   }
   const handleViewBgClick = ({ target }: { target: HTMLElement }) => {
-    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0] as HTMLElement | null
+    const viewBg = document.getElementsByClassName(ViewBg.styledComponentId)[0]
     //* viewBg !== target : target이 viewBg일 때만 실행해야 이벤트 버블링된 하위 컴포넌트는 실행이 안됨
     if (viewBg !== target) return;
     resetSelectComp();
@@ -44,33 +45,20 @@ export default function CompyView() {
   }
 
   useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("user") || JSON.stringify(null))
-    // const id = "0"
-    // if (!user.id || id !== user.id) {
-    //   console.log("옳바른 사용자가 아닙니다.")
-    //   return
-    // }
     if (typeof param !== "string") return;
     const history = getHistory({ id: param })
     // if (!history || refreshExpired({ id: "design" })) {
-    //   sessionStorage.clear()
-    //   setRefresh({ id: "design" })
-    //   const temp = `<div class="App app" style="width:100%;height:100%;background-color:red;border-radius:12px;"><h1 style="font-color:black">CHange!!!</h1></div>`
-    //   view.innerHTML = temp
-    //   saveHistory({ id: temp, value: temp })
-    // } else if (history) view.innerHTML = history[0];
-    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-    const dom = iView?.contentWindow?.document
-    if (!history || !dom) return
-    const { html, style } = history[0]
+    // sessionStorage.clear()
+    // setRefresh({ id: "design" })
+    // saveHistory({ id: temp, value: temp })
+    // } else if (history) {}
+    const iView = document.getElementById("miv") as HTMLIFrameElement | null
+    if (!history) return
     fitHTML(iView, iView?.parentElement?.parentElement, -80)
-    createNewView({ html, style, dom, param, reset: true, normalize: true })
-    window.addEventListener('resize', handleResize)
-    return () => {
-      createNewView({ html, style, dom, param, reset: true, normalize: true })
-      window.removeEventListener('resize', handleResize)
-    }
 
+    createNewView({ ...history[0], id: param, viewId: "miv" })
+    window.addEventListener('resize', handleResize)
+    return () => { window.removeEventListener('resize', handleResize) }
   }, [param])
 
   return (
@@ -81,7 +69,7 @@ export default function CompyView() {
         style={{ backgroundColor: "#C7C7C7" }}
       // onWheel={handleWheel}
       >
-        <IframeView id="mainIframeView" />
+        <IframeView id="miv" />
       </ViewBg>
     </Container>
   )
