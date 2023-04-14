@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Basic from './defaultCompList'
 import Layer from './layer'
 import Widget from './widgetList'
+import { useStore } from '../../zustand/store'
 
 export default function LeftSideBar() {
   const pageTypes: { name: string, Page: ((props: any) => JSX.Element) }[] = [
@@ -10,9 +11,13 @@ export default function LeftSideBar() {
     { name: "Widget", Page: Widget },
     { name: "Layer", Page: Layer }
   ]
+  const { setLeftPage } = useStore()
   const [select, setSelect] = useState(pageTypes[0].name)
   const textProps = (name: string) => ({
-    onClick: () => setSelect(name),
+    onClick: () => {
+      setSelect(name)
+      setLeftPage(name)
+    },
     style: { opacity: select === name ? "1" : "0.6" }
   })
   return (

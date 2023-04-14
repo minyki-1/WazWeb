@@ -3,13 +3,14 @@ import ReactDOM from "react-dom/client";
 import { MouseEventHandler, useState } from "react";
 import { useStore } from "../zustand/store";
 import { useEffect } from "react";
-import { smallerHTML } from "./resize";
 import { saveHTML } from "./saveHTML";
 import { keyDownFunc } from "./keyDown";
 import { normalize as normalizeCss } from "../css/normalize"
 import { reset as resetCss } from "../css/reset"
+import * as htmlToImage from 'html-to-image';
+import { smallerHTML } from "./resize";
 
-export async function createNewView({ html, style, viewId, id, resize, type }: { html: string, style: string, viewId: string, id?: string, resize?: boolean, type: "design" | "widget" }) {
+export async function createNewView({ html, style, viewId, id, type, resize }: { html: string, style: string, viewId: string, id?: string, type: "design" | "widget", resize?: boolean }) {
   const iView = document.getElementById(viewId) as HTMLIFrameElement | null
   const doc = iView?.contentWindow?.document
   if (!doc || doc.body.firstChild) return;
@@ -19,15 +20,15 @@ export async function createNewView({ html, style, viewId, id, resize, type }: {
   root.render(
     React.createElement(
       NewView,
-      { html, style, id, doc, resize, type },
+      { html, style, id, doc, type, resize },
       null
     )
   );
   return main
 }
 
-function NewView({ html, style, doc, id, resize, type }: { html: string, style: string, doc: Document, id?: string | string[], resize?: boolean, type: "design" | "widget" }): JSX.Element {
-  const { selectComp, setSelectComp } = useStore();
+function NewView({ html, style, doc, id, type, resize }: { html: string, style: string, doc: Document, id?: string | string[], type: "design" | "widget", resize?: boolean }): JSX.Element {
+  const { selectComp, setSelectComp, leftPage } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
   const resetSelectComp = () => {
@@ -77,7 +78,6 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
     const view = doc.getElementById("newView")
     if (!view) return;
     view.innerHTML = html
-    console.log(!doc.getElementById("WazWeb"))
     if (!doc.getElementById("WazWeb")) {
       const styleElem = doc.createElement("style")
       styleElem.id = "WazWeb"
@@ -109,8 +109,17 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
   useEffect(() => {
     setupDefaultStyle()
     setupDesign()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [html, id, doc, resize, setSelectComp, style])
+    // const view = doc.getElementById("newView")
+    // if (view) htmlToImage.toPng(view)
+    //   .then((dataUrl) => {
+    //     var img = new Image();
+    //     img.src = dataUrl;
+    //     view.appendChild(img);
+    //     console.log(img)
+    //   })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [html, id, doc, setSelectComp, style, leftPage])
 
   if (type === "widget") return (
     <div id="newView"

@@ -15,7 +15,7 @@ export default function MainView({ id, html, style, width, height, type }: { id:
       const viewBg = document.getElementById("bg" + id)
       smallerHTML(view, viewBg, -20)
     }, type);
-  }, [html, id, style])
+  }, [html, id, style, type])
 
   return (
     <Container>

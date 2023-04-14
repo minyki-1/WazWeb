@@ -17,6 +17,7 @@
   "dependencies": {
     "@next/font": "latest",
     "babel-plugin-styled-components": "latest",
+    "html-to-image": "^1.11.11",
     "next": "latest",
     "react": "latest",
     "react-color": "^2.19.3",

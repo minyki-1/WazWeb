@@ -7,7 +7,7 @@ export default function WidgetList({ show }: { show: boolean }) {
   const [widgetList, setWidgetList] = useState<IDesgin[]>()
   useEffect(() => {
     setWidgetList(setupValue("widget"))
-  }, [])
+  }, [show])
   return (
     <div style={{ display: show ? "block" : "none" }}>
       {

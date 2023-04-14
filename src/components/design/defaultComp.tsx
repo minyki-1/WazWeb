@@ -44,8 +44,8 @@ export default function DefaultComp({ title, descript, html, style, id }: IDefau
 
   useEffect(() => {
     const viewId = "defaultComp" + id
-    createNewView({ html, style, viewId, type: "widget", resize: true })
-    return () => { createNewView({ html, style, viewId, type: "widget", resize: true }) }
+    createNewView({ html, style, viewId, type: "widget" })
+    return () => { createNewView({ html, style, viewId, type: "widget" }) }
   }, [html, id, style])
 
   return (

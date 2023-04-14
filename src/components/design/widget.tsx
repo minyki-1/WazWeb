@@ -12,7 +12,7 @@ import { IDesgin } from '../../types/design';
 export default function Widget({ title, descript, html, style, id, makerId }: IDesgin) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
-  const { selectComp } = useStore();
+  const { selectComp, leftPage } = useStore();
   const router = useRouter();
 
   const addComp = () => {
