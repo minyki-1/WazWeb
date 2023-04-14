@@ -29,11 +29,12 @@ export default function PropertyList() {
     if (!selectComp || !id) return;
     const uid = getCompUID(6, selectComp.ownerDocument)
     const styleComp = selectComp.ownerDocument.getElementById("WazWeb")
-    const styleSheet = selectComp.ownerDocument.styleSheets[0]
+    const styleSheet = Object.values(selectComp.ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    if (!styleSheet) return;
     const { selector } = classStyler(id, "width", styleSheet)
     const styleText = selector?.cssText?.replace(new RegExp(id, 'g'), uid)
-    selectComp.className = selectComp.classList[0] + " " + uid
     if (!styleComp || !styleText) return
+    selectComp.className = selectComp.classList[0] + " " + uid
     styleComp.textContent += styleText
     setId(uid)
   }

@@ -7,9 +7,9 @@ import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
-import { IDesgin } from '../../types/design';
+import { IDefaultComp } from '../../types/design';
 
-export default function Widget({ title, descript, html, style, id, makerId }: IDesgin) {
+export default function DefaultComp({ title, descript, html, style, id }: IDefaultComp & { id: string }) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();
@@ -43,14 +43,14 @@ export default function Widget({ title, descript, html, style, id, makerId }: ID
   }
 
   useEffect(() => {
-    const viewId = "widget" + id
+    const viewId = "defaultComp" + id
     createNewView({ html, style, viewId, type: "widget", resize: true })
     return () => { createNewView({ html, style, viewId, type: "widget", resize: true }) }
   }, [html, id, style])
 
   return (
     <Container>
-      <iframe id={"widget" + id} />
+      <iframe id={"defaultComp" + id} />
       <InfoBar>
         <h2>{title}</h2>
         <div>

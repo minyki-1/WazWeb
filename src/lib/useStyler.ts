@@ -50,7 +50,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
   const createClassStyler = () => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
-    return classStyler(classList[1], name, ownerDocument.styleSheets[0])
+    const styleSheet = Object.values(ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    if (styleSheet) return classStyler(classList[1], name, styleSheet)
   }
 
   const getStyle = () => {

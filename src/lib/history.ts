@@ -17,9 +17,10 @@ export const undoHistory = (
   { storage = sessionStorage,
     id,
     histName = "hist_",
-    undoName = "undo_",
-    changeComp
-  }: IHistValue & { changeComp: HTMLElement | null }) => {
+    undoName = "undo_"
+  }: IHistValue) => {
+  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const changeComp = view?.contentWindow?.document.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || hist.length < 2) return;
@@ -35,10 +36,10 @@ export const redoHistory = (
   { storage = sessionStorage,
     id,
     histName = "hist_",
-    undoName = "undo_",
-    changeComp
-  }: IHistValue & { changeComp: HTMLElement | null }) => {
-
+    undoName = "undo_"
+  }: IHistValue) => {
+  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const changeComp = view?.contentWindow?.document.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
   const WazWeb = changeComp?.ownerDocument.getElementById('WazWeb')

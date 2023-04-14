@@ -8,8 +8,16 @@ export interface IColor {
 export interface IDesgin {
   id: string;
   title: string;
-  owner: string;
+  makerId: string;
   html: string;
   style: string;
-  updatedAt: string;
+  descript?: string;
+  updatedAt?: string;
+  createdAt?: string;
+}
+export interface IDefaultComp {
+  title: string;
+  descript: string;
+  html: string;
+  style: string;
 }

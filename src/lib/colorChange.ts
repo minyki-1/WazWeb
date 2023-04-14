@@ -1,4 +1,4 @@
-import { namedColor } from "../components/design/widgetStyle";
+import { namedColor } from "../components/design/defaultStyle";
 import { IColor } from "../types/design";
 
 function colorToHex(color: number) {

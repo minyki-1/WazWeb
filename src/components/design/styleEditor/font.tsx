@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { IColor } from '../../../types/design'
 import ColorPicker from '../../common/colorPicker'
 import { useStyler } from '../../../lib/useStyler'
-import { fontFamily } from '../widgetStyle'
+import { fontFamily } from '../defaultStyle'
 
 export default function Font() {
   const colorStyler = useStyler("color")

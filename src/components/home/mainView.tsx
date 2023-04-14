@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { smallerHTML } from '../../lib/resize'
 import { setupView } from '../../lib/setup'
 
-export default function DesignView({ id, html, style, width, height, type }: { id: string, html: string, style: string, width: string, height: string, type: "design" | "widget" }) {
+export default function MainView({ id, html, style, width, height, type }: { id: string, html: string, style: string, width: string, height: string, type: "design" | "widget" }) {
   const [bgColor, setBgColor] = useState("#F8FAFB")
 
   useEffect(() => {
@@ -13,7 +13,7 @@ export default function DesignView({ id, html, style, width, height, type }: { i
     return setupView(id, `view${id}`, () => {
       const view = document.getElementById(`view${id}`) as HTMLIFrameElement | null
       const viewBg = document.getElementById("bg" + id)
-      smallerHTML(view, viewBg, -30)
+      smallerHTML(view, viewBg, -20)
     }, type);
   }, [html, id, style])
 

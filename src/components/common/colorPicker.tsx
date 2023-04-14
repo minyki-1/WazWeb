@@ -4,7 +4,7 @@ import { ChromePicker } from 'react-color'
 import { IColor } from "../../types/design"
 import { rgbToHex, hexToRgb, rgbToRgbStr, rgbStrToRgb } from "../../lib/colorChange"
 import { IStylerColor } from '../../lib/useStyler'
-import { namedColor } from '../design/widgetStyle'
+import { namedColor } from '../design/defaultStyle'
 
 export default function ColorPicker({ value, changeStyle, getStyle }: IStylerColor) {
   const [isPickerShow, setIsPickerShow] = useState(false)

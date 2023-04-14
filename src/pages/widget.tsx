@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components'
 import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
-import DesignView from '../components/home/designView';
+import MainView from '../components/home/mainView';
 import { IDesgin } from '../types/design';
 import { useStore } from '../zustand/store';
 import { setupValue } from '../lib/setup';
@@ -24,7 +24,7 @@ export default function Widget() {
         <DesignWrap>
           {
             list?.map((value, key) => (
-              <DesignView type={"widget"} width={"100%"} height={"100%"} key={key} {...value} />
+              <MainView type={"widget"} width={"100%"} height={"100%"} key={key} {...value} />
             ))
           }
         </DesignWrap>

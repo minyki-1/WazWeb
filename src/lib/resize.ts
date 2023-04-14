@@ -6,7 +6,7 @@ export const smallerHTML = (changedComp: HTMLElement | null | undefined, matchCo
   const matchCompHeight = matchComp.offsetHeight + offset
   let resizeValue = 1;
   if (changedCompWidth > matchCompWidth) resizeValue = matchCompWidth / changedCompWidth
-  else if (changedCompHeight > matchCompHeight) resizeValue = matchCompHeight / changedCompHeight
+  if (changedCompHeight > matchCompHeight && resizeValue > matchCompHeight / changedCompHeight) resizeValue = matchCompHeight / changedCompHeight
   changedComp.style.transform = `scale(${resizeValue})`
 }
 

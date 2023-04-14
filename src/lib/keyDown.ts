@@ -9,8 +9,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [copyComp, setCopyComp] = useState<HTMLElement>();
 
-  const changeComp = selectComp?.ownerDocument.getElementById("newView")
-
   const clickAnyWhere = () => {
     if (typeof param !== "string" || !selectComp) return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
     selectComp.childNodes.forEach(e => {
@@ -23,7 +21,6 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
   const handleKeyDown: KeyboardEventHandler<HTMLDivElement> | undefined = (e) => {
     const { key, ctrlKey, shiftKey } = e;
     const selectIsNotView = selectComp && selectComp.classList[1] !== "app"; //* 삭제,카피는 selectComp가 view가 아닐 경우에 해야함
-
     const activeTag = document?.activeElement?.tagName
     if (typeof param !== "string" || activeTag === "INPUT") return;
     if (selectIsNotView && key === 'Delete') deleteEvent(param);
@@ -31,7 +28,7 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
     if (shiftKey && key === 'Z') redoEvent(param);
     else if (key === 'z') undoEvent(param);
     else if (selectIsNotView && key === 'c') copyEvent(param);
-    else if (key === 'v') pasteEvent(param);
+    else if (selectIsNotView && key === 'v') pasteEvent(param);
   }
 
   const deleteEvent = (param: string) => {
@@ -39,25 +36,29 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
     const styleComp = doc?.getElementById("WazWeb")
     if (!selectComp || !styleComp || !doc) return;
     const id = selectComp.classList[1]
-    selectComp.remove()
     setSelectComp(undefined)
+    selectComp.remove()
     if (doc.getElementsByClassName(id).length !== 0) return;
-    const removeRegex = new RegExp(`\\.${id}\\s*{[^}]*}|\\s*\\.${id}\\s*{[^}]*}`, "g");
-    const removeStyle = styleComp.textContent?.replace(removeRegex, "")
-    if (!removeStyle) return;
-    styleComp.textContent = removeStyle
+    removeStyle(selectComp)
     saveHTML(param)
   }
 
+  const removeStyle = (comp: HTMLElement | null) => {
+    const id = comp?.classList[1]
+    const removeRegex = new RegExp(`\\.${id}\\s*{[^}]*}|\\s*\\.${id}\\s*{[^}]*}`, "g");
+    const removedText = comp?.textContent?.replace(removeRegex, "")
+    if (!removedText || !comp) return;
+    comp.textContent = removedText
+    Object.values(comp.children).forEach(value => removeStyle(value as HTMLElement))
+  }
+
   const redoEvent = (param: string) => {
-    if (!changeComp) return
-    redoHistory(({ id: param, changeComp }));
+    redoHistory(({ id: param }));
     saveHTML(param)
   }
 
   const undoEvent = (param: string) => {
-    if (!changeComp) return
-    undoHistory({ id: param, changeComp });
+    undoHistory({ id: param });
     saveHTML(param)
   }
 

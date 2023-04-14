@@ -5,7 +5,7 @@ import { useStore } from "../../zustand/store";
 import { fitHTML } from "../../lib/resize";
 import { setupView } from "../../lib/setup";
 
-export default function CompyView() {
+export default function MainView() {
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
   const param = useRouter().query.id;

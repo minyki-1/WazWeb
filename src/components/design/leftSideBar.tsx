@@ -1,10 +1,16 @@
 import { useState } from 'react'
 import styled from 'styled-components'
-import WidgetList from './widgetList'
+import Basic from './defaultCompList'
 import Layer from './layer'
+import Widget from './widgetList'
 
 export default function LeftSideBar() {
-  const [select, setSelect] = useState("Basic")
+  const pageTypes: { name: string, Page: ((props: any) => JSX.Element) }[] = [
+    { name: "Basic", Page: Basic },
+    { name: "Widget", Page: Widget },
+    { name: "Layer", Page: Layer }
+  ]
+  const [select, setSelect] = useState(pageTypes[0].name)
   const textProps = (name: string) => ({
     onClick: () => setSelect(name),
     style: { opacity: select === name ? "1" : "0.6" }
@@ -12,12 +18,17 @@ export default function LeftSideBar() {
   return (
     <Container>
       <Nav>
-        <PageName {...textProps("Basic")}>Basic</PageName>
-        <PageName {...textProps("Widget")}>Widget</PageName>
-        <PageName {...textProps("Layer")}>Layer</PageName>
+        {
+          pageTypes.map(({ name }, key) => (
+            <PageName key={key} {...textProps(name)}>{name}</PageName>
+          ))
+        }
       </Nav>
-      <WidgetList show={select === "Basic"} />
-      <Layer show={select === "Layer"} />
+      {
+        pageTypes.map(({ name, Page }, key) => (
+          <Page key={key} show={select === name}>{name}</Page>
+        ))
+      }
     </Container>
   )
 }

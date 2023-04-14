@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { MouseEventHandler, useState } from "react";
 import { useStore } from "../zustand/store";
 import { useEffect } from "react";
-import { fitHTML, smallerHTML } from "./resize";
+import { smallerHTML } from "./resize";
 import { saveHTML } from "./saveHTML";
 import { keyDownFunc } from "./keyDown";
 import { normalize as normalizeCss } from "../css/normalize"
@@ -77,6 +77,7 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
     const view = doc.getElementById("newView")
     if (!view) return;
     view.innerHTML = html
+    console.log(!doc.getElementById("WazWeb"))
     if (!doc.getElementById("WazWeb")) {
       const styleElem = doc.createElement("style")
       styleElem.id = "WazWeb"
@@ -87,13 +88,18 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
   }
 
   function setupDefaultStyle() {
-    const normalizeStyle = doc.createElement('style')
-    normalizeStyle.textContent = normalizeCss
-    doc.head.appendChild(normalizeStyle)
-    const resetStyle = doc.createElement('style')
-    resetStyle.textContent = resetCss
-    doc.head.appendChild(resetStyle)
-
+    if (!doc.getElementById("normalizeStyle")) {
+      const normalizeStyle = doc.createElement('style')
+      normalizeStyle.textContent = normalizeCss
+      normalizeStyle.id = "normalizeStyle"
+      doc.head.appendChild(normalizeStyle)
+    }
+    if (!doc.getElementById("resetStyle")) {
+      const resetStyle = doc.createElement('style')
+      resetStyle.id = "resetStyle"
+      resetStyle.textContent = resetCss
+      doc.head.appendChild(resetStyle)
+    }
     const view = doc.getElementById("newView")
     if (!view) return;
     const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }
@@ -103,6 +109,7 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
   useEffect(() => {
     setupDefaultStyle()
     setupDesign()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, id, doc, resize, setSelectComp, style])
 
   if (type === "widget") return (
