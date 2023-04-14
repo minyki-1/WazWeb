@@ -8,6 +8,7 @@ import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
 import { smallerHTML } from '../../lib/resize';
+
 interface ICompProps {
   name: string;
   descript: string;

@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { MouseEventHandler, useState } from "react";
 import { useStore } from "../zustand/store";
 import { useEffect } from "react";
-import { smallerHTML } from "./resize";
+import { fitHTML, smallerHTML } from "./resize";
 import { saveHTML } from "./saveHTML";
 import { keyDownFunc } from "./keyDown";
 import { normalize as normalizeCss } from "../css/normalize"
@@ -83,7 +83,7 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
       styleElem.textContent = style
       doc.head.append(styleElem)
     }
-    if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -25)
+    if (resize) smallerHTML(view.childNodes[0] as HTMLElement | null, view, -30)
   }
 
   function setupDefaultStyle() {
@@ -101,8 +101,8 @@ function NewView({ html, style, doc, id, resize, type }: { html: string, style: 
   }
 
   useEffect(() => {
-    setupDesign()
     setupDefaultStyle()
+    setupDesign()
   }, [html, id, doc, resize, setSelectComp, style])
 
   if (type === "widget") return (

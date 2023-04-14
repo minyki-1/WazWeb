@@ -21,7 +21,7 @@ export default function DesignView({ id, html, style, width, height, type }: { i
     <Container>
       <Link href={`/design/${id}`}>
         <ViewBg style={{ backgroundColor: bgColor }} id={`bg${id}`}>
-          <View width={width} height={height} id={`view${id}`} />
+          <View type={type} width={width} height={height} id={`view${id}`} />
         </ViewBg>
         <DesignInfo>Desgin Name</DesignInfo>
       </Link>
@@ -48,12 +48,13 @@ const ViewBg = styled.div`
   justify-content: center;
   overflow: hidden;
 `
-const View = styled.iframe< { width: string, height: string } >`
+const View = styled.iframe< { width: string, height: string, type: "design" | "widget" } >`
   width:${({ width }: { width: string }) => (width)};
   height:${({ height }: { height: string }) => (height)};
+  border-radius:${({ type }: { type: "design" | "widget" }) => type === "design" ? "12px" : "0px"};
 `
 const DesignInfo = styled.h2`
-  width:calc(100% - 28px);
-  padding: 14px;
-  color:#363636;
+width: calc(100 % - 28px);
+padding: 14px;
+color:#363636;
 `
