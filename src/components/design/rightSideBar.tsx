@@ -3,7 +3,7 @@ import EditorList from './editorList'
 import { useState } from 'react'
 
 export default function RightSideBar() {
-  const [select, setSelect] = useState("design")
+  const [select, setSelect] = useState("Style")
   const textProps = (name: string) => ({
     onClick: () => setSelect(name),
     style: { opacity: select === name ? "1" : "0.6" }
@@ -11,10 +11,11 @@ export default function RightSideBar() {
   return (
     <Container>
       <Nav>
-        <PageName {...textProps("design")}>Design</PageName>
-        <PageName {...textProps("else")}>Else</PageName>
+        <PageName {...textProps("Style")}>Style</PageName>
+        <PageName {...textProps("Tag")}>Tag</PageName>
       </Nav>
-      <EditorList show={select === "design"} />
+      <EditorList show={select === "Style"} />
+      {select === "Tag" ? <></> : null}
     </Container>
   )
 }
