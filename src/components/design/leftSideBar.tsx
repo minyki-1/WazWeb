@@ -11,12 +11,10 @@ export default function LeftSideBar() {
     { name: "Widget", Page: Widget },
     { name: "Layer", Page: Layer }
   ]
-  const { setLeftPage } = useStore()
   const [select, setSelect] = useState(pageTypes[0].name)
   const textProps = (name: string) => ({
     onClick: () => {
       setSelect(name)
-      setLeftPage(name)
     },
     style: { opacity: select === name ? "1" : "0.6" }
   })

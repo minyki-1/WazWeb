@@ -9,12 +9,13 @@ export default function WidgetList({ show }: { show: boolean }) {
     setWidgetList(setupValue("widget"))
   }, [show])
   return (
-    <div style={{ display: show ? "block" : "none" }}>
+    <>
       {
+        show &&
         widgetList?.map((data, key) => (
           <Widget key={key} {...data} />
         ))
       }
-    </div>
+    </>
   )
 }

@@ -7,7 +7,6 @@ import { saveHTML } from "./saveHTML";
 import { keyDownFunc } from "./keyDown";
 import { normalize as normalizeCss } from "../css/normalize"
 import { reset as resetCss } from "../css/reset"
-import * as htmlToImage from 'html-to-image';
 import { smallerHTML } from "./resize";
 
 export async function createNewView({ html, style, viewId, id, type, resize }: { html: string, style: string, viewId: string, id?: string, type: "design" | "widget", resize?: boolean }) {
@@ -28,7 +27,7 @@ export async function createNewView({ html, style, viewId, id, type, resize }: {
 }
 
 function NewView({ html, style, doc, id, type, resize }: { html: string, style: string, doc: Document, id?: string | string[], type: "design" | "widget", resize?: boolean }): JSX.Element {
-  const { selectComp, setSelectComp, leftPage } = useStore();
+  const { selectComp, setSelectComp } = useStore();
   const [mouseoverComp, setMouseoverComp] = useState<HTMLElement | undefined>();
   const canEditTag = ["H1", "H2", "H3", "H4", "H5", "P", "A"];
   const resetSelectComp = () => {
@@ -109,17 +108,8 @@ function NewView({ html, style, doc, id, type, resize }: { html: string, style: 
   useEffect(() => {
     setupDefaultStyle()
     setupDesign()
-    // const view = doc.getElementById("newView")
-    // if (view) htmlToImage.toPng(view)
-    //   .then((dataUrl) => {
-    //     var img = new Image();
-    //     img.src = dataUrl;
-    //     view.appendChild(img);
-    //     console.log(img)
-    //   })
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [html, id, doc, setSelectComp, style, leftPage])
+  }, [html, id, doc, setSelectComp, style])
 
   if (type === "widget") return (
     <div id="newView"

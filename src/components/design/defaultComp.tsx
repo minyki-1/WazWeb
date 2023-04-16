@@ -50,7 +50,7 @@ export default function DefaultComp({ title, descript, html, style, id }: IDefau
 
   return (
     <Container>
-      <iframe id={"defaultComp" + id} />
+      <iframe onLoad={() => { createNewView({ html, style, viewId: "defaultComp" + id, type: "widget", resize: true }) }} id={"defaultComp" + id} />
       <InfoBar>
         <h2>{title}</h2>
         <div>

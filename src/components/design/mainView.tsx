@@ -77,7 +77,12 @@ const ViewBg = styled.div`
   justify-content: center;
   width:100%;
   height:100%;
-  /* min-width:100%; */
-  /* min-height:100%; */
   z-index: 2;
+  iframe{
+    width:360px;
+    height:720px;
+    z-index: 2;
+    background-color:white;
+    border-radius:12px;
+  }
 `

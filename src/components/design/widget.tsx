@@ -12,7 +12,7 @@ import { IDesgin } from '../../types/design';
 export default function Widget({ title, descript, html, style, id, makerId }: IDesgin) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
-  const { selectComp, leftPage } = useStore();
+  const { selectComp } = useStore();
   const router = useRouter();
 
   const addComp = () => {
@@ -44,13 +44,13 @@ export default function Widget({ title, descript, html, style, id, makerId }: ID
 
   useEffect(() => {
     const viewId = "widget" + id
-    createNewView({ html, style, viewId, type: "widget", resize: true })
-    return () => { createNewView({ html, style, viewId, type: "widget", resize: true }) }
+    // createNewView({ html, style, viewId, type: "widget", resize: true })
+    // return () => { createNewView({ html, style, viewId, type: "widget", resize: true }) }
   }, [html, id, style])
 
   return (
     <Container>
-      <iframe id={"widget" + id} />
+      <iframe onLoad={() => { createNewView({ html, style, viewId: "widget" + id, type: "widget", resize: true }) }} id={"widget" + id} key={id} />
       <InfoBar>
         <h2>{title}</h2>
         <div>

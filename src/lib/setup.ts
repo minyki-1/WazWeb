@@ -58,3 +58,18 @@ export function setupView(id: string, viewId: string, resize: () => void, type: 
   window.addEventListener('resize', handleResize)
   return () => { window.removeEventListener('resize', handleResize) }
 }
+
+export function setupView1(id: string, viewId: string, resize: () => void, type: "design" | "widget" = "design") {
+  resize()
+  const handleResize = () => { resize() }
+  return {
+    useEffect: () => {
+      window.addEventListener('resize', handleResize)
+      return () => { window.removeEventListener('resize', handleResize) }
+    },
+    // onLoad: ({ target }) => {
+    //   const history = getHistory({ id })
+    //   if (history) createNewView({ ...history[0], id, viewId, type })
+    // }
+  }
+}

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import EditorList from './editorList'
 import { useState } from 'react'
+import TagStyler from './tagStyler'
 
 export default function RightSideBar() {
   const [select, setSelect] = useState("Style")
@@ -15,7 +16,7 @@ export default function RightSideBar() {
         <PageName {...textProps("Tag")}>Tag</PageName>
       </Nav>
       <EditorList show={select === "Style"} />
-      {select === "Tag" ? <></> : null}
+      {select === "Tag" ? <TagStyler /> : null}
     </Container>
   )
 }
