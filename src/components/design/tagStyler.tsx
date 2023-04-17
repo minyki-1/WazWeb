@@ -12,6 +12,7 @@ const namedTags = {
 
 // str.charAt(0).toUpperCase() + str.slice(1);
 
+
 export default function TagStyler() {
   return (
     <Container>
