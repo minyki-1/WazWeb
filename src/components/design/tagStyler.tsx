@@ -1,4 +1,9 @@
+import { useEffect } from "react"
 import styled from "styled-components"
+import Font from "./styleEditor/font"
+import Basic from "./styleEditor/basic"
+import Size from "./styleEditor/size"
+import Arrange from "./styleEditor/arrange"
 
 const namedTags = {
   skeleton: ["html", "body"],
@@ -10,10 +15,23 @@ const namedTags = {
   semantic: ["header", "nav", "main", "article", "aside", "section", "footer"],
 }
 
+const styleTypes = {
+  skeleton: [Size, Basic],
+  text: [Font],
+  box: [Basic],
+  button: [Font, Basic],
+  control: [Font, Basic],
+  image: [Font],
+  semantic: [Basic]
+}
+
 // str.charAt(0).toUpperCase() + str.slice(1);
 
 
 export default function TagStyler() {
+  useEffect(() => {
+
+  }, [])
   return (
     <Container>
       <Topic>H1</Topic>

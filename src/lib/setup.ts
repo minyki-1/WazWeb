@@ -8,8 +8,8 @@ const temp1: IDesgin[] = [
     id: "0",
     title: "test1",
     makerId: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test1</h1><h1 class="test Qsgols">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}.Qsgols{color:white}`,
+    html: `<main class="App app"><h1 class="test Qsgold">Project 1</h1></main>`,
+    style: `.app{width:100vw;height:100vh;background-color:black;display:flex;align-items:center;justify-content:center;}.Qsgold{color:white}`,
     updatedAt: "1",
     createdAt: "1"
   },
@@ -17,8 +17,8 @@ const temp1: IDesgin[] = [
     id: "1",
     title: "test2",
     makerId: "0",
-    html: `<main class="App app"><h1 class="test Qsgold">test2</h1></main>`,
-    style: `.app{width:100vw;height:100vh;background-color:blue;display:flex;align-items:center;justify-content:center;}.Qsgold{color:red}`,
+    html: `<main class="App app"><h1 class="test Qsgold">Project 2</h1></main>`,
+    style: `.app{width:100vw;height:100vh;background-color:tomato;display:flex;align-items:center;justify-content:center;}.Qsgold{color:white}`,
     updatedAt: "2",
     createdAt: "2"
   },
