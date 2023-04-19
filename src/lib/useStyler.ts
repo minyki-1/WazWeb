@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStore } from "../zustand/store";
 import { Dispatch, SetStateAction } from "react";
-import { classStyler } from "./classStyler";
+import { selectorStyler } from "./selectorStyler";
 import { useRouter } from "next/router";
 import { saveHTML } from "./saveHTML";
 
@@ -47,11 +47,11 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, resetText, selectComp])
 
-  const createClassStyler = () => {
+  const createselectorStyler = () => {
     if (!selectComp) return;
     const { classList, ownerDocument } = selectComp
     const styleSheet = Object.values(ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
-    if (styleSheet) return classStyler(classList[1], name, styleSheet)
+    if (styleSheet) return selectorStyler('.' + classList[1], name, styleSheet)
   }
 
   const getStyle = () => {
@@ -60,7 +60,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       const elem = document.querySelector('.' + className) as HTMLElement | null
       style = elem?.style[name]
     } else {
-      const selectorStyle = createClassStyler()
+      const selectorStyle = createselectorStyler()
       style = selectorStyle?.get()
     }
     return withoutCalc(style || resetText)
@@ -87,7 +87,7 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
       comp.style[name as any] = styleText
       after = comp.style[name as any]
     } else {
-      const selectorStyle = createClassStyler()
+      const selectorStyle = createselectorStyler()
       if (!selectorStyle) return;
       styleText = styleToCalc(style || value)
       before = selectorStyle.get()

@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 import { fitHTML } from "../../lib/resize";
 import { setupView } from "../../lib/setup";
+import { selectorStyler } from "../../lib/selectorStyler";
 
 export default function MainView() {
   const { selectComp, setSelectComp } = useStore();
@@ -53,7 +54,13 @@ export default function MainView() {
         style={{ backgroundColor: "#C7C7C7" }}
       // onWheel={handleWheel}
       >
-        <IframeView id="mainIframeView" />
+        <IframeView onLoad={() => {
+          if (typeof param === "string")
+            setupView(param, "mainIframeView", () => {
+              const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+              fitHTML(iView, iView?.parentElement?.parentElement, -80)
+            })
+        }} id="mainIframeView" />
       </ViewBg>
     </Container>
   )

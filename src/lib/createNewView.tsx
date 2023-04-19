@@ -8,6 +8,7 @@ import { keyDownFunc } from "./keyDown";
 import { normalize as normalizeCss } from "../css/normalize"
 import { reset as resetCss } from "../css/reset"
 import { smallerHTML } from "./resize";
+import { selectorStyler } from "./selectorStyler";
 
 export async function createNewView({ html, style, viewId, id, type, resize }: { html: string, style: string, viewId: string, id?: string, type: "design" | "widget", resize?: boolean }) {
   const iView = document.getElementById(viewId) as HTMLIFrameElement | null
@@ -108,6 +109,7 @@ function NewView({ html, style, doc, id, type, resize }: { html: string, style: 
   useEffect(() => {
     setupDefaultStyle()
     setupDesign()
+    selectorStyler('.app', 'backgroundColor', doc.styleSheets[2]).get()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [html, id, doc, setSelectComp, style])
 

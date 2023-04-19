@@ -3,7 +3,7 @@ import styled from "styled-components"
 import Property from "./property";
 import { useStore } from "../../../zustand/store";
 import { getCompUID } from "../../../lib/randomString";
-import { classStyler } from "../../../lib/classStyler";
+import { selectorStyler } from "../../../lib/selectorStyler";
 
 const attributes: { [key: string]: string[] } = {
   input: ["type", "placeholder"],
@@ -31,7 +31,7 @@ export default function PropertyList() {
     const styleComp = selectComp.ownerDocument.getElementById("WazWeb")
     const styleSheet = Object.values(selectComp.ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
     if (!styleSheet) return;
-    const { selector } = classStyler(id, "width", styleSheet)
+    const { selector } = selectorStyler('.' + id, "width", styleSheet)
     const styleText = selector?.cssText?.replace(new RegExp(id, 'g'), uid)
     if (!styleComp || !styleText) return
     selectComp.className = selectComp.classList[0] + " " + uid

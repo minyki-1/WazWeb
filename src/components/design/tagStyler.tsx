@@ -1,18 +1,28 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import styled from "styled-components"
 import Font from "./styleEditor/font"
 import Basic from "./styleEditor/basic"
 import Size from "./styleEditor/size"
 import Arrange from "./styleEditor/arrange"
 
-const namedTags = {
-  skeleton: ["html", "body"],
-  text: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li", "option"],
+interface Tags {
+  skltn: string[];
+  txt: string[];
+  box: string[];
+  btn: string[];
+  ctrl: string[];
+  img: string[];
+  smntc: string[];
+}
+
+const namedTags: Tags = {
+  skltn: ["html", "body"],
+  txt: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li", "option"],
   box: ["div", "span", "table"],
-  button: ["button", "form"],
-  control: ["input", "textarea", "select"],
-  image: ["img"],
-  semantic: ["header", "nav", "main", "article", "aside", "section", "footer"],
+  btn: ["button", "form"],
+  ctrl: ["input", "textarea", "select"],
+  img: ["img"],
+  smntc: ["header", "nav", "main", "article", "aside", "section", "footer"],
 }
 
 const styleTypes = {
@@ -27,16 +37,17 @@ const styleTypes = {
 
 // str.charAt(0).toUpperCase() + str.slice(1);
 
-
 export default function TagStyler() {
-  useEffect(() => {
+  const [skltn, setSkltn] = useState<Tags>({ skltn: [], txt: [], box: [], btn: [], ctrl: [], img: [], smntc: [] });
 
+  useEffect(() => {
+    
   }, [])
   return (
     <Container>
       <Topic>H1</Topic>
       <SizeGroup1>
-        <h4 title="color">Color</h4>
+        <h4>H1</h4>
       </SizeGroup1>
     </Container>
   )
