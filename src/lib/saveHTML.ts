@@ -1,14 +1,15 @@
 import { IDesgin } from "../types/design";
+import { getStyleName, getViewName } from "./getMainComp";
 import { saveHistory } from "./history";
 
 export const saveHTML = (id: string) => {
-  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const view = document.getElementById(getViewName()) as HTMLIFrameElement | null
   const iframeDom = view?.contentWindow?.document
   if (!view || !iframeDom) return;
   const html = iframeDom.getElementById("newView")?.innerHTML
     .replace(/ contenteditable="[^"]*"/g, '')
     .replace(/ style="[^"]*"/g, '');
-  const style = iframeDom.getElementById("WazWeb")?.innerHTML
+  const style = iframeDom.getElementById(getStyleName())?.innerHTML
   if (!html || !style) return;
   saveHistory({ value: { html, style }, id })
   const designList: IDesgin[] | null = JSON.parse(sessionStorage.getItem("designList") || JSON.stringify(null))

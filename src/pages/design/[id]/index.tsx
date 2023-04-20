@@ -5,20 +5,8 @@ import MainView from '../../../components/design/mainView'
 import LeftSideBar from '../../../components/design/leftSideBar'
 import { useRouter } from 'next/router'
 import { keyDownFunc } from '../../../lib/keyDown'
-export default function Design() {
-  const param = useRouter().query.id
-
-  return (
-    <Container tabIndex={0} {...keyDownFunc(param)}>
-      <Header />
-      <Main>
-        <LeftSideBar />
-        <MainView />
-        <RightSideBar />
-      </Main>
-    </Container>
-  )
-}
+import { GetServerSideProps, GetServerSidePropsContext, GetStaticPaths, GetStaticProps } from 'next'
+import { useEffect } from 'react'
 
 const Container = styled.main`
   width:100vw;
@@ -32,3 +20,24 @@ const Main = styled.div`
   display: flex;
   justify-content: space-between;
 `
+export default function Design(props: any) {
+  const param = useRouter().query.id
+
+  return (
+    <Container tabIndex={0} {...keyDownFunc(param)}>
+      <Header />
+      <Main>
+        <LeftSideBar />
+        <MainView id={param} />
+        <RightSideBar />
+      </Main>
+    </Container>
+  )
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log(context.query.id)
+  return {
+    props: { data: context.query.id }
+  }
+}

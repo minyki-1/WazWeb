@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { selectorStyler } from "./selectorStyler";
 import { useRouter } from "next/router";
 import { saveHTML } from "./saveHTML";
+import { getMainStyleSheet } from "./getMainComp";
 
 export interface IStylerColor {
   value: string;
@@ -49,8 +50,8 @@ export const useStyler: TUseStyler = (name, resetText = "None", className) => {
 
   const createselectorStyler = () => {
     if (!selectComp) return;
-    const { classList, ownerDocument } = selectComp
-    const styleSheet = Object.values(ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    const { classList } = selectComp
+    const styleSheet = getMainStyleSheet()
     if (styleSheet) return selectorStyler('.' + classList[1], name, styleSheet)
   }
 

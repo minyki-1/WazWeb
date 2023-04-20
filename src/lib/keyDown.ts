@@ -2,6 +2,7 @@ import { useState, KeyboardEventHandler } from "react";
 import { useStore } from "../zustand/store";
 import { redoHistory, undoHistory } from "./history";
 import { saveHTML } from "./saveHTML";
+import { getStyleName } from "./getMainComp";
 
 export const keyDownFunc = (param: string | string[] | undefined) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -33,7 +34,7 @@ export const keyDownFunc = (param: string | string[] | undefined) => {
 
   const deleteEvent = (param: string) => {
     const doc = selectComp?.ownerDocument
-    const styleComp = doc?.getElementById("WazWeb")
+    const styleComp = doc?.getElementById(getStyleName())
     if (!selectComp || !styleComp || !doc) return;
     const id = selectComp.classList[1]
     setSelectComp(undefined)

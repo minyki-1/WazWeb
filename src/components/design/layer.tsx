@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { useStore } from '../../zustand/store';
 import { saveHTML } from '../../lib/saveHTML';
 import { useRouter } from 'next/router';
+import { getMainView } from '../../lib/getMainComp';
 
 type TLayer = {
   tap: number;
@@ -24,10 +25,9 @@ export default function Layer({ show }: { show: boolean }) {
     return list
   }
   useEffect(() => {
-    const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-    const dom = iView?.contentWindow?.document
+    const dom = getMainView()?.contentDocument
     const main = dom?.getElementById("newView")?.firstChild as HTMLElement | null
-    if (!main) return;
+    if (!main || !dom) return;
     setViewDom(dom)
     setLayer(searchLayer(main))
     // eslint-disable-next-line react-hooks/exhaustive-deps

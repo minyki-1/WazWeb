@@ -2,16 +2,17 @@ import { useRouter } from "next/router";
 import { useEffect } from "react"
 import styled from "styled-components"
 import { setupView } from "../../../lib/setup";
+import { getViewName } from "../../../lib/getMainComp";
 
 export default function CompyView() {
   const param = useRouter().query.id;
 
   useEffect(() => {
-    if (typeof param === "string") return setupView(param, "mainIframeView", () => { }, "widget");
+    if (typeof param === "string") return setupView({ id: param, type: "widget" });
   }, [param])
 
   return (
-    <IframeView id="mainIframeView" />
+    <IframeView id={getViewName()} />
   )
 }
 

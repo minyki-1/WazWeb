@@ -8,6 +8,7 @@ import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
 import { IDesgin } from '../../types/design';
+import { getMainStyleSheet } from '../../lib/getMainComp';
 
 export default function Widget({ title, descript, html, style, id, makerId }: IDesgin) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
@@ -22,7 +23,7 @@ export default function Widget({ title, descript, html, style, id, makerId }: ID
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
     const newStyle = changeClassStyle(newComp, style)
-    const styleSheet = Object.values(selectComp.ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    const styleSheet = getMainStyleSheet()
     if (!styleSheet) return;
     const styleNode = styleSheet.ownerNode
     selectComp.append(newComp)

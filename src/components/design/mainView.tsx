@@ -5,11 +5,11 @@ import { useStore } from "../../zustand/store";
 import { fitHTML } from "../../lib/resize";
 import { setupView } from "../../lib/setup";
 import { selectorStyler } from "../../lib/selectorStyler";
+import { getMainView, getViewName } from "../../lib/getMainComp";
 
-export default function MainView() {
+export default function MainView({ id }: { id: string | string[] | undefined }) {
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
-  const param = useRouter().query.id;
 
   const resetSelectComp = () => {
     if (!selectComp) return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -39,12 +39,11 @@ export default function MainView() {
   }
 
   useEffect(() => {
-    if (typeof param === "string")
-      return setupView(param, "mainIframeView", () => {
-        const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-        fitHTML(iView, iView?.parentElement?.parentElement, -80)
+    if (typeof id === "string")
+      setupView({
+        id, resize: () => { fitHTML(getMainView(), getMainView()?.parentElement?.parentElement, -80) }
       })
-  }, [param])
+  }, [id])
 
   return (
     <Container>
@@ -55,12 +54,11 @@ export default function MainView() {
       // onWheel={handleWheel}
       >
         <IframeView onLoad={() => {
-          if (typeof param === "string")
-            setupView(param, "mainIframeView", () => {
-              const iView = document.getElementById("mainIframeView") as HTMLIFrameElement | null
-              fitHTML(iView, iView?.parentElement?.parentElement, -80)
+          if (typeof id === "string")
+            setupView({
+              id, resize: () => { fitHTML(getMainView(), getMainView()?.parentElement?.parentElement, -80) }
             })
-        }} id="mainIframeView" />
+        }} id={getViewName()} />
       </ViewBg>
     </Container>
   )

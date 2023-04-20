@@ -1,3 +1,5 @@
+import { getStyleElem, getViewName } from "./getMainComp";
+
 interface IHistValue {
   storage?: Storage;
   histName?: string;
@@ -19,7 +21,7 @@ export const undoHistory = (
     histName = "hist_",
     undoName = "undo_"
   }: IHistValue) => {
-  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const view = document.getElementById(getViewName()) as HTMLIFrameElement | null
   const changeComp = view?.contentWindow?.document.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
@@ -38,15 +40,15 @@ export const redoHistory = (
     histName = "hist_",
     undoName = "undo_"
   }: IHistValue) => {
-  const view = document.getElementById("mainIframeView") as HTMLIFrameElement | null
+  const view = document.getElementById(getViewName()) as HTMLIFrameElement | null
   const changeComp = view?.contentWindow?.document.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
-  const WazWeb = changeComp?.ownerDocument.getElementById('WazWeb')
-  if (!changeComp || !hist || !undo || undo.length < 1 || !WazWeb) return;
+  const styleElem = getStyleElem()
+  if (!changeComp || !hist || !undo || undo.length < 1 || !styleElem) return;
   changeComp.childNodes.forEach(child => child.remove())
   changeComp.innerHTML = undo[0].html
-  WazWeb.textContent = undo[0].style
+  styleElem.textContent = undo[0].style
   setHist([undo[0], ...hist])
   undo.shift()
   setUndo(undo)

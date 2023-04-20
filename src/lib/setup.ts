@@ -1,5 +1,6 @@
 import { IDesgin } from "../types/design"
 import { createNewView } from "./createNewView"
+import { getViewName } from "./getMainComp"
 import { getHistory, saveHistory } from "./history"
 import { refreshExpired, setRefresh } from "./refresh"
 
@@ -50,7 +51,7 @@ export function setupValue(id: "design" | "widget" = "design"): IDesgin[] {
   }
 }
 
-export function setupView(id: string, viewId: string, resize: () => void, type: "design" | "widget" = "design") {
+export function setupView({ id, viewId = getViewName(), resize = () => { }, type = "design" }: { id: string, viewId?: string, resize?: () => void, type?: "design" | "widget" }) {
   const history = getHistory({ id })
   resize()
   const handleResize = () => { resize() }

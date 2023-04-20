@@ -4,6 +4,7 @@ import Property from "./property";
 import { useStore } from "../../../zustand/store";
 import { getCompUID } from "../../../lib/randomString";
 import { selectorStyler } from "../../../lib/selectorStyler";
+import { getMainStyleSheet, getStyleElem } from "../../../lib/getMainComp";
 
 const attributes: { [key: string]: string[] } = {
   input: ["type", "placeholder"],
@@ -28,8 +29,8 @@ export default function PropertyList() {
   const handleClickIdChange = () => {
     if (!selectComp || !id) return;
     const uid = getCompUID(6, selectComp.ownerDocument)
-    const styleComp = selectComp.ownerDocument.getElementById("WazWeb")
-    const styleSheet = Object.values(selectComp.ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    const styleComp = getStyleElem()
+    const styleSheet = getMainStyleSheet()
     if (!styleSheet) return;
     const { selector } = selectorStyler('.' + id, "width", styleSheet)
     const styleText = selector?.cssText?.replace(new RegExp(id, 'g'), uid)

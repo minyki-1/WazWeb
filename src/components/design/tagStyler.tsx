@@ -4,25 +4,16 @@ import Font from "./styleEditor/font"
 import Basic from "./styleEditor/basic"
 import Size from "./styleEditor/size"
 import Arrange from "./styleEditor/arrange"
+import { getMainStyleSheet } from "../../lib/getMainComp"
 
-interface Tags {
-  skltn: string[];
-  txt: string[];
-  box: string[];
-  btn: string[];
-  ctrl: string[];
-  img: string[];
-  smntc: string[];
-}
-
-const namedTags: Tags = {
-  skltn: ["html", "body"],
-  txt: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li", "option"],
+const namedTags = {
+  skeleton: ["html", "body"],
+  text: ["h1", "h2", "h3", "h4", "h5", "h6", "p", "strong", "em", "li", "option"],
   box: ["div", "span", "table"],
-  btn: ["button", "form"],
-  ctrl: ["input", "textarea", "select"],
-  img: ["img"],
-  smntc: ["header", "nav", "main", "article", "aside", "section", "footer"],
+  button: ["button", "form"],
+  control: ["input", "textarea", "select"],
+  image: ["img"],
+  semantic: ["header", "nav", "main", "article", "aside", "section", "footer"],
 }
 
 const styleTypes = {
@@ -38,16 +29,29 @@ const styleTypes = {
 // str.charAt(0).toUpperCase() + str.slice(1);
 
 export default function TagStyler() {
-  const [skltn, setSkltn] = useState<Tags>({ skltn: [], txt: [], box: [], btn: [], ctrl: [], img: [], smntc: [] });
+  const [tagState, setTagState] = useState<string[]>([]);
 
   useEffect(() => {
-    
+    Object.values(namedTags).forEach((tagArray) => {
+      tagArray.forEach((tag) => {
+        const regex = new RegExp(`\\${tag}\\s*\\{[^}]*\\}`, 'gi');
+        const styleSheet = getMainStyleSheet();
+        const styleText = styleSheet?.ownerNode?.textContent;
+        // if (styleText) styleSheet.ownerNode.textContent = styleText.replace(regex, findSelector.cssText);
+
+      })
+    })
   }, [])
   return (
     <Container>
-      <Topic>H1</Topic>
+      {
+
+      }
+      <TopicCont>
+        <Topic>Basic</Topic>
+      </TopicCont>
       <SizeGroup1>
-        <h4>H1</h4>
+        <h4>Size</h4>
       </SizeGroup1>
     </Container>
   )
@@ -60,6 +64,12 @@ const Container = styled.section`
   border-bottom: 2px solid rgba(54,54,54,0.1);
   padding: 0px 20px;
   padding-bottom: 28px;
+`
+const TopicCont = styled.div`
+  width:100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
 `
 const Topic = styled.h2`
   margin-top: 28px;

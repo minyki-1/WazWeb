@@ -10,17 +10,18 @@ export default function MainView({ id, html, style, width, height, type }: { id:
   useEffect(() => {
     const sColor = localStorage.getItem(id + "_background")
     if (sColor) setBgColor(sColor)
-    return setupView(id, `view${id}`, () => {
-      const view = document.getElementById(`view${id}`) as HTMLIFrameElement | null
-      const viewBg = document.getElementById("bg" + id)
-      smallerHTML(view, viewBg, -20)
-    }, type);
+    return setupView({
+      id, viewId: `view${id}`, type, resize: () => {
+        const view = document.getElementById(`view${id}`)
+        smallerHTML(view, view?.parentElement, -20)
+      }
+    });
   }, [html, id, style, type])
 
   return (
     <Container>
       <Link href={`/design/${id}`}>
-        <ViewBg style={{ backgroundColor: bgColor }} id={`bg${id}`}>
+        <ViewBg style={{ backgroundColor: bgColor }}>
           <View type={type} width={width} height={height} id={`view${id}`} />
         </ViewBg>
         <DesignInfo>Desgin Name</DesignInfo>

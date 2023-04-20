@@ -8,6 +8,7 @@ import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
 import { IDefaultComp } from '../../types/design';
+import { getMainStyleSheet, getStyleElem } from '../../lib/getMainComp';
 
 export default function DefaultComp({ title, descript, html, style, id }: IDefaultComp & { id: string }) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
@@ -22,9 +23,9 @@ export default function DefaultComp({ title, descript, html, style, id }: IDefau
     const newComp = parentComp.firstChild as HTMLElement | null;
     if (!newComp) return;
     const newStyle = changeClassStyle(newComp, style)
-    const styleSheet = Object.values(selectComp.ownerDocument.styleSheets).find((value) => (value.ownerNode as HTMLElement | null)?.id === "WazWeb")
+    const styleSheet = getMainStyleSheet()
     if (!styleSheet) return;
-    const styleNode = styleSheet.ownerNode
+    const styleNode = getStyleElem()
     selectComp.append(newComp)
     if (styleNode && newStyle) styleNode.textContent += newStyle
     if (typeof router.query.id === "string") saveHTML(router.query.id)
