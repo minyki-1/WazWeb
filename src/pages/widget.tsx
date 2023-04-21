@@ -3,12 +3,12 @@ import styled from 'styled-components'
 import Header from '../components/home/header';
 import LeftSideBar from "../components/home/leftSideBar"
 import MainView from '../components/home/mainView';
-import { IDesgin } from '../types/design';
+import { IDesign } from '../types/design';
 import { useStore } from '../zustand/store';
 import { setupValue } from '../lib/setup';
 
 export default function Widget() {
-  const [list, setList] = useState<IDesgin[]>()
+  const [list, setList] = useState<IDesign[]>()
   const { setSelectComp } = useStore();
 
   useEffect(() => {

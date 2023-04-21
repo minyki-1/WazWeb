@@ -5,7 +5,7 @@ export interface IColor {
   a?: number;
 }
 
-export interface IDesgin {
+export interface IDesign {
   id: string;
   title: string;
   makerId: string;

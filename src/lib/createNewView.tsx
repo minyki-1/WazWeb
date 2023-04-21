@@ -13,10 +13,27 @@ import { getStyleName } from "./getMainComp";
 
 export async function createNewView({ html, style, viewId, id, type, resize }: { html: string, style: string, viewId: string, id?: string, type: "design" | "widget", resize?: boolean }) {
   const iView = document.getElementById(viewId) as HTMLIFrameElement | null
-  const doc = iView?.contentWindow?.document
-  if (!doc || doc.body.firstChild) return;
+  const doc = iView?.contentDocument
+  if (!doc) return;
   const main = doc.createElement("div")
   doc.body.appendChild(main)
+  main.innerHTML = html
+  if (!doc.getElementById("normalizeStyle")) {
+    const normalizeStyle = doc.createElement('style')
+    normalizeStyle.textContent = normalizeCss
+    normalizeStyle.id = "normalizeStyle"
+    doc.head.appendChild(normalizeStyle)
+  }
+  if (!doc.getElementById("resetStyle")) {
+    const resetStyle = doc.createElement('style')
+    resetStyle.id = "resetStyle"
+    resetStyle.textContent = resetCss
+    doc.head.appendChild(resetStyle)
+  }
+  const styleElem = doc.createElement("style")
+  styleElem.id = getStyleName()
+  styleElem.textContent = style
+  doc.head.append(styleElem)
   const root = ReactDOM.createRoot(main);
   root.render(
     React.createElement(
@@ -90,18 +107,7 @@ function NewView({ html, style, doc, id, type, resize }: { html: string, style: 
   }
 
   function setupDefaultStyle() {
-    if (!doc.getElementById("normalizeStyle")) {
-      const normalizeStyle = doc.createElement('style')
-      normalizeStyle.textContent = normalizeCss
-      normalizeStyle.id = "normalizeStyle"
-      doc.head.appendChild(normalizeStyle)
-    }
-    if (!doc.getElementById("resetStyle")) {
-      const resetStyle = doc.createElement('style')
-      resetStyle.id = "resetStyle"
-      resetStyle.textContent = resetCss
-      doc.head.appendChild(resetStyle)
-    }
+
     const view = doc.getElementById("newView")
     if (!view) return;
     const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }
@@ -113,7 +119,7 @@ function NewView({ html, style, doc, id, type, resize }: { html: string, style: 
     setupDesign()
     // console.log(selectorStyler('.app', 'backgroundColor', doc.styleSheets[2]).get())
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [html, id, doc, setSelectComp, style])
+  }, [id, doc, setSelectComp])
 
   if (type === "widget") return (
     <div id="newView"

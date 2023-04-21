@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react"
 import styled from "styled-components"
-import { setupView } from "../../../lib/setup";
-import { getViewName } from "../../../lib/getMainComp";
+import { setupView } from "../lib/setup";
+import { getViewName } from "../lib/getMainComp";
 
 export default function CompyView() {
   const param = useRouter().query.id;

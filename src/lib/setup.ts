@@ -1,10 +1,10 @@
-import { IDesgin } from "../types/design"
+import { IDesign } from "../types/design"
 import { createNewView } from "./createNewView"
 import { getViewName } from "./getMainComp"
 import { getHistory, saveHistory } from "./history"
 import { refreshExpired, setRefresh } from "./refresh"
 
-const temp1: IDesgin[] = [
+const temp1: IDesign[] = [
   {
     id: "0",
     title: "test1",
@@ -25,7 +25,7 @@ const temp1: IDesgin[] = [
   },
 ]
 
-const temp2: IDesgin[] = [
+const temp2: IDesign[] = [
   {
     id: "3",
     title: "widget1",
@@ -38,9 +38,9 @@ const temp2: IDesgin[] = [
   }
 ]
 
-export function setupValue(id: "design" | "widget" = "design"): IDesgin[] {
+export function setupValue(id: "design" | "widget" = "design"): IDesign[] {
   const list = id === "design" ? temp1 : temp2
-  const listStorage: IDesgin[] = JSON.parse(sessionStorage.getItem(`${id}List`) || JSON.stringify(null))
+  const listStorage: IDesign[] = JSON.parse(sessionStorage.getItem(`${id}List`) || JSON.stringify(null))
   if (listStorage && !refreshExpired({ id })) return listStorage
   else { //* 새롭게 리프레시 값을 만들어 주고 값도 새로 받아와야함
     sessionStorage.removeItem(`${id}List`)

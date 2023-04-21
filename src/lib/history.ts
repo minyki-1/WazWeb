@@ -7,11 +7,20 @@ interface IHistValue {
   id: string;
 }
 
-type TStorage = [{ html: string, style: string }[] | null, (value: { html: string, style: string }[]) => void]
+type TGetStorage = {
+  html: string;
+  style: string;
+}[]
+type TSetStorage = (value: {
+  html: string;
+  style: string;
+}[]) => void
+
+type TStorage = [TGetStorage, TSetStorage]
 
 const storageManager = (name: string, id: string, storage: Storage): TStorage => {
-  const storageValue: { html: string, style: string }[] | null = JSON.parse(storage.getItem(name + id) || JSON.stringify(null))
-  const setStorage = (value: { html: string, style: string }[]) => storage.setItem(name + id, JSON.stringify(value))
+  const storageValue: TGetStorage = JSON.parse(storage.getItem(name + id) || JSON.stringify(null)) as { html: string, style: string }[]
+  const setStorage: TSetStorage = (value) => storage.setItem(name + id, JSON.stringify(value))
   return [storageValue, setStorage]
 }
 
@@ -22,7 +31,7 @@ export const undoHistory = (
     undoName = "undo_"
   }: IHistValue) => {
   const view = document.getElementById(getViewName()) as HTMLIFrameElement | null
-  const changeComp = view?.contentWindow?.document.getElementById("newView")
+  const changeComp = view?.contentDocument?.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
   if (!changeComp || !hist || hist.length < 2) return;
@@ -41,7 +50,7 @@ export const redoHistory = (
     undoName = "undo_"
   }: IHistValue) => {
   const view = document.getElementById(getViewName()) as HTMLIFrameElement | null
-  const changeComp = view?.contentWindow?.document.getElementById("newView")
+  const changeComp = view?.contentDocument?.getElementById("newView")
   const [hist, setHist] = storageManager(histName, id, storage)
   const [undo, setUndo] = storageManager(undoName, id, storage)
   const styleElem = getStyleElem()

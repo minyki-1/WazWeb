@@ -7,10 +7,10 @@ import { getCompUID } from "../../lib/randomString"
 import { saveHTML } from '../../lib/saveHTML';
 import { createNewView } from '../../lib/createNewView';
 import { useRouter } from 'next/router';
-import { IDesgin } from '../../types/design';
+import { IDesign } from '../../types/design';
 import { getMainStyleSheet } from '../../lib/getMainComp';
 
-export default function Widget({ title, descript, html, style, id, makerId }: IDesgin) {
+export default function Widget({ title, descript, html, style, id, makerId }: IDesign) {
   const svgProps = { width: 24, height: 24, fill: "#363636", style: { marginLeft: 8, cursor: "pointer" } }
   const [showInfo, setShowInfo] = useState(false)
   const { selectComp } = useStore();

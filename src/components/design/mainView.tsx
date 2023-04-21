@@ -1,15 +1,20 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import styled from "styled-components"
 import { useStore } from "../../zustand/store";
 import { fitHTML } from "../../lib/resize";
 import { setupView } from "../../lib/setup";
 import { selectorStyler } from "../../lib/selectorStyler";
 import { getMainView, getViewName } from "../../lib/getMainComp";
+import { getHistory } from "../../lib/history";
+import { createNewView } from "../../lib/createNewView";
+import { GetServerSideProps } from "next";
+import { IDesign } from "../../types/design";
 
-export default function MainView({ id }: { id: string | string[] | undefined }) {
+export default function MainView({ data }: { data: IDesign }) {
   const { selectComp, setSelectComp } = useStore();
   const [zoom, setZoom] = useState(1);
+  const { id } = useRouter().query
 
   const resetSelectComp = () => {
     if (!selectComp) return; //* 기존에 선택되어있던 컴포넌트가 있을경우에 초기화 해줌
@@ -39,11 +44,11 @@ export default function MainView({ id }: { id: string | string[] | undefined }) 
   }
 
   useEffect(() => {
-    if (typeof id === "string")
-      setupView({
-        id, resize: () => { fitHTML(getMainView(), getMainView()?.parentElement?.parentElement, -80) }
-      })
-  }, [id])
+    if (typeof id !== "string") return;
+    setupView({
+      id, resize: () => { fitHTML(getMainView(), getMainView()?.parentElement?.parentElement, -80) }
+    })
+  }, [data, id])
 
   return (
     <Container>
