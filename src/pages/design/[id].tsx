@@ -40,7 +40,6 @@ export default function Design(props: any) {
 
 
 export const getStaticPaths: GetStaticPaths = async () => {
-<<<<<<< HEAD
   let paths: { params: { id: string } }[] = [];
   try {
     const res = await fetch(`http://localhost:4000/api/designList`)
@@ -63,24 +62,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 
   return { props: { data }, revalidate: 20 }
-=======
-  try {
-    const res = await fetch(`http://localhost:4000/api/designList`)
-    const { data }: any = await res.json()
-    const paths = data.map((design: any) => { return { params: { id: design.id } } })
-    return { paths, fallback: "blocking" }
-  } catch {
-    return { paths: [], fallback: "blocking" }
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  try {
-    const res = await fetch(`http://localhost:4000/api/design/${params?.id}`)
-    const data = await res.json()
-    return { props: { data: data }, revalidate: 20 }
-  } catch {
-    return { props: { data: null }, revalidate: 20 }
-  }
->>>>>>> 1960b377ffd12fc1079802caf45fd854f523fcb7
 }

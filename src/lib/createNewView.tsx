@@ -99,10 +99,6 @@ function NewView({ html, doc, id, type, resize }: { html: string, doc: Document,
   }
 
   function setupDefaultStyle() {
-<<<<<<< HEAD
-=======
-
->>>>>>> 1960b377ffd12fc1079802caf45fd854f523fcb7
     const view = doc.getElementById("newView")
     if (!view) return;
     const mainStyle: { [key: string]: string } = { width: "100vw", height: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }
