@@ -1,0 +1,6 @@
+declare module 'styled-components'
+declare module 'react-dom'
+declare module 'react-color'
+declare module 'react-dom/client'
+declare module '@next/font/google'
+declare module 'dom-to-image'
