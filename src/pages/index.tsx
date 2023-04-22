@@ -10,7 +10,6 @@ import { setupValue } from '../lib/setup';
 export default function Home() {
   const [list, setList] = useState<IDesign[]>()
   const { setSelectComp } = useStore();
-
   useEffect(() => {
     setSelectComp(undefined);
     setList(setupValue("design"))
